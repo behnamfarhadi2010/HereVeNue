@@ -1,3 +1,6 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,7 +23,7 @@
       <nav class="menu">
         <ul>
           <li>
-            <a href="/"
+            <a href="/login"
               ><img
                 src="./src/assets/person.svg"
                 id="icon"
@@ -53,15 +56,17 @@
           <div class="hero-content">
             <div class="search-container">
               <p class="trust-badge">Over 17k venues - Trusted by TM+ customers</p>
-            <h1>Find and book venues for any event imaginable</h1>
+            <h2>Find and book venues for any event imaginable</h2>
               <div class="search-box">
                 <div class="filter-group">
                   <label>EVENT TYPE</label>
                   <p class="filter-description">What are you planning?</p>
                   <div class="select-wrapper">
-                    <select>
-                      <option value="">Select event type</option>
-                    </select>
+                    
+              <form>
+                        <input type="text" id="event-type" name="event-type" placeholder="e.g., Wedding" />
+                  
+                    
                   </div>
                 </div>
                 
@@ -69,19 +74,15 @@
                   <label>GUESTS</label>
                   <p class="filter-description">Number of guests</p>
                   <div class="select-wrapper">
-                    <select>
-                      <option value="">Select guests</option>
-                    </select>
+                    <input type="number" id="guests" name="guests" placeholder="e.g., 100" min="1" />
                   </div>
                 </div>
                 
                 <div class="filter-group">
                   <label>LOCATION</label>
-                  <p class="filter-description">Toronto</p>
+                  <p class="filter-description">Choose City</p>
                   <div class="select-wrapper">
-                    <select>
-                      <option value="">Select location</option>
-                    </select>
+                    <input type="text" id="location" name="location" placeholder="e.g., St. John's" />
                   </div>
                 </div>
                 

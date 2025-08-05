@@ -20,7 +20,15 @@ header {
   align-items: center;
   justify-content: space-between;
 }
-
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 100px;
+  height: 100px; */
+  margin-top: -3.4rem;
+  margin-left: 3.9rem;
+}
 nav {
   display: flex;
   flex-direction: row;
@@ -29,6 +37,7 @@ nav {
   width: 100%;
   background-color: #ffffff;
   padding: 9px 5%;
+  margin-right: -4rem;
 }
 
 nav ul {
@@ -145,7 +154,17 @@ h1 {
 .select-wrapper {
   position: relative;
 }
-
+#guests,
+#location,
+form input[type="text"] {
+  width: 70%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  font-size: 14px;
+}
 select {
   width: 100%;
   padding: 12px 15px;
