@@ -8,7 +8,7 @@ function Header() {
         <img
           src="/src/assets/Blue Yellow Simple Modern Travel Booking Platform Logo (1).png"
           className="logo"
-          alt="OVB Logo"
+          alt="OVB"
           width="300"
         />
       </Link>

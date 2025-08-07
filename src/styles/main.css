@@ -238,3 +238,20 @@ select {
     flex-direction: column;
   }
 }
+
+.menuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #282c34;
+  color: white;
+}
+.menuHeader nav span {
+  display: flex;
+  gap: 20px;
+  border: #282c34 1px solid;
+  padding: 10px;
+  border-radius: 5px;
+  color: violet;
+}
