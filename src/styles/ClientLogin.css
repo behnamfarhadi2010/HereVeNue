@@ -1,0 +1,91 @@
+.Clientlogin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1rem;
+}
+
+.Clientlogin-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.Clientlogin-title h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.Clientlogin-icon {
+  font-size: 3rem;
+  color: #2fa9bf;
+}
+
+.Clientlogin-box-user {
+  background-color: #ffffff;
+  border: 1px solid #2fa9bf;
+  border-radius: 10px;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.Clientlogin-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.Clientforgot-password {
+  font-size: 0.9rem;
+  color: #00a884;
+  text-decoration: none;
+  display: block;
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.Clientforgot-password:hover {
+  text-decoration: underline;
+}
+
+.Clientlogin-btn-usr {
+  background-color: #ec676a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.Clientlogin-btn-usr:hover {
+  background-color: #d85b5e;
+}
+
+.Clientline {
+  margin: 2rem 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+}
+
+.Clientsignup-link {
+  color: #00a884;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.Clientsignup-link:hover {
+  text-decoration: underline;
+}

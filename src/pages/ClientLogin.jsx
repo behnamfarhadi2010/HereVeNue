@@ -1,17 +1,10 @@
-// src/pages/Login.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import "../styles/ClientLogin.css";
+import "../styles/Login.css";
+import "../styles/main.css";
 
-//import "./Login.css";
-const Login = () => {
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    // you can also add form validation here
-    navigate("/client-login");
-  };
-
+const ClientLogin = () => {
   return (
     <>
       <head>
@@ -60,37 +53,40 @@ const Login = () => {
             </ul>
           </nav>
         </header>
-        <main>
-          <div className="login-page">
-            <h1 className="login-title">Log in</h1>
-            <div className="login-options">
-              {/* User Box */}
-              <div className="login-box-user">
-                <div className="login-icon">👤</div>
-                <h2>User</h2>
-                <p>Find the perfect venue for your event.</p>
-                <button className="login-btn-usr" onClick={handleLogin}>
-                  User login
-                </button>
-                <div class="line"></div>
-                <p className="login-footer">
-                  Don’t have a User Account? <br />
-                  <Link to="/signup">Sign up</Link>
-                </p>
-              </div>
 
-              {/* Venue Box */}
-              <div className="login-box-venue">
-                <div className="login-icon">🏠</div>
-                <h2>Venue</h2>
-                <p>Manage enquiries and edit your listings.</p>
-                <button className="login-btn-vnu">Venue login</button>
-                <div class="line"></div>
-                <p className="login-footer">
-                  Don’t have a Venue Account? <br />
-                  <Link to="/list-your-venue">List your venue with us</Link>
-                </p>
-              </div>
+        <main>
+          <div className="Clientlogin-page">
+            <div className="Clientlogin-title">
+              <span className="Clientlogin-icon">👤</span>
+              <h1>User login</h1>
+            </div>
+
+            <div className="Clientlogin-box-user">
+              <input
+                type="email"
+                placeholder="Email address"
+                className="Clientlogin-input"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="Clientlogin-input"
+              />
+
+              <a href="#" className="Clientforgot-password">
+                Forgot your password?
+              </a>
+
+              <button className="Clientlogin-btn-usr">Log in</button>
+
+              <div className="Clientline" />
+
+              <p>
+                Don’t have a User Account?{" "}
+                <a href="#" className="Clientsignup-link">
+                  Sign up
+                </a>
+              </p>
             </div>
           </div>
         </main>
@@ -99,4 +95,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ClientLogin;
