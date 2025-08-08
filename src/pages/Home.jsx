@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 
 import React from "react";
+import Header from "../components/Header";
 // کامپوننت Link را برای جابجایی بین صفحات بدون رفرش شدن صفحه وارد می‌کنیم
 import { Link } from "react-router-dom";
 
@@ -15,17 +16,18 @@ const Home = () => {
         <title>Online Venue Booking</title>
         <link rel="stylesheet" href="/src/styles/main.css" />
       </head>
-      <body>
-        <header>
+      <div>
+        <Header />
+        {/* <header>
           <a href="/index.html" target="_blank" rel="noopener noreferrer">
             <img
               src="./src/assets/Blue Yellow Simple Modern Travel Booking Platform Logo (1).png"
-              class="logo"
+              className="logo"
               alt="Vite logo"
               width="300"
             />
           </a>
-          <nav class="menu">
+          <nav className="menu">
             <ul>
               <li>
                 <a href="/login">
@@ -53,21 +55,23 @@ const Home = () => {
               </li>
             </ul>
           </nav>
-        </header>
+        </header> */}
         <main>
-          <div class="mainpage container left">
-            <div class="hero-section">
-              <div class="hero-content">
-                <div class="search-container">
-                  <p class="trust-badge">
+          <div className="mainpage container left">
+            <div className="hero-section">
+              <div className="hero-content">
+                <div className="search-container">
+                  <p className="trust-badge">
                     Over 17k venues - Trusted by TM+ customers
                   </p>
                   <h2>Find and book venues for any event imaginable</h2>
-                  <div class="search-box">
-                    <div class="filter-group">
+                  <div className="search-box">
+                    <div className="filter-group">
                       <label>EVENT TYPE</label>
-                      <p class="filter-description">What are you planning?</p>
-                      <div class="select-wrapper">
+                      <p className="filter-description">
+                        What are you planning?
+                      </p>
+                      <div className="select-wrapper">
                         <input
                           type="text"
                           id="event-type"
@@ -77,10 +81,10 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <div class="filter-group">
+                    <div className="filter-group">
                       <label>GUESTS</label>
-                      <p class="filter-description">Number of guests</p>
-                      <div class="select-wrapper">
+                      <p className="filter-description">Number of guests</p>
+                      <div className="select-wrapper">
                         <input
                           type="number"
                           id="guests"
@@ -91,10 +95,10 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <div class="filter-group">
+                    <div className="filter-group">
                       <label>LOCATION</label>
-                      <p class="filter-description">Choose City</p>
-                      <div class="select-wrapper">
+                      <p className="filter-description">Choose City</p>
+                      <div className="select-wrapper">
                         <input
                           type="text"
                           id="location"
@@ -104,7 +108,7 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <button class="search-btn">Search</button>
+                    <button className="search-btn">Search</button>
                   </div>
                 </div>
 
@@ -115,7 +119,7 @@ const Home = () => {
             </div>
           </div>
         </main>
-      </body>
+      </div>
     </>
   );
 };

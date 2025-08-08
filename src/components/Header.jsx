@@ -1,38 +1,26 @@
 import { Link } from "react-router-dom";
+import Logo from "../assets/ovblogo.png";
+import Person from "../assets/person.svg";
+import Home24 from "../assets/home_24.svg";
 // import './Header.css';
 
 function Header() {
   return (
     <header>
       <Link to="/">
-        <img
-          src="/src/assets/Blue Yellow Simple Modern Travel Booking Platform Logo (1).png"
-          className="logo"
-          alt="OVB"
-          width="300"
-        />
+        <img src={Logo} className="logo" alt="OVB" width="300" />
       </Link>
       <nav className="menu">
         <ul>
           <li>
             <Link to="/login">
-              <img
-                src="/src/assets/person.svg"
-                alt="Person icon"
-                width="24"
-                height="24"
-              />
+              <img src={Person} alt="Person icon" width="24" height="24" />
               <span>Log in</span>
             </Link>
           </li>
           <li>
             <Link to="/about">
-              <img
-                src="/src/assets/home_24.svg"
-                alt="Home icon"
-                width="24"
-                height="24"
-              />
+              <img src={Home24} alt="Home icon" width="24" height="24" />
               <span>List your venue</span>
             </Link>
           </li>

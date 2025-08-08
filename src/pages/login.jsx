@@ -2,7 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+// import person from "../assets/person.svg";
+import Header from "../components/Header";
 //import "./Login.css";
 const Login = () => {
   const navigate = useNavigate();
@@ -14,29 +15,22 @@ const Login = () => {
 
   return (
     <>
-      <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <meta name="viewport" />
-        <title>Online Venue Booking</title>
-        <link rel="stylesheet" href="/src/styles/main.css" />
-      </head>
-      <body>
-        <header>
+      <div>
+        {/* <header>
           <a href="/index.html" target="_blank" rel="noopener noreferrer">
             <img
               src="./src/assets/Blue Yellow Simple Modern Travel Booking Platform Logo (1).png"
-              class="logo"
+              className="logo"
               alt="Vite logo"
               width="300"
             />
           </a>
-          <nav class="menu">
+          <nav className="menu">
             <ul>
               <li>
                 <a href="/login">
                   <img
-                    src="./src/assets/person.svg"
+                    src={person}
                     id="icon"
                     alt="Person icon"
                     width="24"
@@ -59,7 +53,7 @@ const Login = () => {
               </li>
             </ul>
           </nav>
-        </header>
+        </header> */}
         <main>
           <div className="login-page">
             <h1 className="login-title">Log in</h1>
@@ -72,7 +66,7 @@ const Login = () => {
                 <button className="login-btn-usr" onClick={handleLogin}>
                   User login
                 </button>
-                <div class="line"></div>
+                <div className="line"></div>
                 <p className="login-footer">
                   Don’t have a User Account? <br />
                   <Link to="/signup">Sign up</Link>
@@ -85,7 +79,7 @@ const Login = () => {
                 <h2>Venue</h2>
                 <p>Manage enquiries and edit your listings.</p>
                 <button className="login-btn-vnu">Venue login</button>
-                <div class="line"></div>
+                <div className="line"></div>
                 <p className="login-footer">
                   Don’t have a Venue Account? <br />
                   <Link to="/list-your-venue">List your venue with us</Link>
@@ -94,7 +88,7 @@ const Login = () => {
             </div>
           </div>
         </main>
-      </body>
+      </div>
     </>
   );
 };
