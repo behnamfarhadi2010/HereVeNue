@@ -9,51 +9,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    // you can also add form validation here
+    //  can also add form validation here
     navigate("/client-login");
   };
 
   return (
     <>
       <div>
-        {/* <header>
-          <a href="/index.html" target="_blank" rel="noopener noreferrer">
-            <img
-              src="./src/assets/Blue Yellow Simple Modern Travel Booking Platform Logo (1).png"
-              className="logo"
-              alt="Vite logo"
-              width="300"
-            />
-          </a>
-          <nav className="menu">
-            <ul>
-              <li>
-                <a href="/login">
-                  <img
-                    src={person}
-                    id="icon"
-                    alt="Person icon"
-                    width="24"
-                    height="24"
-                  />
-                  <span>Log in</span>
-                </a>
-              </li>
-              <li>
-                <a href="/about">
-                  <img
-                    src="./src/assets/home_24.svg"
-                    id="icon"
-                    alt="Person icon"
-                    width="24"
-                    height="24"
-                  />
-                  <span> List your venue </span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </header> */}
+        <Header />
         <main>
           <div className="login-page">
             <h1 className="login-title">Log in</h1>
