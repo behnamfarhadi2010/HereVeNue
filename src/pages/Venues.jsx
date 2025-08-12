@@ -1,6 +1,8 @@
 // src/pages/Venues.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
+import Header from "../components/Header";
+import VenuesHeader from "../components/VenuesHeader";
 
 export default function Venues() {
   const location = useLocation();
@@ -8,6 +10,7 @@ export default function Venues() {
 
   return (
     <div style={{ padding: "20px" }}>
+      <VenuesHeader />
       <h2>Search Results</h2>
       {results.length > 0 ? (
         <div className="venues-grid">
