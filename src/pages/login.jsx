@@ -13,6 +13,11 @@ const Login = () => {
     navigate("/client-login");
   };
 
+  const handleVenueLogin = () => {
+    //  can also add form validation here
+    navigate("/venue-login");
+  };
+
   return (
     <>
       <div>
@@ -41,7 +46,9 @@ const Login = () => {
                 <div className="login-icon">🏠</div>
                 <h2>Venue</h2>
                 <p>Manage enquiries and edit your listings.</p>
-                <button className="login-btn-vnu">Venue login</button>
+                <button className="login-btn-vnu" onClick={handleVenueLogin}>
+                  Venue login
+                </button>
                 <div className="line"></div>
                 <p className="login-footer">
                   Don’t have a Venue Account? <br />

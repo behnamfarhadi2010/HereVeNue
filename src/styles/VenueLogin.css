@@ -1,29 +1,29 @@
-.Clientlogin-page {
+.Venuelogin-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 4rem 1rem;
 }
 
-.Clientlogin-title {
+.Venuelogin-title {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.Clientlogin-title h1 {
+.Venuelogin-title h1 {
   font-size: 2.5rem;
   font-weight: bold;
   color: #333;
 }
 
-.Clientlogin-icon {
+.Venuelogin-icon {
   font-size: 3rem;
   color: #2fa9bf;
 }
 
-.Clientlogin-box-user {
+.Venuelogin-box-user {
   background-color: #ffffff;
   border: 1px solid #2fa9bf;
   border-radius: 10px;
@@ -34,7 +34,7 @@
   text-align: center;
 }
 
-.Clientlogin-input {
+.Venuelogin-input {
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@
   border-radius: 6px;
 }
 
-.Clientforgot-password {
+.Venueforgot-password {
   font-size: 0.9rem;
   color: #00a884;
   text-decoration: none;
@@ -58,11 +58,11 @@
   text-align: center;
 }
 
-.Clientforgot-password:hover {
+.Venueforgot-password:hover {
   text-decoration: underline;
 }
 
-.Clientlogin-btn-usr {
+.Venuelogin-btn-usr {
   background-color: #ec676a;
   color: white;
   border: none;
@@ -75,23 +75,23 @@
   width: 100%;
 }
 
-.Clientlogin-btn-usr:hover {
+.Venuelogin-btn-usr:hover {
   background-color: #d85b5e;
 }
 
-.Clientline {
+.Venueline {
   margin: 2rem 0;
   width: 100%;
   height: 2px;
   background-color: #ccc;
 }
 
-.Clientsignup-link {
+.Venuesignup-link {
   color: #00a884;
   font-weight: bold;
   text-decoration: none;
 }
 
-.Clientsignup-link:hover {
+.Venuesignup-link:hover {
   text-decoration: underline;
 }
