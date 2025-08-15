@@ -7,12 +7,14 @@ import "./styles/Login.css"; // استایل هدر
 import "./styles/VenuesHeader.css"; // استایل هدر صفحه مکان‌ها
 import "./styles/ClientLogin.css"; // استایل صفحه لاگین کاربر
 import "./styles/VenueLogin.css"; // استایل صفحه لاگین مکان
+import "./pages/myDashboard.jsx";
 
 import Login from "./pages/login"; //
 import ClientLogin from "./pages/ClientLogin";
 import VenueLogin from "./pages/VenueLogin";
 import Venues from "./pages/Venues";
 import Home from "./pages/Home";
+import MyDashboard from "./pages/myDashboard";
 
 import Search from "./components/Search";
 import Header from "./components/Header"; // کامپوننت هدر برای ناوبری
@@ -30,7 +32,9 @@ const App = () => {
         <Route path="/" element={<Home />} /> {/*مسیر صفحه اصلی */}
         <Route path="/login" element={<Login />} />
         <Route path="/client-login" element={<ClientLogin />} />
+        <Route path="/client-login" element={<ClientLogin />} />
         <Route path="/venue-login" element={<VenueLogin />} />
+        <Route path="/my-dashboard" element={<MyDashboard />} />
         {/*مسیر صفحه لاگین مکان */}
         <Route path="/venues" element={<Venues />} />
         {/*مسیر لاگین */}
