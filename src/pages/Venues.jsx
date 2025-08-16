@@ -9,7 +9,7 @@ export default function Venues() {
   const results = location.state?.results || [];
 
   return (
-    <>
+    <div>
       <VenuesHeader />
       <div className="venues-container">
         <h2>Search Results</h2>
@@ -43,6 +43,6 @@ export default function Venues() {
           <p>No results found.</p>
         )}
       </div>
-    </>
+    </div>
   );
 }

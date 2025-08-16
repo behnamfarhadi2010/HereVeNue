@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { Link } from "react-router-dom";
 import "../styles/ClientLogin.css";
 import "../styles/Login.css";
 import "../styles/main.css";
@@ -28,7 +27,7 @@ const ClientLogin = () => {
   };
 
   return (
-    <>
+    <div>
       <Header />
       <main>
         <div className="Clientlogin-page">
@@ -40,7 +39,7 @@ const ClientLogin = () => {
           <form className="Clientlogin-box-user" onSubmit={handleLogin}>
             <input
               type="text"
-              placeholder="Email address"
+              placeholder="user"
               className="Clientlogin-input"
               value={user}
               onChange={(e) => setUser(e.target.value)}
@@ -78,7 +77,7 @@ const ClientLogin = () => {
           </form>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

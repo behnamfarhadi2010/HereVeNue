@@ -14,7 +14,7 @@ export default function VenuesHeader() {
 
       {/* Search component */}
       <div className="search-bar">
-        <Search />
+        <Search showGuests={false} />
       </div>
 
       {/* Menu items */}
