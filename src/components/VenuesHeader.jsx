@@ -1,27 +1,90 @@
-// src/components/VenuesHeader.jsx
-import React from "react";
-import Search from "./Search"; // reuse your existing search component
-import Logo from "../assets/ovblogo.png";
-import "../styles/VenuesHeader.css"; // import your CSS styles
+// src/components/Search.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import venues from "../data";
+import Header from "../components/Header";
+import "../styles/testVenuesearch.css"; // import your CSS styles
 
-export default function VenuesHeader() {
+export default function Search() {
+  const [eventType, setEventType] = useState("");
+  const [guests, setGuests] = useState("");
+  // const [city, setCity] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    const filtered = venues.filter((v) => {
+      const matchesEvent = eventType
+        ? v.eventType.toLowerCase().includes(eventType.trim().toLowerCase())
+        : true;
+      const matchesGuests = guests ? v.guests >= Number(guests) : true;
+      // const matchesCity = city
+      //   ? v.city.toLowerCase().includes(city.trim().toLowerCase())
+      //   : true;
+      return matchesEvent && matchesGuests;
+      // && matchesCity
+    });
+
+    // Navigate to /venues and pass the results
+    navigate("/venues", { state: { results: filtered } });
+  };
+
   return (
-    <header className="venues-header">
-      {/* Logo */}
-      <div className="logo">
-        <img src={Logo} alt="Logo" width="300" />
-      </div>
+    <>
+      <Header />
+      <form className="search-box1" onSubmit={handleSearch}>
+        {/* EVENT TYPE */}
+        <div className="filter-group1">
+          <label>EVENT TYPE</label>
+          <p className="filter-description1">What are you planning?</p>
+          <div className="select-wrapper1">
+            <input
+              type="text"
+              placeholder="e.g., Wedding"
+              value={eventType}
+              onChange={(e) => setEventType(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
+            />
+          </div>
+        </div>
 
-      {/* Search component */}
-      <div className="search-bar">
-        <Search showGuests={false} />
-      </div>
+        {/* GUESTS */}
+        <div className="filter-group1">
+          <label>GUESTS</label>
+          <p className="filter-description1">Number of guests</p>
+          <div className="select-wrapper1">
+            <input
+              type="number"
+              id="guests"
+              placeholder="e.g., 100"
+              min="1"
+              value={guests}
+              onChange={(e) => setGuests(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
+            />
+          </div>
+        </div>
 
-      {/* Menu items */}
-      <nav className="venues-menu">
-        <a href="/login">Log in</a>
-        <a href="/list">List your venue</a>
-      </nav>
-    </header>
+        {/* LOCATION */}
+        {/* <div className="filter-group">
+        <label>LOCATION</label>
+        <p className="filter-description">Choose City</p>
+        <div className="select-wrapper">
+          <input
+            type="text"
+            id="location"
+            placeholder="e.g., St. John's"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </div>
+      </div> */}
+
+        {/* <button className="search-btn" type="submit">
+        Search
+      </button> */}
+      </form>
+    </>
   );
 }

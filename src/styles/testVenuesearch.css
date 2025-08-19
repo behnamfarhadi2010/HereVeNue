@@ -7,38 +7,47 @@
 .venues-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   padding: 20px;
-  padding-left: 11rem;
+  font-size: 12px;
+  padding-left: 14rem;
+  padding-top: 40px;
 }
 
-.venues-header {
+.search-box1 {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: white;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
+  padding-left: 14rem;
+  width: 70%;
+  font-size: 14px;
+  gap: 10px;
+  margin-top: 33px;
 }
-
-.venues-header .logo img {
+.filter-group1 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+}
+/* .venues-header .logo img {
   height: 35px;
-}
+} */
 
-.search-bar {
+/* .search-bar {
   flex: 1;
   margin: 0 20px;
-}
+} */
 
-.venues-menu {
+/* .venues-menu {
   display: flex;
   gap: 20px;
-}
+} */
 
-.venues-menu a {
+/* .venues-menu a {
   text-decoration: none;
   color: #333;
-}
+} */
 
 /* show searc resuls like grid */
 .venues-grid {
@@ -46,6 +55,7 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
+  padding-left: 0rem;
 }
 
 .venue-card {
@@ -71,15 +81,15 @@
 }
 /* { */
 /* .venue-image {
-  width: "300px";
-  height: "200px";
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  margin-bottom: 10px;
-  /* cursor: pointer;
-  display: block;
-  margin-left: auto;
-  margin-right: auto; */
+    width: "300px";
+    height: "200px";
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 10px;
+    /* cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; */
 /* }  */

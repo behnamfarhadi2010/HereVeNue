@@ -31,6 +31,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  src: url("../assets/logo.png");
   /* width: 100px;
   height: 100px; */
   margin-top: -3.4rem;
@@ -151,7 +152,8 @@ h1 {
   text-transform: uppercase;
   margin-bottom: 5px;
 }
-.filter-group input:hover {
+.filter-group input:hover,
+.filter-group input:focus {
   border-color: #ec676a;
 }
 
@@ -170,11 +172,21 @@ form input[type="text"] {
   width: 70%;
   padding: 12px 15px;
   border: 1px solid #ddd;
-  border-color: #ec676a;
+  border-color: #5a5152;
   border-radius: 4px;
   appearance: none;
   background-color: white;
   font-size: 14px;
+}
+#guests:hover,
+#location:hover,
+form input[type="text"]:hover,
+#guests:focus,
+#location:focus,
+form input[type="text"]:focus {
+  border-color: #ec676a;
+  box-shadow: 0 0 0 3px rgba(236, 103, 106, 0.25);
+  outline: none;
 }
 select {
   width: 100%;
@@ -248,21 +260,4 @@ select {
   .search-box {
     flex-direction: column;
   }
-}
-
-.menuHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #282c34;
-  color: white;
-}
-.menuHeader nav span {
-  display: flex;
-  gap: 20px;
-  border: #282c34 1px solid;
-  padding: 10px;
-  border-radius: 5px;
-  color: violet;
 }

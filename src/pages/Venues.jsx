@@ -1,7 +1,8 @@
 // src/pages/Venues.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Header from "../components/Header";
+// import Header from "../components/Header";
+
 import VenuesHeader from "../components/VenuesHeader";
 
 export default function Venues() {
@@ -23,7 +24,7 @@ export default function Venues() {
                     src={venue.image}
                     alt={venue.title}
                     style={{
-                      width: "300px",
+                      width: "330px",
                       height: "200px",
                       objectFit: "cover",
                       borderRadius: "8px",
