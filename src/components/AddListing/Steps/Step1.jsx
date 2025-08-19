@@ -1,11 +1,10 @@
 import React from "react";
-// src/components/AddListing/Steps/Step1.jsx
 
 const Step1 = ({ formData, handleChange, handleVenueTypeToggle }) => {
   const venueCategories = {
     Popular: [
-      "Apartments / Penthouse",
-      "Auditorium",
+      "Garden",
+      "‌Birthday",
       "Conference Centre",
       "Hotel",
       "Meeting Centre",

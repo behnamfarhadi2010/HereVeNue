@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/ovblogo.png";
 import Person from "../assets/person.svg";
 import Home24 from "../assets/home_24.svg";
-// import './Header.css';
+import "../styles/main.css";
 
 function Header() {
   return (

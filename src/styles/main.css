@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -12,13 +18,14 @@ body {
 header {
   display: flex;
   position: sticky;
-  width: 90%;
+  top: 0; /* so it stays visible */
+  width: 100%;
   background-color: #fff;
-  margin-top: -14px;
-  padding: 0 8% 5% 8%;
+  padding: 10px 5%; /* safe padding */
   z-index: 1000;
   align-items: center;
   justify-content: space-between;
+  /* border-bottom: 1px solid #eee; subtle divider */
 }
 .logo {
   display: flex;
@@ -27,7 +34,7 @@ header {
   /* width: 100px;
   height: 100px; */
   margin-top: -3.4rem;
-  margin-left: 3.9rem;
+  margin-left: 8.9rem;
 }
 nav {
   display: flex;
@@ -144,6 +151,9 @@ h1 {
   text-transform: uppercase;
   margin-bottom: 5px;
 }
+.filter-group input:hover {
+  border-color: #ec676a;
+}
 
 .filter-description {
   font-size: 14px;
@@ -160,6 +170,7 @@ form input[type="text"] {
   width: 70%;
   padding: 12px 15px;
   border: 1px solid #ddd;
+  border-color: #ec676a;
   border-radius: 4px;
   appearance: none;
   background-color: white;
