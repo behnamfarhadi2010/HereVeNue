@@ -1,15 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .Clientlogin-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 1rem;
+  justify-content: center;
+  margin-left: 11.9rem;
+  min-height: 80vh;
+  width: 100%;
+  gap: 4rem;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .Clientlogin-title {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin: 0;
 }
 
 .Clientlogin-title h1 {
