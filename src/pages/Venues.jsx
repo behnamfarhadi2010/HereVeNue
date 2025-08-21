@@ -1,6 +1,7 @@
 // src/pages/Venues.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
+import MyMap from "../components/MyMap";
 // import Header from "../components/Header";
 
 import VenuesHeader from "../components/VenuesHeader";
@@ -12,6 +13,7 @@ export default function Venues() {
   return (
     <div>
       <VenuesHeader />
+
       <div className="venues-container">
         <h2>Search Results</h2>
         {results.length > 0 ? (
@@ -43,6 +45,10 @@ export default function Venues() {
         ) : (
           <p>No results found.</p>
         )}
+      </div>
+      <div className="App">
+        <h1>My React Leaflet Map</h1>
+        <MyMap />
       </div>
     </div>
   );
