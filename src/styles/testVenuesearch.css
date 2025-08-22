@@ -3,65 +3,56 @@
   padding: 0;
   box-sizing: border-box;
 }
+.venues-layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  padding-top: 60px;
+  overflow: hidden;
+  margin-left: 5rem;
+}
+
+.venues-results {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+}
 
 .venues-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  font-size: 12px;
-  padding-left: 14rem;
-  padding-top: 40px;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  padding-top: 60px;
+  overflow: hidden;
 }
 
-.search-box1 {
-  display: flex;
-  align-items: center;
-  padding-left: 14rem;
-  width: 70%;
-  font-size: 14px;
-  gap: 10px;
-  margin-top: 33px;
-}
-.filter-group1 {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-family: "Poppins", sans-serif;
-  font-size: 13px;
-}
-/* .venues-header .logo img {
-  height: 35px;
-} */
-
-/* .search-bar {
-  flex: 1;
-  margin: 0 20px;
-} */
-
-/* .venues-menu {
-  display: flex;
-  gap: 20px;
-} */
-
-/* .venues-menu a {
-  text-decoration: none;
-  color: #333;
-} */
-
-/* show searc resuls like grid */
+/* LEFT SIDE Venues list */
 .venues-grid {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
-  padding-left: 0rem;
+  overflow-y: auto; /* scroll only venues list */
+}
+
+/* RIGHT SIDE Map */
+.Mapp {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 40%;
+  height: calc(100vh - 60px); /* full height minus header */
+  background: #eee;
 }
 
 .venue-card {
   background: white;
   border-radius: 8px;
-  overflow: hidden; /* Makes corners round for image too */
+  overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
@@ -69,27 +60,21 @@
 .venue-card:hover {
   transform: translateY(-5px);
 }
-
-.venue-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+.search-box1 {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  margin-top: 5rem;
+  margin-left: 8rem;
 }
+.venues-map {
+  display: flex;
+  flex-direction: column;
+  align-items: right;
 
-.venue-info {
-  padding: 10px;
+  width: 40%;
+  height: 80vh;
 }
-/* { */
-/* .venue-image {
-    width: "300px";
-    height: "200px";
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    margin-bottom: 10px;
-    /* cursor: pointer;
-    display: block;
-    margin-left: auto;
-    margin-right: auto; */
-/* }  */
+.venues-map > div {
+  height: 100%; /* make MyMap fill the container */
+}
