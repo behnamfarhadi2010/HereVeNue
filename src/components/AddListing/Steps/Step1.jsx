@@ -1,6 +1,6 @@
 import React from "react";
 
-const Step1 = ({ formData, handleChange, handleVenueTypeToggle }) => {
+const Step1 = ({ formData, handleChange, handleVenueTypeToggle, nextStep }) => {
   const venueCategories = {
     Popular: [
       "Garden",
@@ -67,6 +67,13 @@ const Step1 = ({ formData, handleChange, handleVenueTypeToggle }) => {
         <div className="character-count">
           {formData.venueDescription.length}/50 characters minimum
         </div>
+      </div>
+
+      {/* Next Button */}
+      <div className="form-navigation">
+        <button type="button" className="next-btn" onClick={nextStep}>
+          Next
+        </button>
       </div>
     </div>
   );

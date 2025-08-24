@@ -113,6 +113,41 @@
   margin-top: 5px;
 }
 
+/* Form navigation */
+.form-navigation {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.next-btn,
+.prev-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 120px;
+}
+
+.next-btn {
+  background-color: #ec676a;
+  color: white;
+}
+
+.prev-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.next-btn:hover,
+.prev-btn:hover {
+  opacity: 0.9;
+}
+
 /* Form actions */
 .form-actions {
   display: flex;
@@ -121,8 +156,7 @@
   gap: 15px;
 }
 
-.submit-btn,
-.next-btn {
+.submit-btn {
   padding: 12px 25px;
   border: none;
   border-radius: 4px;
@@ -130,21 +164,9 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.submit-btn {
   background-color: #f8f9fa;
   color: #333;
   border: 1px solid #ddd;
-}
-
-.next-btn {
-  background-color: #ec676a;
-  color: white;
-}
-
-.next-btn:hover {
-  background-color: #e34949;
 }
 
 /* Responsive adjustments */
@@ -152,6 +174,7 @@
   .add-listing-container {
     width: 95%;
     padding: 15px;
+    margin-left: 0;
   }
 
   .venue-types-grid {
@@ -162,13 +185,15 @@
     flex-direction: column;
   }
 
-  .submit-btn,
-  .next-btn {
-    width: 100%;
+  .form-navigation {
+    flex-direction: column; /* Stack buttons vertically on mobile */
+    gap: 0.5rem;
   }
 
-  .next-btn {
-    margin-top: 10px;
+  .next-btn,
+  .prev-btn,
+  .submit-btn {
+    width: 100%;
   }
 }
 
