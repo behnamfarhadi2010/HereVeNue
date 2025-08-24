@@ -5,7 +5,25 @@ const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
   return (
     <div className="step2-form">
       <h2>Step 2: Location & Address</h2>
-
+      <div className="form-group">
+        <label htmlFor="country">Country</label>
+        <select
+          id="country"
+          name="country"
+          value={formData.country || ""}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select Country</option>
+          <option value="USA">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="Canada">Canada</option>
+          <option value="Australia">Australia</option>
+          <option value="Germany">Germany</option>
+          <option value="France">France</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
       <div className="form-group">
         <label htmlFor="venueAddress">Street Address</label>
         <input
@@ -60,28 +78,21 @@ const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
           />
         </div>
-
+      </div>
+      <div className="form-row">
         <div className="form-group">
-          <label htmlFor="country">Country</label>
-          <select
-            id="country"
-            name="country"
-            value={formData.country || ""}
+          <label htmlFor="zipCode">Show your location on Map</label>
+          <input
+            type="text"
+            id="zipCode"
+            name="zipCode"
+            value={formData.zipCode || ""}
             onChange={handleChange}
+            placeholder="Enter ZIP code"
             required
-          >
-            <option value="">Select Country</option>
-            <option value="USA">United States</option>
-            <option value="UK">United Kingdom</option>
-            <option value="Canada">Canada</option>
-            <option value="Australia">Australia</option>
-            <option value="Germany">Germany</option>
-            <option value="France">France</option>
-            <option value="Other">Other</option>
-          </select>
+          />
         </div>
       </div>
-
       <div className="form-group">
         <label htmlFor="neighborhood">Neighborhood/District</label>
         <input

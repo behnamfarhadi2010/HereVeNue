@@ -169,6 +169,146 @@
   border: 1px solid #ddd;
 }
 
+/* Step 3 Specific Styles */
+.step3-form h2 {
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 28px;
+}
+
+.step3-form h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+}
+
+.example-text {
+  color: #888;
+  font-style: italic;
+  margin-bottom: 1rem;
+  font-size: 13px;
+}
+
+/* Search Box */
+.search-box {
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ec676a;
+}
+
+/* Space Types Grid */
+.space-types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.space-type-btn {
+  padding: 12px 15px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  font-size: 14px;
+}
+
+.space-type-btn:hover {
+  background: #f5f5f5;
+}
+
+.space-type-btn.selected {
+  background: #ec676a;
+  color: white;
+  border-color: #ec676a;
+}
+
+.selected-indicator {
+  background: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 4px;
+  border-left: 4px solid #ec676a;
+  margin-top: 1rem;
+}
+
+/* Venue Parts List */
+.venue-parts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.venue-part-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: white;
+}
+
+.venue-part-card:hover {
+  border-color: #ccc;
+  background: #fafafa;
+}
+
+.venue-part-card.selected {
+  border-color: #ec676a;
+  background: #fff5f5;
+}
+
+.venue-part-content {
+  flex: 1;
+}
+
+.venue-part-content h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.venue-part-content p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.selection-indicator {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark {
+  color: #ec676a;
+  font-weight: bold;
+  font-size: 18px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .add-listing-container {

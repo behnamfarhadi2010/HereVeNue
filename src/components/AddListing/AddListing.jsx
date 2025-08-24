@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
+import Step3 from "./Steps/Step3";
 import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
@@ -21,6 +22,10 @@ const AddListing = () => {
     landmarks: "",
     parkingInfo: "",
     publicTransport: "",
+    // Step 3 fields
+    spaceType: "",
+    venuePart: "",
+    spaceTypeSearch: "",
   });
 
   const handleChange = (e) => {
@@ -64,6 +69,17 @@ const AddListing = () => {
             formData={formData}
             handleChange={handleChange}
             prevStep={prevStep}
+            nextStep={nextStep}
+            // Add other props needed for Step2
+          />
+        );
+      case 3:
+        return (
+          <Step3
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+
             // Add other props needed for Step2
           />
         );
