@@ -146,7 +146,7 @@ const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
           type="button"
           className="next-btn"
           onClick={nextStep}
-          disabled={!isStepValid()}
+          //   disabled={!isStepValid()}
         >
           Next
         </button>
