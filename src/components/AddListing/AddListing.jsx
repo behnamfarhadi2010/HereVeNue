@@ -3,6 +3,7 @@ import { useState } from "react";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
 import Step3 from "./Steps/Step3";
+import Step4 from "./Steps/Step4";
 import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
@@ -26,6 +27,19 @@ const AddListing = () => {
     spaceType: "",
     venuePart: "",
     spaceTypeSearch: "",
+    // Step 4 fields
+    freeParkingOnPremises: false,
+    freeParkingSpaces: "",
+    freeStreetParking: false,
+    paidParkingOnPremises: false,
+    paidParkingSpaces: "",
+    paidParkingOffPremises: false,
+    accommodationAvailable: false,
+    accommodationRooms: "",
+    allowedEvents: false,
+    ageRestrictions: false,
+    minAgeRequirement: "",
+    enforcementTime: "",
   });
 
   const handleChange = (e) => {
@@ -79,8 +93,18 @@ const AddListing = () => {
             formData={formData}
             handleChange={handleChange}
             prevStep={prevStep}
+            nextStep={nextStep}
 
             // Add other props needed for Step2
+          />
+        );
+      case 4:
+        return (
+          <Step4
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
           />
         );
       // Add more cases for additional steps
