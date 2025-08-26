@@ -4,6 +4,7 @@ import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
 import Step3 from "./Steps/Step3";
 import Step4 from "./Steps/Step4";
+import Step5 from "./Steps/Step5";
 import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
@@ -40,6 +41,25 @@ const AddListing = () => {
     ageRestrictions: false,
     minAgeRequirement: "",
     enforcementTime: "",
+    // Step 5 fields
+    layouts: {
+      dining: false,
+      standing: false,
+      cabaret: false,
+      classroom: false,
+      theatre: false,
+      uShaped: false,
+      boardroom: false,
+    },
+    capacity_dining: "",
+    capacity_standing: "",
+    capacity_cabaret: "",
+    capacity_classroom: "",
+    capacity_theatre: "",
+    capacity_uShaped: "",
+    capacity_boardroom: "",
+    minAttendees: "",
+    floorPlanImages: [],
   });
 
   const handleChange = (e) => {
@@ -101,6 +121,15 @@ const AddListing = () => {
       case 4:
         return (
           <Step4
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        );
+      case 5:
+        return (
+          <Step5
             formData={formData}
             handleChange={handleChange}
             prevStep={prevStep}
