@@ -71,9 +71,9 @@ const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
     handleChange({ target: { name: "venuePart", value: part } });
   };
 
-  const isStepValid = () => {
-    return formData.spaceType && formData.venuePart;
-  };
+  //   const isStepValid = () => {
+  //     return formData.spaceType && formData.venuePart;
+  //   };
 
   return (
     <div className="step3-form">
