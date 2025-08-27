@@ -5,6 +5,7 @@ import Step2 from "./Steps/Step2";
 import Step3 from "./Steps/Step3";
 import Step4 from "./Steps/Step4";
 import Step5 from "./Steps/Step5";
+import Step6 from "./Steps/Step6";
 import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
@@ -60,6 +61,19 @@ const AddListing = () => {
     capacity_boardroom: "",
     minAttendees: "",
     floorPlanImages: [],
+    // Step 6 fields
+    weddingLicense: false,
+    // Facilities
+    customFacilities: [],
+    playOwnMusic: false,
+    bringOwnDJ: false,
+    noiseRestrictions: false,
+    wheelchairAccessible: false,
+    accessibleToilet: false,
+    stepFreeEntrance: false,
+    accessibleParking: false,
+    liftAllFloors: false,
+    cargolift: false,
   });
 
   const handleChange = (e) => {
@@ -130,6 +144,15 @@ const AddListing = () => {
       case 5:
         return (
           <Step5
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        );
+      case 6:
+        return (
+          <Step6
             formData={formData}
             handleChange={handleChange}
             prevStep={prevStep}
