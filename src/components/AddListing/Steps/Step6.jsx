@@ -295,10 +295,10 @@ const Step6 = ({ formData, handleChange, prevStep, nextStep }) => {
       {/* Navigation */}
       <div className="form-navigation">
         <button type="button" className="prev-btn" onClick={prevStep}>
-          Back
+          Previous
         </button>
         <button type="button" className="next-btn" onClick={nextStep}>
-          Continue
+          Next
         </button>
       </div>
     </div>

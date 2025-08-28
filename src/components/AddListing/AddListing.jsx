@@ -6,6 +6,8 @@ import Step3 from "./Steps/Step3";
 import Step4 from "./Steps/Step4";
 import Step5 from "./Steps/Step5";
 import Step6 from "./Steps/Step6";
+import Step7 from "./Steps/Step7";
+import Step8 from "./Steps/Step8";
 import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
@@ -74,7 +76,44 @@ const AddListing = () => {
     accessibleParking: false,
     liftAllFloors: false,
     cargolift: false,
+    // Step 7 fields
+    pricingOption: "",
+    monday: { status: "closed", fullDayRate: "" },
+    tuesday: { status: "closed", fullDayRate: "" },
+    wednesday: { status: "closed", fullDayRate: "" },
+    thursday: { status: "closed", fullDayRate: "" },
+    friday: { status: "closed", fullDayRate: "" },
+    saturday: { status: "closed", fullDayRate: "" },
+    sunday: { status: "closed", fullDayRate: "" },
+    mondayHourlyRates: [],
+    tuesdayHourlyRates: [],
+    wednesdayHourlyRates: [],
+    thursdayHourlyRates: [],
+    fridayHourlyRates: [],
+    saturdayHourlyRates: [],
+    sundayHourlyRates: [],
+    cleaningFee: "",
+    minBookingHours: "2",
+    pricingComment: "",
+    // Step 8 fields
+    rules: "",
+    cancellationPolicy: "",
+    customPolicy_atLeast: "",
+    customPolicy_lessThan: "",
+    allowRescheduling: false,
+    rescheduleMonths: "3",
   });
+  const handleSubmit = () => {
+    localStorage.setItem("venueFormData", JSON.stringify(formData));
+    localStorage.setItem(
+      "venueSubmission",
+      JSON.stringify({
+        ...formData,
+        submittedAt: new Date().toISOString(),
+        status: "submitted",
+      })
+    );
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -159,11 +198,30 @@ const AddListing = () => {
             nextStep={nextStep}
           />
         );
+      case 7:
+        return (
+          <Step7
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        );
+      case 8:
+        return (
+          <Step8
+            formData={formData}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            onSubmit={handleSubmit}
+          />
+        );
       // Add more cases for additional steps
       default:
         return <Step1 />;
     }
   };
+
   return (
     <>
       <Header />
