@@ -103,17 +103,37 @@ const AddListing = () => {
     allowRescheduling: false,
     rescheduleMonths: "3",
   });
+
   const handleSubmit = () => {
+    // Save final data to localStorage
+    const submissionData = {
+      ...formData,
+      submittedAt: new Date().toISOString(),
+      status: "submitted",
+    };
+
     localStorage.setItem("venueFormData", JSON.stringify(formData));
-    localStorage.setItem(
-      "venueSubmission",
-      JSON.stringify({
-        ...formData,
-        submittedAt: new Date().toISOString(),
-        status: "submitted",
-      })
-    );
+    localStorage.setItem("venueSubmission", JSON.stringify(submissionData));
+
+    console.log("Form submitted:", submissionData);
+
+    // Show success message
+    alert("Venue submitted successfully! Redirecting to dashboard...");
+
+    // Redirect to dashboard
+    window.location.href = "/dashboard";
   };
+  // const handleSubmit = () => {
+  //   localStorage.setItem("venueFormData", JSON.stringify(formData));
+  //   localStorage.setItem(
+  //     "venueSubmission",
+  //     JSON.stringify({
+  //       ...formData,
+  //       submittedAt: new Date().toISOString(),
+  //       status: "submitted",
+  //     })
+  //   );
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

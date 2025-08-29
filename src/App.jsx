@@ -3,6 +3,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
+import VenueOwnerDashboard from "./components/VenueOwnerDashboard.jsx";
 
 import "./pages/myDashboard.jsx";
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/venue-login" element={<VenueLogin />} />
         <Route path="/my-dashboard" element={<MyDashboard />} />
         <Route path="/add-listing" element={<AddListing />} />
+        <Route path="/dashboard" element={<VenueOwnerDashboard />} />
         {/*مسیر صفحه لاگین مکان */}
         <Route path="/venues" element={<Venues />} />
         {/*مسیر لاگین */}
