@@ -4,21 +4,29 @@ import { useNavigate } from "react-router-dom";
 
 const VenueOwnerDashboard = () => {
   const navigate = useNavigate();
-  const [venueData, setVenueData] = useState(null);
+  const [venues, setVenues] = useState([]);
 
   useEffect(() => {
-    // Load from localStorage
-    const savedVenue = localStorage.getItem("venueSubmission");
-    if (savedVenue) {
-      setVenueData(JSON.parse(savedVenue));
+    // Load all venues from localStorage
+    const savedVenues = localStorage.getItem("venueSubmissions");
+    if (savedVenues) {
+      setVenues(JSON.parse(savedVenues));
     }
   }, []);
 
-  if (!venueData) {
+  const deleteVenue = (venueId) => {
+    if (window.confirm("Are you sure you want to delete this venue?")) {
+      const updatedVenues = venues.filter((venue) => venue.id !== venueId);
+      setVenues(updatedVenues);
+      localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+    }
+  };
+
+  if (venues.length === 0) {
     return (
       <div className="dashboard-container">
         <h1>My Venue Dashboard</h1>
-        <p>No venue data found. Please create a venue first.</p>
+        <p>No venues found. Please create your first venue.</p>
         <button
           onClick={() => navigate("/add-listing")}
           className="primary-btn"
@@ -38,74 +46,54 @@ const VenueOwnerDashboard = () => {
           onClick={() => navigate("/add-listing")}
           className="primary-btn"
         >
-          ➕ Create New Venue
+          + Create New Venue
         </button>
-        <button onClick={() => navigate("/")} className="secondary-btn">
-          ← Back to Home
-        </button>
+        <span className="venue-count">Total Venues: {venues.length}</span>
       </div>
 
-      <div className="venue-card">
-        <h2>{venueData.venueName || "Unnamed Venue"}</h2>
-        <p className="submission-date">
-          Submitted on: {new Date(venueData.submittedAt).toLocaleDateString()}
-        </p>
+      <div className="venues-list">
+        {venues.map((venue) => (
+          <div key={venue.id} className="venue-card">
+            <h2>{venue.venueName || "Unnamed Venue"}</h2>
+            <p className="submission-date">
+              Submitted on: {new Date(venue.submittedAt).toLocaleDateString()}
+            </p>
 
-        <div className="venue-details">
-          <h3>Venue Details</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
-              <strong>Venue Type:</strong>{" "}
-              {venueData.spaceType || "Not specified"}
+            <div className="venue-details">
+              <div className="detail-grid">
+                <div className="detail-item">
+                  <strong>Venue Type:</strong>{" "}
+                  {venue.spaceType || "Not specified"}
+                </div>
+                <div className="detail-item">
+                  <strong>Location:</strong>{" "}
+                  {venue.venueAddress
+                    ? `${venue.venueAddress}, ${venue.city}`
+                    : "Not specified"}
+                </div>
+                <div className="detail-item">
+                  <strong>Capacity:</strong>{" "}
+                  {venue.capacity_standing || "Not specified"}
+                </div>
+                <div className="detail-item">
+                  <strong>Status:</strong>{" "}
+                  <span className="status">{venue.status || "draft"}</span>
+                </div>
+              </div>
             </div>
-            <div className="detail-item">
-              <strong>Location:</strong>{" "}
-              {venueData.venueAddress
-                ? `${venueData.venueAddress}, ${venueData.city}`
-                : "Not specified"}
-            </div>
-            <div className="detail-item">
-              <strong>Capacity:</strong>{" "}
-              {venueData.capacity_standing || "Not specified"}
-            </div>
-            <div className="detail-item">
-              <strong>Pricing:</strong>{" "}
-              {venueData.pricingOption
-                ? venueData.pricingOption.replace(/([A-Z])/g, " $1").trim()
-                : "Not specified"}
-            </div>
-          </div>
-        </div>
 
-        {venueData.venueDescription && (
-          <div className="description-section">
-            <h3>Description</h3>
-            <p>{venueData.venueDescription}</p>
-          </div>
-        )}
-
-        {venueData.venueTypes && venueData.venueTypes.length > 0 && (
-          <div className="venue-types">
-            <h3>Venue Types</h3>
-            <div className="tags">
-              {venueData.venueTypes.map((type, index) => (
-                <span key={index} className="tag">
-                  {type}
-                </span>
-              ))}
+            <div className="action-buttons">
+              <button className="edit-btn">Edit</button>
+              <button className="view-btn">View</button>
+              <button
+                className="delete-btn"
+                onClick={() => deleteVenue(venue.id)}
+              >
+                Delete
+              </button>
             </div>
           </div>
-        )}
-
-        <div className="status-badge">
-          Status: <span className="status">{venueData.status || "draft"}</span>
-        </div>
-
-        <div className="action-buttons">
-          <button className="edit-btn">Edit Venue</button>
-          <button className="view-btn">View Public Page</button>
-          <button className="delete-btn">Delete</button>
-        </div>
+        ))}
       </div>
     </div>
   );
