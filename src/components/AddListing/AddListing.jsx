@@ -105,24 +105,45 @@ const AddListing = () => {
   });
 
   const handleSubmit = () => {
-    // Save final data to localStorage
-    const submissionData = {
+    const existingVenues = JSON.parse(
+      localStorage.getItem("venueSubmissions") || "[]"
+    );
+
+    const newVenue = {
       ...formData,
+      id: Date.now(),
       submittedAt: new Date().toISOString(),
       status: "submitted",
     };
 
+    const updatedVenues = [...existingVenues, newVenue];
+
+    localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+
     localStorage.setItem("venueFormData", JSON.stringify(formData));
-    localStorage.setItem("venueSubmission", JSON.stringify(submissionData));
 
-    console.log("Form submitted:", submissionData);
+    console.log("Venue submitted:", newVenue);
+    console.log("Total venues:", updatedVenues.length);
 
-    // Show success message
-    alert("Venue submitted successfully! Redirecting to dashboard...");
-
-    // Redirect to dashboard
     window.location.href = "/dashboard";
   };
+
+  // const handleSubmit = () => {
+  //   // Save final data to localStorage
+  //   const submissionData = {
+  //     ...formData,
+  //     submittedAt: new Date().toISOString(),
+  //     status: "submitted",
+  //   };
+
+  //   localStorage.setItem("venueFormData", JSON.stringify(formData));
+  //   localStorage.setItem("venueSubmission", JSON.stringify(submissionData));
+
+  //   console.log("Form submitted:", submissionData);
+
+  //   // Redirect to dashboard
+  //   window.location.href = "/dashboard";
+  // };
   // const handleSubmit = () => {
   //   localStorage.setItem("venueFormData", JSON.stringify(formData));
   //   localStorage.setItem(
