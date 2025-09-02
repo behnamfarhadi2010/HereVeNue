@@ -2,15 +2,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import venues from "../data";
+import { useVenue } from "../contexts/VenueContext";
 
 export default function Search() {
   const [eventType, setEventType] = useState("");
   const [guests, setGuests] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate();
+  const { searchVenues } = useVenue();
 
   const handleSearch = (e) => {
     e.preventDefault();
+
+    const filters = {
+      eventType: eventType.trim(),
+      guests: guests.trim(),
+      city: city.trim(),
+    };
+    const filteredResults = searchVenues(filters);
+    navigate("/venues", { state: { results: filteredResults } });
 
     const filtered = venues.filter((v) => {
       const matchesEvent = eventType

@@ -1,5 +1,6 @@
 // src/components/AddListing/AddListing.jsx
 import { useState } from "react";
+import { useVenue } from "../../contexts/VenueContext";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
 import Step3 from "./Steps/Step3";
@@ -12,6 +13,7 @@ import "../../styles/add-listing.css";
 import Header from "../Header"; // Adjust the import path as necessary
 
 const AddListing = () => {
+  const { addVenue } = useVenue();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     venueName: "",
@@ -105,6 +107,7 @@ const AddListing = () => {
   });
 
   const handleSubmit = () => {
+    addVenue(formData);
     const existingVenues = JSON.parse(
       localStorage.getItem("venueSubmissions") || "[]"
     );
