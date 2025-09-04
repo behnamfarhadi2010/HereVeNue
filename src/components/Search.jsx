@@ -1,6 +1,7 @@
 // src/components/Search.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import venues from "../data";
 import { useVenue } from "../contexts/VenueContext";
 
 export default function Search() {
@@ -18,24 +19,34 @@ export default function Search() {
       guests: guests.trim(),
       city: city.trim(),
     };
-
-    // Use context to search venues
     const filteredResults = searchVenues(filters);
-
-    // Navigate to /venues with results
     navigate("/venues", { state: { results: filteredResults } });
+
+    const filtered = venues.filter((v) => {
+      const matchesEvent = eventType
+        ? v.eventType.toLowerCase().includes(eventType.trim().toLowerCase())
+        : true;
+      const matchesGuests = guests ? v.guests >= Number(guests) : true;
+      const matchesCity = city
+        ? v.city.toLowerCase().includes(city.trim().toLowerCase())
+        : true;
+      return matchesEvent && matchesGuests && matchesCity;
+    });
+
+    // Navigate to /venues and pass the results
+    navigate("/venues", { state: { results: filtered } });
   };
 
   return (
     <form className="search-box" onSubmit={handleSearch}>
-      {/* ... your existing JSX remains the same */}
+      {/* EVENT TYPE */}
       <div className="filter-group">
         <label>EVENT TYPE</label>
         <p className="filter-description">What are you planning?</p>
         <div className="select-wrapper">
           <input
             type="text"
-            placeholder="e.g., Wedding, Conference, Birthday"
+            placeholder="e.g., Wedding"
             value={eventType}
             onChange={(e) => setEventType(e.target.value)}
           />
@@ -49,6 +60,7 @@ export default function Search() {
         <div className="select-wrapper">
           <input
             type="number"
+            id="guests"
             placeholder="e.g., 100"
             min="1"
             value={guests}
@@ -64,7 +76,8 @@ export default function Search() {
         <div className="select-wrapper">
           <input
             type="text"
-            placeholder="e.g., New York, London"
+            id="location"
+            placeholder="e.g., St. John's"
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
