@@ -28,6 +28,19 @@ const Step1 = ({ formData, handleChange, handleVenueTypeToggle, nextStep }) => {
       </div>
 
       <div className="form-group">
+        <label htmlFor="venueSize">Venue Size</label>
+        <input
+          type="number"
+          id="venueSize"
+          name="venueSize"
+          value={formData.venueSize}
+          onChange={handleChange}
+          placeholder="Enter venue Size"
+          required
+        />
+      </div>
+
+      <div className="form-group">
         <h3>Venue Type</h3>
         <p>Select one or more options</p>
 

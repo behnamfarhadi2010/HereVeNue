@@ -1,26 +1,23 @@
 // src/components/VenueOwnerDashboard.jsx
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useVenue } from "../contexts/VenueContext";
 
 const VenueOwnerDashboard = () => {
+  const venueContext = useVenue();
+  const deleteVenue = venueContext.deleteVenue;
+  const venues = venueContext.venues;
+
   const navigate = useNavigate();
-  const [venues, setVenues] = useState([]);
+  //   const [venues, setVenues] = useState([]);
 
-  useEffect(() => {
-    // Load all venues from localStorage
-    const savedVenues = localStorage.getItem("venueSubmissions");
-    if (savedVenues) {
-      setVenues(JSON.parse(savedVenues));
-    }
-  }, []);
-
-  const deleteVenue = (venueId) => {
-    if (window.confirm("Are you sure you want to delete this venue?")) {
-      const updatedVenues = venues.filter((venue) => venue.id !== venueId);
-      setVenues(updatedVenues);
-      localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
-    }
-  };
+  //   const deleteVenue = (venueId) => {
+  //     if (window.confirm("Are you sure you want to delete this venue?")) {
+  //       const updatedVenues = venues.filter((venue) => venue.id !== venueId);
+  //       setVenues(updatedVenues);
+  //       localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+  //     }
+  //   };
 
   if (venues.length === 0) {
     return (

@@ -1,7 +1,10 @@
 // src/components/AddListing/Steps/Step8.jsx
 import React, { useState } from "react";
+import { useVenue } from "../../../contexts/VenueContext";
 
 const Step8 = ({ formData, handleChange, prevStep, onSubmit }) => {
+  const venue = useVenue();
+
   const [rules, setRules] = useState(formData.rules || "");
 
   const cancellationPolicies = [
@@ -64,6 +67,7 @@ const Step8 = ({ formData, handleChange, prevStep, onSubmit }) => {
 
   const handleSubmit = () => {
     // Save to localStorage
+    venue.addVenue(formData);
     localStorage.setItem("venueFormData", JSON.stringify(formData));
     localStorage.setItem(
       "venueSubmission",

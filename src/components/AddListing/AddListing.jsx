@@ -17,6 +17,7 @@ const AddListing = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     venueName: "",
+    venueSize: "",
     venueDescription: "",
     venueTypes: [],
     // Step 2 fields
