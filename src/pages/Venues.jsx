@@ -35,11 +35,8 @@ export default function Venues() {
                     <h3>{venue.venueName || "Unnamed Venue"}</h3>
                     <p>
                       {venue.venueTypes?.join(", ") || "No event type"} •{" "}
-                      {venue.capacity_standing ||
-                        venue.capacity_dining ||
-                        venue.capacity_theatre ||
-                        "Capacity not set"}{" "}
-                      guests • {venue.city || "Unknown city"}
+                      {venue.venueSize || "Capacity not set"} guests •{" "}
+                      {venue.city || "Unknown city"}
                     </p>
                   </div>
                 </div>
