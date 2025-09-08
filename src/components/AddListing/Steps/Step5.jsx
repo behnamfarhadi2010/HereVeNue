@@ -46,17 +46,42 @@ const Step5 = ({ formData, handleChange, prevStep, nextStep }) => {
     formData.floorPlanImages || []
   );
 
+  // const handleImageUpload = (event) => {
+  //   const files = Array.from(event.target.files);
+  //   const newImages = files.map((file) => ({
+  //     name: file.name,
+  //     url: URL.createObjectURL(file),
+  //     type: file.type,
+  //   }));
+
+  //   const updatedImages = [...floorPlanImages, ...newImages];
+  //   setFloorPlanImages(updatedImages);
+  //   handleChange({ target: { name: "floorPlanImages", value: updatedImages } });
+  // };
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map((file) => ({
-      name: file.name,
-      url: URL.createObjectURL(file),
-      type: file.type,
-    }));
 
-    const updatedImages = [...floorPlanImages, ...newImages];
-    setFloorPlanImages(updatedImages);
-    handleChange({ target: { name: "floorPlanImages", value: updatedImages } });
+    const fileReaders = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file); // Convert to Base64
+        reader.onload = () =>
+          resolve({
+            name: file.name,
+            url: reader.result, // base64 string
+            type: file.type,
+          });
+        reader.onerror = (error) => reject(error);
+      });
+    });
+
+    Promise.all(fileReaders).then((newImages) => {
+      const updatedImages = [...floorPlanImages, ...newImages];
+      setFloorPlanImages(updatedImages);
+      handleChange({
+        target: { name: "floorPlanImages", value: updatedImages },
+      });
+    });
   };
 
   return (
