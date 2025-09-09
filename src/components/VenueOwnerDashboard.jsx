@@ -60,7 +60,42 @@ const VenueOwnerDashboard = () => {
               <p className="submission-date">
                 Submitted on: {new Date(venue.submittedAt).toLocaleDateString()}
               </p>
+              {/* adding more image  */}
+              {venue.floorPlanImages && venue.floorPlanImages.length > 0 && (
+                <div className="venue-gallery">
+                  <h4>Floor Plans ({venue.floorPlanImages.length})</h4>
+                  <div className="gallery-grid">
+                    {venue.floorPlanImages.map((image, index) => (
+                      <div key={index} className="gallery-item">
+                        <img
+                          src={image.url}
+                          alt={`${venue.venueName} floor plan ${index + 1}`}
+                          style={{
+                            width: "430px",
+                            height: "200px",
+                            objectFit: "cover",
 
+                            borderRadius: "8px",
+                          }}
+                          className="gallery-image"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* {venue.floorPlanImages?.[0]?.url && (
+                <img
+                  src={venue.floorPlanImages[0].url}
+                  alt={venue.venueName}
+                  style={{
+                    width: "330px",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+              )} */}
               <div className="venue-details">
                 <div className="detail-grid">
                   <div className="detail-item">
@@ -73,18 +108,7 @@ const VenueOwnerDashboard = () => {
                       ? `${venue.venueAddress}, ${venue.city}`
                       : "Not specified"}
                   </div>
-                  {venue.floorPlanImages?.[0]?.url && (
-                    <img
-                      src={venue.floorPlanImages[0].url}
-                      alt={venue.venueName}
-                      style={{
-                        width: "330px",
-                        height: "200px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  )}
+
                   <div className="detail-item">
                     <strong>Capacity:</strong>{" "}
                     {venue.venueSize || "Not specified"}

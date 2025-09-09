@@ -1158,6 +1158,9 @@ input[type="checkbox"]:checked ~ span {
   }
 }
 
+.venue-gallery {
+  margin-top: 20px;
+}
 /* Dashboard Styles */
 .dashboard-container {
   display: flex;
