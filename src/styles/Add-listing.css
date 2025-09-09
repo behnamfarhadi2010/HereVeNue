@@ -1160,8 +1160,12 @@ input[type="checkbox"]:checked ~ span {
 
 /* Dashboard Styles */
 .dashboard-container {
+  display: flex;
+  flex-direction: column;
   max-width: 1000px;
   margin: 50px auto;
+  border: #000000 1px solid;
+  padding-bottom: 20px;
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -1199,7 +1203,8 @@ input[type="checkbox"]:checked ~ span {
   background: #f8f9fa;
   padding: 30px;
   border-radius: 8px;
-  border-left: 4px solid #ec676a;
+  border: #000000 1px solid;
+  /* border-left: 4px solid #ec676a; */
 }
 
 .submission-date {
@@ -1210,6 +1215,7 @@ input[type="checkbox"]:checked ~ span {
 
 .venue-details {
   margin: 20px 0;
+  padding: 20px;
 }
 
 .detail-grid {
@@ -1236,6 +1242,15 @@ input[type="checkbox"]:checked ~ span {
 
 .venue-types {
   margin: 20px 0;
+}
+
+/* Venues List Spacing */
+.venues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 20px;
+  padding: 10px;
 }
 
 .tags {
