@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import venues from "../data";
 import { useVenue } from "../contexts/VenueContext";
+import "../styles/main.css";
 
 export default function Search() {
   const [eventType, setEventType] = useState("");
