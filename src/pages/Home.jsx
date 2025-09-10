@@ -12,9 +12,9 @@ const Home = () => {
       <main>
         <div className="mainpage container left">
           <div className="hero-section">
-            Over 17k venues - Trusted by TM+ customers
-            <h2>Find and book venues for any event imaginable</h2>
             <div className="hero-content"></div>
+            <span>Over 17k venues - Trusted by TM+ customers</span>
+            <h2>Find and book venues for any event imaginable</h2>
             <div className="hero-image">
               <img src={Background} alt="Venue image" />
             </div>

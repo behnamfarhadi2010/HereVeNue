@@ -91,6 +91,7 @@ main {
   margin-top: 120px;
   display: flex;
   flex-direction: column;
+
   /* background-color: #ea9a9a;
   align-items: first baseline; */
 }
@@ -140,14 +141,28 @@ h1 {
   color: #333;
   margin-bottom: 30px;
 }
+.hero-section span {
+  display: inline-block; /* wrap tightly around the text */
+  background-color: #ea9091;
+  padding: 4px 8px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  color: #4d4242;
+  vertical-align: middle;
+  /* protect against flex parent stretching */
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
 
 .search-box {
   display: flex;
   gap: 5px;
   background-color: #ffffff;
   z-index: 2;
-  padding: 40px;
+  padding: 15px;
+  margin-top: 3rem;
   border-radius: 8px;
+  border: #8a8585 1px solid;
 }
 
 .filter-group {
