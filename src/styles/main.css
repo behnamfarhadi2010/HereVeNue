@@ -111,7 +111,7 @@ main {
   /* padding: 20px; */
   display: flex;
   align-items: center;
-  backkground-color: rgb(255, 255, 255);
+  /* backkground-color: rgb(255, 255, 255); */
   position: relative;
   z-index: 1;
   height: 22vh;
