@@ -1,5 +1,5 @@
 // src/components/AddListing/AddListing.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Add useEffect import
 import { useVenue } from "../../contexts/VenueContext";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
@@ -10,11 +10,14 @@ import Step6 from "./Steps/Step6";
 import Step7 from "./Steps/Step7";
 import Step8 from "./Steps/Step8";
 import "../../styles/add-listing.css";
-import Header from "../Header"; // Adjust the import path as necessary
+import Header from "../Header";
 
 const AddListing = () => {
-  const { addVenue } = useVenue();
+  const { addVenue, updateVenue } = useVenue(); // Add updateVenue
   const [currentStep, setCurrentStep] = useState(1);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingVenueId, setEditingVenueId] = useState(null);
+
   const [formData, setFormData] = useState({
     venueName: "",
     venueSize: "",
@@ -107,58 +110,53 @@ const AddListing = () => {
     rescheduleMonths: "3",
   });
 
+  // Check if we're in edit mode
+  useEffect(() => {
+    const editing = localStorage.getItem("isEditing") === "true";
+    const venueId = localStorage.getItem("editingVenueId");
+    const venueToEdit = localStorage.getItem("venueToEdit");
+
+    if (editing && venueId && venueToEdit) {
+      setIsEditing(true);
+      setEditingVenueId(parseInt(venueId));
+      setFormData(JSON.parse(venueToEdit));
+    }
+  }, []);
+
   const handleSubmit = () => {
-    addVenue(formData);
-    const existingVenues = JSON.parse(
-      localStorage.getItem("venueSubmissions") || "[]"
-    );
+    if (isEditing && editingVenueId) {
+      // Update existing venue
+      updateVenue(editingVenueId, formData);
+      alert("Venue updated successfully!");
+    } else {
+      // Add new venue
+      addVenue(formData);
+      const existingVenues = JSON.parse(
+        localStorage.getItem("venueSubmissions") || "[]"
+      );
 
-    const newVenue = {
-      ...formData,
-      id: Date.now(),
-      submittedAt: new Date().toISOString(),
-      status: "submitted",
-    };
+      const newVenue = {
+        ...formData,
+        id: Date.now(),
+        submittedAt: new Date().toISOString(),
+        status: "submitted",
+      };
 
-    const updatedVenues = [...existingVenues, newVenue];
+      const updatedVenues = [...existingVenues, newVenue];
+      localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+      localStorage.setItem("venueFormData", JSON.stringify(formData));
 
-    localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+      console.log("Venue submitted:", newVenue);
+      console.log("Total venues:", updatedVenues.length);
+    }
 
-    localStorage.setItem("venueFormData", JSON.stringify(formData));
-
-    console.log("Venue submitted:", newVenue);
-    console.log("Total venues:", updatedVenues.length);
+    // Clear editing state
+    localStorage.removeItem("isEditing");
+    localStorage.removeItem("editingVenueId");
+    localStorage.removeItem("venueToEdit");
 
     window.location.href = "/dashboard";
   };
-
-  // const handleSubmit = () => {
-  //   // Save final data to localStorage
-  //   const submissionData = {
-  //     ...formData,
-  //     submittedAt: new Date().toISOString(),
-  //     status: "submitted",
-  //   };
-
-  //   localStorage.setItem("venueFormData", JSON.stringify(formData));
-  //   localStorage.setItem("venueSubmission", JSON.stringify(submissionData));
-
-  //   console.log("Form submitted:", submissionData);
-
-  //   // Redirect to dashboard
-  //   window.location.href = "/dashboard";
-  // };
-  // const handleSubmit = () => {
-  //   localStorage.setItem("venueFormData", JSON.stringify(formData));
-  //   localStorage.setItem(
-  //     "venueSubmission",
-  //     JSON.stringify({
-  //       ...formData,
-  //       submittedAt: new Date().toISOString(),
-  //       status: "submitted",
-  //     })
-  //   );
-  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -176,6 +174,7 @@ const AddListing = () => {
         : [...prev.venueTypes, type],
     }));
   };
+
   const nextStep = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -185,85 +184,49 @@ const AddListing = () => {
   };
 
   const renderStep = () => {
+    const commonProps = {
+      formData,
+      handleChange,
+      prevStep,
+      nextStep,
+      isEditing,
+    };
+
     switch (currentStep) {
       case 1:
         return (
           <Step1
-            formData={formData}
-            handleChange={handleChange}
+            {...commonProps}
             handleVenueTypeToggle={handleVenueTypeToggle}
-            nextStep={nextStep}
           />
         );
       case 2:
-        return (
-          <Step2
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-            // Add other props needed for Step2
-          />
-        );
+        return <Step2 {...commonProps} />;
       case 3:
-        return (
-          <Step3
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-
-            // Add other props needed for Step2
-          />
-        );
+        return <Step3 {...commonProps} />;
       case 4:
-        return (
-          <Step4
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        );
+        return <Step4 {...commonProps} />;
       case 5:
-        return (
-          <Step5
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        );
+        return <Step5 {...commonProps} />;
       case 6:
-        return (
-          <Step6
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        );
+        return <Step6 {...commonProps} />;
       case 7:
-        return (
-          <Step7
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        );
+        return <Step7 {...commonProps} />;
       case 8:
         return (
           <Step8
-            formData={formData}
-            handleChange={handleChange}
-            prevStep={prevStep}
+            {...commonProps}
             onSubmit={handleSubmit}
+            isEditing={isEditing}
           />
         );
-      // Add more cases for additional steps
       default:
-        return <Step1 />;
+        return (
+          <Step1
+            {...commonProps}
+            handleVenueTypeToggle={handleVenueTypeToggle}
+          />
+        );
     }
   };
 
@@ -271,22 +234,20 @@ const AddListing = () => {
     <>
       <Header />
       <div className="add-listing-container">
-        <h1>Add New Venue</h1>
+        {/* Show edit mode header */}
+        {isEditing && (
+          <div className="edit-mode-header">
+            <h3> Editing Venue: {formData.venueName || "Unnamed Venue"}</h3>
+            <p>
+              You are currently editing this venue. Changes will be saved when
+              you submit.
+            </p>
+          </div>
+        )}
 
-        {/* Step Progress Indicator */}
-        {/* <div className="step-progress">
-          <div className={`step ${currentStep >= 1 ? "active" : ""}`}>1</div>
-          <div className={`step ${currentStep >= 2 ? "active" : ""}`}>2</div> */}
-        {/* Add more steps as needed */}
-        {/* </div> */}
+        <h1>{isEditing ? "Edit Venue" : "Add New Venue"}</h1>
 
         {renderStep()}
-
-        {/* Debug panel (optional) */}
-        {/* <div className="debug-panel">
-          <h3>Current Form Data:</h3>
-          <pre>{JSON.stringify(formData, null, 2)}</pre>
-        </div> */}
       </div>
     </>
   );

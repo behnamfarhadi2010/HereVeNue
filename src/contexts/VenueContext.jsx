@@ -40,6 +40,45 @@ export function VenueProvider({ children }) {
       localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
     }
   };
+
+  // Edit a venue
+  const editVenue = (venueId) => {
+    const venueToEdit = venues.find((venue) => venue.id === venueId);
+
+    if (venueToEdit) {
+      // Save the venue data edited in localStorage
+      localStorage.setItem("venueToEdit", JSON.stringify(venueToEdit));
+      localStorage.setItem("isEditing", "true");
+      localStorage.setItem("editingVenueId", venueId.toString());
+
+      console.log("Editing venue:", venueToEdit);
+
+      return venueToEdit;
+    } else {
+      console.error("Venue not found for editing");
+      return null;
+    }
+  };
+
+  // Update venue after edit
+  const updateVenue = (venueId, updatedData) => {
+    const updatedVenues = venues.map((venue) =>
+      venue.id === venueId
+        ? { ...venue, ...updatedData, updatedAt: new Date().toISOString() }
+        : venue
+    );
+
+    setVenues(updatedVenues);
+    localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+
+    // Clear editing state
+    localStorage.removeItem("venueToEdit");
+    localStorage.removeItem("isEditing");
+    localStorage.removeItem("editingVenueId");
+
+    console.log("Venue updated successfully");
+  };
+
   //to search venues
   const searchVenues = (filters) => {
     // const venues = getVenues();
@@ -76,6 +115,8 @@ export function VenueProvider({ children }) {
     venues,
     addVenue,
     deleteVenue,
+    editVenue,
+    updateVenue,
     searchVenues,
   };
   console.log("VenueContext venues:", venues);
