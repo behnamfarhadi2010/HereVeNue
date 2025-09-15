@@ -8,7 +8,7 @@ import "../styles/main.css";
 export default function Search() {
   const [eventType, setEventType] = useState("");
   const [venueSize, setVenueSize] = useState("");
-  const [guests, setGuests] = useState("");
+  const [venueName, setvenueName] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate();
   const { searchVenues } = useVenue();
@@ -19,7 +19,7 @@ export default function Search() {
     const filters = {
       venueSize: venueSize.trim(),
       eventType: eventType.trim(),
-      guests: guests.trim(),
+      venueName: venueName.trim(),
       city: city.trim(),
     };
     console.log("Search filters:", filters);
@@ -28,21 +28,6 @@ export default function Search() {
     console.log("Filtered results from Context:", filteredResults);
     navigate("/venues", { state: { results: filteredResults } });
   };
-
-  //   const filtered = venues.filter((v) => {
-  //     const matchesEvent = eventType
-  //       ? v.eventType.toLowerCase().includes(eventType.trim().toLowerCase())
-  //       : true;
-  //     const matchesGuests = guests ? v.guests >= Number(guests) : true;
-  //     const matchesCity = city
-  //       ? v.city.toLowerCase().includes(city.trim().toLowerCase())
-  //       : true;
-  //     return matchesEvent && matchesGuests && matchesCity;
-  //   });
-
-  //   // Navigate to /venues and pass the results
-  //   navigate("/venues", { state: { results: filtered } });
-  // };
 
   return (
     <form className="search-box" onSubmit={handleSearch}>
@@ -62,16 +47,16 @@ export default function Search() {
 
       {/* GUESTS */}
       <div className="filter-group">
-        <label>GUESTS</label>
-        <p className="filter-description">Number of guests</p>
+        <label> Name </label>
+        <p className="filter-description"> Venue Name</p>
         <div className="select-wrapper">
           <input
-            type="number"
+            type="text"
             id="guests"
-            placeholder="e.g., 100"
+            placeholder="Venue name"
             min="1"
-            value={guests}
-            onChange={(e) => setGuests(e.target.value)}
+            value={venueName}
+            onChange={(e) => setvenueName(e.target.value)}
           />
         </div>
       </div>

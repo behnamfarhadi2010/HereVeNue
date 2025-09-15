@@ -8,7 +8,6 @@ import "../styles/testVenuesearch.css"; // import your CSS styles
 export default function Search() {
   const [eventType, setEventType] = useState("");
   const [guests, setGuests] = useState("");
-  // const [city, setCity] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -19,11 +18,8 @@ export default function Search() {
         ? v.eventType.toLowerCase().includes(eventType.trim().toLowerCase())
         : true;
       const matchesGuests = guests ? v.guests >= Number(guests) : true;
-      // const matchesCity = city
-      //   ? v.city.toLowerCase().includes(city.trim().toLowerCase())
-      //   : true;
+
       return matchesEvent && matchesGuests;
-      // && matchesCity
     });
 
     // Navigate to /venues and pass the results

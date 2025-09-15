@@ -91,10 +91,12 @@ export function VenueProvider({ children }) {
           ) || false
         : true;
 
-      const matchesGuests = filters.guests
-        ? venue.capacity_standing >= Number(filters.guests) ||
-          venue.capacity_dining >= Number(filters.guests) ||
-          venue.capacity_theatre >= Number(filters.guests)
+      console.log(venue, filters);
+
+      const matchesName = filters.venueName
+        ? venue.venueName
+            ?.toLowerCase()
+            .includes(filters.venueName.toLowerCase()) || false
         : true;
 
       const matchesCity = filters.city
@@ -103,11 +105,9 @@ export function VenueProvider({ children }) {
         : true;
 
       const matchesSize = filters.venueSize
-        ? venue.venueSize
-            ?.toLowerCase()
-            .includes(filters.venueSize.toLowerCase())
+        ? Number(venue.venueSize) >= Number(filters.venueSize)
         : true;
-      return matchesEvent && matchesGuests && matchesCity && matchesSize;
+      return matchesEvent && matchesCity && matchesSize && matchesName;
     });
   };
 

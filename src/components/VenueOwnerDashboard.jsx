@@ -10,15 +10,6 @@ const VenueOwnerDashboard = () => {
   const venues = venueContext.venues;
 
   const navigate = useNavigate();
-  //   const [venues, setVenues] = useState([]);
-
-  //   const deleteVenue = (venueId) => {
-  //     if (window.confirm("Are you sure you want to delete this venue?")) {
-  //       const updatedVenues = venues.filter((venue) => venue.id !== venueId);
-  //       setVenues(updatedVenues);
-  //       localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
-  //     }
-  //   };
 
   if (venues.length === 0) {
     return (
