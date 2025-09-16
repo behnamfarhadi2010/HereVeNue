@@ -22,6 +22,9 @@ const Home = () => {
           </div>
         </div>
       </main>
+      <div className="tagline">
+        <h2>Discover top event spaces in Canada</h2>
+      </div>
     </div>
   );
 };

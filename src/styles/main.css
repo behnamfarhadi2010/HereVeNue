@@ -262,6 +262,15 @@ select {
   right: 9em;
 }
 
+.tagline h2 {
+  display: flex;
+  justify-content: left;
+  font-size: 34px;
+  color: #000000;
+  margin-left: 8rem;
+  margin-top: 20rem;
+}
+
 @media (max-width: 768px) {
   .hero-content {
     flex-direction: column;
