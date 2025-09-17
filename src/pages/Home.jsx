@@ -2,7 +2,8 @@
 import React from "react";
 import Header from "../components/Header";
 import Background from "../assets/bg.jpg";
-import Search from "../components/Search"; // new component
+import Search from "../components/Search";
+import VenueCarousel from "../components/carouselImage"; // Import the carousel
 import "../styles/main.css";
 
 const Home = () => {
@@ -25,6 +26,9 @@ const Home = () => {
       <div className="tagline">
         <h2>Discover top event spaces in Canada</h2>
       </div>
+
+      {/* Add the carousel component here */}
+      <VenueCarousel />
     </div>
   );
 };

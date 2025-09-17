@@ -1,25 +1,147 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useVenue } from "../contexts/VenueContext";
+import "../styles/VenueCarousel.css";
 
 const VenueCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { venues } = useVenue(); // Access venues from context
+  const { venues } = useVenue();
 
-  const nextSlide = () => {
-    if (venues.length === 0) return; // Prevent errors if no venues
+  // Calculate how many slides we need (each slide shows 4 venues)
+  const itemsPerSlide = 4;
+  const totalSlides = Math.ceil(venues.length / itemsPerSlide);
+
+  const nextSlide = useCallback(() => {
+    if (totalSlides <= 1) return;
     setCurrentIndex((prevIndex) =>
-      prevIndex === venues.length - 1 ? 0 : prevIndex + 1
+      prevIndex === totalSlides - 1 ? 0 : prevIndex + 1
+    );
+  }, [totalSlides]);
+
+  const prevSlide = () => {
+    if (totalSlides <= 1) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? totalSlides - 1 : prevIndex - 1
     );
   };
-};
 
-const prevSlide = () => {
-  if (venues.length === 0) return; // Prevent errors if no venues
-  setCurrentIndex((prevIndex) =>
-    prevIndex === 0 ? venues.length - 1 : prevIndex - 1
+  const goToSlide = (index) => {
+    if (totalSlides <= 1) return;
+    setCurrentIndex(index);
+  };
+
+  // Auto-advance the carousel only if we have venues
+  useEffect(() => {
+    if (totalSlides <= 1) return;
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, totalSlides, nextSlide]);
+
+  // Get image for venue - use floorPlanImages if available
+  const getVenueImage = (venue) => {
+    return venue.floorPlanImages?.[0]?.url || "../assets/ovblogo.png";
+  };
+
+  if (venues.length === 0) {
+    return (
+      <div className="venue-carousel-container">
+        <div className="no-venues">
+          <p>No venues available yet.</p>
+          <button
+            className="cta-button"
+            onClick={() => (window.location.href = "/add-venue")}
+          >
+            Add Your First Venue
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="venue-carousel-container">
+      <div className="carousel">
+        <div
+          className="carousel-inner"
+          style={{
+            transform: `translateX(-${currentIndex * 100}%)`,
+          }}
+        >
+          {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+            <div key={slideIndex} className="carousel-slide">
+              {venues
+                .slice(
+                  slideIndex * itemsPerSlide,
+                  slideIndex * itemsPerSlide + itemsPerSlide
+                )
+                .map((venue, index) => (
+                  <div key={venue.id || index} className="venue-card">
+                    <div className="venue-image-container">
+                      <img
+                        src={getVenueImage(venue)}
+                        alt={venue.venueName || "Venue"}
+                        className="venue-image"
+                        onError={(e) => {
+                          e.target.src = "/placeholder-venue.jpg";
+                        }}
+                      />
+                      <div className="venue-overlay">
+                        <button className="venue-button">Explore Venue</button>
+                      </div>
+                    </div>
+                    <div className="venue-content">
+                      <h3>{venue.venueName || venue.city || "Venue"}</h3>
+                      <div className="venue-details">
+                        {venue.city && (
+                          <span className="detail-item">{venue.city}</span>
+                        )}
+                        {venue.venueSize && (
+                          <span className="detail-item">
+                            Capacity: {venue.venueSize}
+                          </span>
+                        )}
+                        {venue.venueTypes && venue.venueTypes.length > 0 && (
+                          <span className="detail-item">
+                            {venue.venueTypes.join(", ")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+
+        {totalSlides > 1 && (
+          <>
+            <button className="carousel-control prev" onClick={prevSlide}>
+              &#10094;
+            </button>
+            <button className="carousel-control next" onClick={nextSlide}>
+              &#10095;
+            </button>
+
+            {/* Indicators */}
+            <div className="carousel-indicators">
+              {Array.from({ length: totalSlides }).map((_, index) => (
+                <button
+                  key={index}
+                  className={`indicator ${
+                    index === currentIndex ? "active" : ""
+                  }`}
+                  onClick={() => goToSlide(index)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
-export const carouselImage = () => {
-  return <div>carouselImage</div>;
-};
+export default VenueCarousel;

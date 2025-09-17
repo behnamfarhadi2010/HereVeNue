@@ -1,4 +1,3 @@
-// src/components/VenueOwnerDashboard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";

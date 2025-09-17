@@ -1,0 +1,266 @@
+.venue-carousel-container {
+  padding: 40px 20px;
+  text-align: center;
+  /* background-color: #f8f9fa; */
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.carousel {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
+}
+
+.carousel-slide {
+  display: flex;
+  flex: 0 0 100%;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.venue-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  width: calc(25% - 20px);
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.venue-card:hover {
+  transform: translateY(-5px);
+}
+
+.venue-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.venue-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.venue-card:hover .venue-image {
+  transform: scale(1.05);
+}
+
+.venue-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.venue-card:hover .venue-overlay {
+  opacity: 1;
+}
+
+.venue-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.venue-content h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  min-height: 3rem;
+}
+
+.venue-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.detail-item {
+  background: #f1f2f6;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.venue-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.venue-button:hover {
+  background-color: #c0392b;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(231, 76, 60, 0.8);
+  color: white;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 100;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.carousel-control.prev {
+  left: 10px;
+}
+
+.carousel-control.next {
+  right: 10px;
+}
+
+.carousel-control:hover {
+  background: #e74c3c;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #bbb;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+  background: #e74c3c;
+  transform: scale(1.2);
+}
+
+.no-venues {
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  text-align: center;
+}
+
+.cta-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .carousel-control.prev {
+    left: 5px;
+  }
+
+  .carousel-control.next {
+    right: 5px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .venue-card {
+    width: calc(50% - 20px);
+    min-width: 200px;
+  }
+
+  .carousel-slide {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .venue-carousel-container {
+    padding: 20px 10px;
+  }
+
+  .venue-card {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .carousel-control {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .venue-content h3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .venue-card {
+    padding: 15px;
+  }
+
+  .carousel-control {
+    display: flex;
+    width: 35px;
+    height: 35px;
+  }
+}
