@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import MyDashboard from "./pages/myDashboard";
 import AddListing from "./components/AddListing/AddListing.jsx";
 import { VenueProvider } from "./contexts/VenueContext";
+import UserDashboard from "./pages/UserDashboard";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/my-dashboard" element={<MyDashboard />} />
           <Route path="/add-listing" element={<AddListing />} />
           <Route path="/dashboard" element={<VenueOwnerDashboard />} />
+          <Route path="/userdashboard" element={<UserDashboard />} />
           {/*مسیر صفحه لاگین مکان */}
           <Route path="/venues" element={<Venues />} />
           {/*مسیر لاگین */}
