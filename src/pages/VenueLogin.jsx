@@ -22,7 +22,7 @@ const ClientLogin = () => {
     if (result.success && typeof window !== "undefined") {
       localStorage.setItem("authUser", user);
       console.log("User stored in localStorage");
-      navigate("/add-listing");
+      navigate("/dashboard");
     }
   };
 

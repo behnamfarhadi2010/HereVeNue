@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-// import "./UserDashboard.css";
+import { useVenue } from "../contexts/VenueContext";
+import "../styles/userDashboard.css";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("current");
+  const { venues } = useVenue(); // Get venues from context
+
+  const handleBrowseVenues = () => {
+    console.log("All venues from context:", venues);
+    navigate("/venues", { state: { results: venues } });
+  };
 
   return (
     <div className="user-dashboard">
@@ -40,10 +47,7 @@ const UserDashboard = () => {
                 <p>
                   Start exploring venues and submit enquiries to see them here.
                 </p>
-                <button
-                  className="cta-button"
-                  onClick={() => navigate("/venues")}
-                >
+                <button className="cta-button" onClick={handleBrowseVenues}>
                   Browse Venues
                 </button>
               </div>

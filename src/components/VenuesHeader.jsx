@@ -1,85 +1,76 @@
 // src/components/Search.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import venues from "../data";
 import Header from "../components/Header";
-import "../styles/testVenuesearch.css"; // import your CSS styles
+import "../styles/testVenuesearch.css";
+import { useVenue } from "../contexts/VenueContext";
 
 export default function Search() {
   const [eventType, setEventType] = useState("");
-  const [guests, setGuests] = useState("");
+  const [venueSize, setVenueSize] = useState("");
   const navigate = useNavigate();
+  const { searchVenues } = useVenue();
 
   const handleSearch = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
-    const filtered = venues.filter((v) => {
-      const matchesEvent = eventType
-        ? v.eventType.toLowerCase().includes(eventType.trim().toLowerCase())
-        : true;
-      const matchesGuests = guests ? v.guests >= Number(guests) : true;
+    const filters = {
+      venueSize: venueSize.trim(),
+      eventType: eventType.trim(),
+    };
+    console.log("Search filters:", filters);
 
-      return matchesEvent && matchesGuests;
-    });
+    const filteredResults = searchVenues(filters);
+    console.log("Filtered results from Context:", filteredResults);
+    navigate("/venues", { state: { results: filteredResults } });
+  };
 
-    // Navigate to /venues and pass the results
-    navigate("/venues", { state: { results: filtered } });
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
     <>
       <Header />
-      <form className="search-box1" onSubmit={handleSearch}>
+      <form className="search-box" onSubmit={handleSearch}>
         {/* EVENT TYPE */}
-        <div className="filter-group1">
+        <div className="filter-group">
           <label>EVENT TYPE</label>
-          <p className="filter-description1">What are you planning?</p>
-          <div className="select-wrapper1">
+          <p className="filter-description">What are you planning?</p>
+          <div className="select-wrapper">
             <input
               type="text"
               placeholder="e.g., Wedding"
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
+              onKeyPress={handleKeyPress}
             />
           </div>
         </div>
 
-        {/* GUESTS */}
-        <div className="filter-group1">
-          <label>GUESTS</label>
-          <p className="filter-description1">Number of guests</p>
-          <div className="select-wrapper1">
+        {/* VENUE SIZE */}
+        <div className="filter-group">
+          <label>VENUE SIZE</label>
+          <p className="filter-description">Pick venue size</p>
+          <div className="select-wrapper">
             <input
-              type="number"
-              id="guests"
-              placeholder="e.g., 100"
-              min="1"
-              value={guests}
-              onChange={(e) => setGuests(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
+              type="text"
+              placeholder="e.g., Large, Small"
+              value={venueSize}
+              onChange={(e) => setVenueSize(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
           </div>
         </div>
 
-        {/* LOCATION */}
-        {/* <div className="filter-group">
-        <label>LOCATION</label>
-        <p className="filter-description">Choose City</p>
-        <div className="select-wrapper">
-          <input
-            type="text"
-            id="location"
-            placeholder="e.g., St. John's"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-        </div>
-      </div> */}
-
-        {/* <button className="search-btn" type="submit">
-        Search
-      </button> */}
+        {/* Hidden submit button for accessibility */}
+        <button type="submit" style={{ display: "none" }}>
+          Submit
+        </button>
       </form>
     </>
   );
