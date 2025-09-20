@@ -1,4 +1,4 @@
-// src/components/Search.jsx
+// src/components/VenuesHeader.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -16,15 +16,14 @@ export default function Search() {
       e.preventDefault();
     }
 
-    const filters = {
-      venueSize: venueSize.trim(),
-      eventType: eventType.trim(),
-    };
-    console.log("Search filters:", filters);
+    // Create query parameters object
+    const queryParams = new URLSearchParams();
 
-    const filteredResults = searchVenues(filters);
-    console.log("Filtered results from Context:", filteredResults);
-    navigate("/venues", { state: { results: filteredResults } });
+    if (eventType.trim()) queryParams.append("type", eventType.trim());
+    if (venueSize.trim()) queryParams.append("size", venueSize.trim());
+
+    // Navigate with query string
+    navigate(`/venues?${queryParams.toString()}`);
   };
 
   const handleKeyPress = (e) => {
