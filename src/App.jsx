@@ -16,6 +16,7 @@ import MyDashboard from "./pages/myDashboard";
 import AddListing from "./components/AddListing/AddListing.jsx";
 import { VenueProvider } from "./contexts/VenueContext";
 import UserDashboard from "./pages/UserDashboard";
+import VenueDetailsStep1 from "./components/VenueDetailsStep1";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/userdashboard" element={<UserDashboard />} />
           {/*مسیر صفحه لاگین مکان */}
           <Route path="/venues" element={<Venues />} />
+          <Route path="/venue/:id" element={<VenueDetailsStep1 />} />
           {/*مسیر لاگین */}
         </Routes>
       </Router>

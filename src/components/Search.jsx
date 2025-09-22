@@ -1,6 +1,7 @@
 // src/components/Search.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import venues from "../data";
 import { useVenue } from "../contexts/VenueContext";
 import "../styles/main.css";
 
@@ -15,16 +16,17 @@ export default function Search() {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    // Create query parameters object
-    const queryParams = new URLSearchParams();
+    const filters = {
+      venueSize: venueSize.trim(),
+      eventType: eventType.trim(),
+      venueName: venueName.trim(),
+      city: city.trim(),
+    };
+    console.log("Search filters:", filters);
 
-    if (eventType.trim()) queryParams.append("type", eventType.trim());
-    if (venueSize.trim()) queryParams.append("size", venueSize.trim());
-    if (venueName.trim()) queryParams.append("name", venueName.trim());
-    if (city.trim()) queryParams.append("city", city.trim());
-
-    // Navigate with query string
-    navigate(`/venues?${queryParams.toString()}`);
+    const filteredResults = searchVenues(filters);
+    console.log("Filtered results from Context:", filteredResults);
+    navigate("/venues", { state: { results: filteredResults } });
   };
 
   return (
@@ -43,20 +45,21 @@ export default function Search() {
         </div>
       </div>
 
-      {/* VENUE NAME */}
+      {/* GUESTS */}
       <div className="filter-group">
-        <label>NAME</label>
-        <p className="filter-description">Venue Name</p>
+        <label> Name </label>
+        <p className="filter-description"> Venue Name</p>
         <div className="select-wrapper">
           <input
             type="text"
+            id="guests"
             placeholder="Venue name"
+            min="1"
             value={venueName}
             onChange={(e) => setvenueName(e.target.value)}
           />
         </div>
       </div>
-
       {/* VENUE SIZE */}
       <div className="filter-group">
         <label>VENUE SIZE</label>
@@ -78,6 +81,7 @@ export default function Search() {
         <div className="select-wrapper">
           <input
             type="text"
+            id="location"
             placeholder="e.g., St. John's"
             value={city}
             onChange={(e) => setCity(e.target.value)}

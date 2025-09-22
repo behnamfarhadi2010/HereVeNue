@@ -1,12 +1,13 @@
 // src/pages/Venues.jsx
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
 import MyMap from "../components/MyMap";
 import VenuesHeader from "../components/VenuesHeader";
 import { useVenue } from "../contexts/VenueContext";
 
 export default function Venues() {
   const location = useLocation();
+  const navigate = useNavigate(); // Add navigate function
   const { searchVenues } = useVenue();
   const [filteredVenues, setFilteredVenues] = useState([]);
 
@@ -40,7 +41,12 @@ export default function Venues() {
           {filteredVenues.length > 0 ? (
             <div className="venues-grid">
               {filteredVenues.map((venue) => (
-                <div key={venue.id} className="venue-card">
+                <div
+                  key={venue.id}
+                  className="venue-card"
+                  onClick={() => navigate(`/venue/${venue.id}`)} // Add this line
+                  style={{ cursor: "pointer" }} // Add this style
+                >
                   {venue.floorPlanImages?.[0]?.url && (
                     <img
                       src={venue.floorPlanImages[0].url}
