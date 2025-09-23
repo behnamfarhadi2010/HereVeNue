@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
-// import "./VenueDetails.css";
+import "../styles/VenueDetails.css";
 
 const VenueDetailsStep1 = () => {
   const { id } = useParams();
