@@ -24,6 +24,118 @@ const VenueDetails = () => {
     );
   }
 
+  // Helper functions and data
+  const spaceTypes = [
+    "Photo Studio",
+    "Restaurant",
+    "Event Space",
+    "Conference Room",
+    "Ballroom",
+    "Meeting Room",
+    "Banquet Hall",
+    "Theater",
+    "Classroom",
+    "Exhibition Hall",
+    "Coworking Space",
+    "Studio Apartment",
+    "Loft",
+    "Warehouse",
+    "Gallery",
+    "Rooftop",
+    "Garden",
+    "Terrace",
+    "Bar",
+    "Nightclub",
+  ];
+
+  const venueParts = [
+    {
+      value: "whole-venue",
+      label: "Whole venue",
+      description: "The entire venue exclusively for the customer.",
+    },
+    {
+      value: "private-space",
+      label: "Private space within the venue",
+      description:
+        "A space within the venue that is exclusively reserved for a specific group or individual.",
+    },
+    {
+      value: "semi-private",
+      label: "Semi-private area within the space",
+      description:
+        "An area that is partially excluded or separated from the rest of the space, but is not completely private.",
+    },
+    {
+      value: "shared-space",
+      label: "Shared space",
+      description:
+        "A non-exclusive, common area with open access for everyone.",
+    },
+    {
+      value: "private-outdoor",
+      label: "Private outdoor space",
+      description:
+        "An outdoor area that is exclusively reserved for the use of a specific group or individual.",
+    },
+    {
+      value: "semi-private-outdoor",
+      label: "Semi-private outdoor space",
+      description:
+        "An outdoor area that is partially separated from the rest of the space, but is not completely private.",
+    },
+  ];
+
+  const ageRestrictions = { 18: "18+", 21: "21+", 25: "25+", other: "Other" };
+  const enforcementTimes = {
+    after6pm: "After 6 PM",
+    after8pm: "After 8 PM",
+    after10pm: "After 10 PM",
+    allDay: "All day",
+    other: "Other",
+  };
+
+  const layoutOptions = [
+    { id: "dining", label: "Dining", icon: "🍽️" },
+    { id: "standing", label: "Standing", icon: "🧍" },
+    { id: "cabaret", label: "Cabaret", icon: "🎭" },
+    { id: "classroom", label: "Classroom", icon: "📚" },
+    { id: "theatre", label: "Theatre", icon: "🎬" },
+    { id: "uShaped", label: "U-Shaped", icon: "⛎" },
+    { id: "boardroom", label: "Boardroom", icon: "💼" },
+  ];
+
+  const getVenuePartLabel = (partValue) => {
+    const part = venueParts.find((p) => p.value === partValue);
+    return part ? part.label : partValue;
+  };
+
+  const getVenuePartDescription = (partValue) => {
+    const part = venueParts.find((p) => p.value === partValue);
+    return part ? part.description : "";
+  };
+
+  // Get layout capacities from venue data
+  const getLayoutCapacities = () => {
+    const capacities = {};
+    layoutOptions.forEach((layout) => {
+      const capacityKey = `capacity_${layout.id}`;
+      capacities[layout.id] = venue[capacityKey] || null;
+    });
+    return capacities;
+  };
+
+  const layoutCapacities = getLayoutCapacities();
+
+  // Check which layouts are available
+  const getAvailableLayouts = () => {
+    return layoutOptions.filter(
+      (layout) => layoutCapacities[layout.id] !== null
+    );
+  };
+
+  const availableLayouts = getAvailableLayouts();
+
   return (
     <div className="venue-details-container">
       {/* Back Button */}
@@ -31,17 +143,15 @@ const VenueDetails = () => {
         ← Back to Results
       </button>
 
-      {/* Step 1 Information - Basic Details */}
+      {/* Step 1: Basic Venue Info */}
       <div className="venue-info-section">
         <h1>{venue.venueName || "Unnamed Venue"}</h1>
 
-        {/* Venue Name */}
         <div className="info-group">
           <label>Venue Name</label>
           <div className="info-value">{venue.venueName || "Not specified"}</div>
         </div>
 
-        {/* Venue Size */}
         <div className="info-group">
           <label>Venue Capacity</label>
           <div className="info-value">
@@ -49,7 +159,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Venue Types */}
         <div className="info-group">
           <label>Venue Types</label>
           <div className="venue-types-display">
@@ -65,7 +174,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Venue Description */}
         <div className="info-group">
           <label>Venue Description</label>
           <div className="info-value description-text">
@@ -75,7 +183,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Additional Step 1 Information if available */}
         {venue.spaceType && (
           <div className="info-group">
             <label>Space Type</label>
@@ -97,17 +204,15 @@ const VenueDetails = () => {
         )}
       </div>
 
-      {/* Step 2 Information - Location & Address */}
+      {/* Step 2: Location & Address */}
       <div className="venue-info-section step2-section">
         <h2>Location & Address</h2>
 
-        {/* Country */}
         <div className="info-group">
           <label>Country</label>
           <div className="info-value">{venue.country || "Not specified"}</div>
         </div>
 
-        {/* Street Address */}
         <div className="info-group">
           <label>Street Address</label>
           <div className="info-value">
@@ -115,13 +220,11 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* City and State/Province */}
         <div className="form-row">
           <div className="info-group half-width">
             <label>City</label>
             <div className="info-value">{venue.city || "Not specified"}</div>
           </div>
-
           <div className="info-group half-width">
             <label>State/Province</label>
             <div className="info-value">
@@ -130,7 +233,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* ZIP/Postal Code */}
         <div className="info-group">
           <label>ZIP/Postal Code</label>
           <div className="info-value">
@@ -138,7 +240,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Neighborhood/District */}
         <div className="info-group">
           <label>Neighborhood/District</label>
           <div className="info-value">
@@ -146,7 +247,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Nearby Landmarks */}
         <div className="info-group">
           <label>Nearby Landmarks</label>
           <div className="info-value description-text">
@@ -154,7 +254,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Parking Information */}
         <div className="info-group">
           <label>Parking Information</label>
           <div className="info-value description-text">
@@ -162,7 +261,6 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Public Transportation Access */}
         <div className="info-group">
           <label>Public Transportation Access</label>
           <div className="info-value description-text">
@@ -171,19 +269,18 @@ const VenueDetails = () => {
           </div>
         </div>
 
-        {/* Map Location (if available) */}
         {venue.latitude && venue.longitude && (
           <div className="info-group">
             <label>Location on Map</label>
             <div className="info-value">
               <button
                 className="map-button"
-                onClick={() => {
+                onClick={() =>
                   window.open(
                     `https://maps.google.com/?q=${venue.latitude},${venue.longitude}`,
                     "_blank"
-                  );
-                }}
+                  )
+                }
               >
                 📍 View on Map
               </button>
@@ -192,131 +289,335 @@ const VenueDetails = () => {
         )}
       </div>
 
-      {/* Step 3 Information - Pricing & Packages */}
+      {/* Step 3: Space Details */}
       <div className="venue-info-section step3-section">
-        <h2>Pricing & Packages</h2>
+        <h2>Space Details</h2>
 
-        {/* Pricing Model */}
         <div className="info-group">
-          <label>Pricing Model</label>
+          <label>Space Type</label>
           <div className="info-value">
-            {venue.pricingModel ||
-              venue.pricingType ||
-              "Contact for pricing information"}
+            {venue.spaceType ? (
+              <div className="space-type-display">
+                <span className="space-type-badge">{venue.spaceType}</span>
+                {spaceTypes.includes(venue.spaceType) && (
+                  <span className="space-type-verified">✓ Verified type</span>
+                )}
+              </div>
+            ) : (
+              "Not specified"
+            )}
           </div>
         </div>
 
-        {/* Pricing Options */}
-        <div className="pricing-options">
-          <div className="form-row">
-            {/* Starting Price */}
-            <div className="info-group half-width">
-              <label>Starting Price</label>
-              <div className="info-value pricing-amount">
-                {venue.startingPrice
-                  ? `$${venue.startingPrice}`
-                  : "Not specified"}
+        <div className="info-group">
+          <label>Venue Accessibility</label>
+          <div className="info-value">
+            {venue.venuePart ? (
+              <div className="venue-part-display">
+                <strong>{getVenuePartLabel(venue.venuePart)}</strong>
+                <p className="venue-part-description">
+                  {getVenuePartDescription(venue.venuePart)}
+                </p>
               </div>
-            </div>
+            ) : (
+              "Not specified"
+            )}
+          </div>
+        </div>
 
-            {/* Minimum Spend */}
-            <div className="info-group half-width">
-              <label>Minimum Spend</label>
-              <div className="info-value pricing-amount">
-                {venue.minSpend ? `$${venue.minSpend}` : "Not specified"}
-              </div>
+        {(venue.outdoorSpace || venue.hasWindows || venue.naturalLight) && (
+          <div className="info-group">
+            <label>Space Features</label>
+            <div className="features-list">
+              {venue.outdoorSpace && (
+                <span className="feature-tag">🌳 Outdoor Space</span>
+              )}
+              {venue.hasWindows && (
+                <span className="feature-tag">🪟 Windows</span>
+              )}
+              {venue.naturalLight && (
+                <span className="feature-tag">☀️ Natural Light</span>
+              )}
+              {venue.airConditioning && (
+                <span className="feature-tag">❄️ Air Conditioning</span>
+              )}
+              {venue.heating && <span className="feature-tag">🔥 Heating</span>}
             </div>
           </div>
+        )}
 
-          {/* Hourly Rate */}
+        {(venue.spaceLength || venue.spaceWidth || venue.ceilingHeight) && (
           <div className="info-group">
-            <label>Hourly Rate</label>
-            <div className="info-value pricing-amount">
-              {venue.hourlyRate ? `$${venue.hourlyRate}/hour` : "Not specified"}
-            </div>
-          </div>
-
-          {/* Package Options */}
-          <div className="info-group">
-            <label>Package Options</label>
-            <div className="info-value">
-              {venue.packageOptions && venue.packageOptions.length > 0 ? (
-                <ul className="package-list">
-                  {venue.packageOptions.map((pkg, index) => (
-                    <li key={index} className="package-item">
-                      <strong>{pkg.name}:</strong> ${pkg.price}
-                      {pkg.description && ` - ${pkg.description}`}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                "No package options specified"
+            <label>Space Dimensions</label>
+            <div className="dimensions-grid">
+              {venue.spaceLength && (
+                <div className="dimension-item">
+                  <span>Length:</span>
+                  <strong>{venue.spaceLength}m</strong>
+                </div>
+              )}
+              {venue.spaceWidth && (
+                <div className="dimension-item">
+                  <span>Width:</span>
+                  <strong>{venue.spaceWidth}m</strong>
+                </div>
+              )}
+              {venue.ceilingHeight && (
+                <div className="dimension-item">
+                  <span>Ceiling Height:</span>
+                  <strong>{venue.ceilingHeight}m</strong>
+                </div>
+              )}
+              {venue.totalArea && (
+                <div className="dimension-item">
+                  <span>Total Area:</span>
+                  <strong>{venue.totalArea} sqm</strong>
+                </div>
               )}
             </div>
           </div>
+        )}
+      </div>
 
-          {/* Additional Fees */}
-          <div className="info-group">
-            <label>Additional Fees</label>
-            <div className="info-value">
-              {venue.additionalFees || "No additional fees specified"}
-            </div>
+      {/* Step 4: Venue Amenities & Policies */}
+      <div className="venue-info-section step4-section">
+        <h2>Venue Amenities & Policies</h2>
+
+        {/* Parking Options */}
+        <div className="info-group">
+          <label>Parking Options</label>
+          <div className="amenities-list">
+            {venue.freeParkingOnPremises && (
+              <div className="amenity-item">
+                <span className="amenity-icon">🅿️</span>
+                <div>
+                  <strong>Free parking on premises</strong>
+                  {venue.freeParkingSpaces && (
+                    <span className="amenity-detail">
+                      {" "}
+                      - {venue.freeParkingSpaces} spaces available
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+            {venue.freeStreetParking && (
+              <div className="amenity-item">
+                <span className="amenity-icon">🚗</span>
+                <strong>Free street parking available</strong>
+              </div>
+            )}
+            {venue.paidParkingOnPremises && (
+              <div className="amenity-item">
+                <span className="amenity-icon">💰</span>
+                <div>
+                  <strong>Paid parking on premises</strong>
+                  {venue.paidParkingSpaces && (
+                    <span className="amenity-detail">
+                      {" "}
+                      - {venue.paidParkingSpaces} spaces available
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+            {venue.paidParkingOffPremises && (
+              <div className="amenity-item">
+                <span className="amenity-icon">🏢</span>
+                <strong>Paid parking off premises available</strong>
+              </div>
+            )}
+            {!venue.freeParkingOnPremises &&
+              !venue.freeStreetParking &&
+              !venue.paidParkingOnPremises &&
+              !venue.paidParkingOffPremises && (
+                <span className="no-info">
+                  No parking information available
+                </span>
+              )}
           </div>
+        </div>
 
-          {/* Security Deposit */}
-          <div className="info-group">
-            <label>Security Deposit</label>
-            <div className="info-value pricing-amount">
-              {venue.securityDeposit
-                ? `$${venue.securityDeposit}`
-                : "Not required"}
-            </div>
+        {/* Accommodation */}
+        <div className="info-group">
+          <label>Accommodation</label>
+          <div className="amenities-list">
+            {venue.accommodationAvailable ? (
+              <div className="amenity-item">
+                <span className="amenity-icon">🏨</span>
+                <div>
+                  <strong>Accommodation available on-site</strong>
+                  {venue.accommodationRooms && (
+                    <span className="amenity-detail">
+                      {" "}
+                      - {venue.accommodationRooms} rooms available
+                    </span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="no-info">No on-site accommodation</span>
+            )}
           </div>
+        </div>
 
-          {/* Cancellation Policy */}
-          <div className="info-group">
-            <label>Cancellation Policy</label>
-            <div className="info-value description-text">
-              {venue.cancellationPolicy ||
-                "Standard cancellation policy applies"}
-            </div>
+        {/* Event Registration */}
+        <div className="info-group">
+          <label>Event Registration</label>
+          <div className="amenities-list">
+            {venue.allowedEvents ? (
+              <div className="amenity-item">
+                <span className="amenity-icon">🎫</span>
+                <div>
+                  <strong>
+                    Registration for personnel and ticketed events allowed
+                  </strong>
+                  <p className="amenity-description">
+                    This venue can publicly advertise events and set tickets for
+                    registered personnel events.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <span className="no-info">Ticketed events not specified</span>
+            )}
           </div>
+        </div>
 
-          {/* Payment Terms */}
-          <div className="info-group">
-            <label>Payment Terms</label>
-            <div className="info-value">
-              {venue.paymentTerms || "50% deposit required to secure booking"}
-            </div>
+        {/* Age Policy */}
+        <div className="info-group">
+          <label>Age Policy</label>
+          <div className="amenities-list">
+            {venue.ageRestrictions ? (
+              <div className="amenity-item">
+                <span className="amenity-icon">🔞</span>
+                <div>
+                  <strong>Age restrictions apply</strong>
+                  <div className="age-policy-details">
+                    {venue.minAgeRequirement && (
+                      <div className="policy-detail">
+                        <span>Minimum age: </span>
+                        <strong>
+                          {ageRestrictions[venue.minAgeRequirement] ||
+                            venue.minAgeRequirement}
+                        </strong>
+                      </div>
+                    )}
+                    {venue.enforcementTime && (
+                      <div className="policy-detail">
+                        <span>Enforcement: </span>
+                        <strong>
+                          {enforcementTimes[venue.enforcementTime] ||
+                            venue.enforcementTime}
+                        </strong>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <span className="no-info">No age restrictions specified</span>
+            )}
           </div>
+        </div>
+      </div>
 
-          {/* Included Services */}
-          {venue.includedServices && venue.includedServices.length > 0 && (
-            <div className="info-group">
-              <label>Included Services</label>
-              <div className="included-services">
-                {venue.includedServices.map((service, index) => (
-                  <span key={index} className="service-tag">
-                    ✓ {service}
-                  </span>
+      {/* Step 5: Capacity and Layouts */}
+      <div className="venue-info-section step5-section">
+        <h2>Capacity and Layouts</h2>
+
+        {/* Available Layouts */}
+        <div className="info-group">
+          <label>Available Layouts</label>
+          <div className="layouts-container">
+            {availableLayouts.length > 0 ? (
+              <div className="layouts-grid">
+                {availableLayouts.map((layout) => (
+                  <div key={layout.id} className="layout-card">
+                    <div className="layout-header">
+                      <span className="layout-icon">{layout.icon}</span>
+                      <span className="layout-label">{layout.label}</span>
+                    </div>
+                    <div className="layout-capacity">
+                      <strong>{layoutCapacities[layout.id]}</strong>
+                      <span>guests</span>
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <span className="no-info">No specific layouts configured</span>
+            )}
+          </div>
+        </div>
 
-          {/* Extra Services */}
-          {venue.extraServices && venue.extraServices.length > 0 && (
-            <div className="info-group">
-              <label>Extra Services (Additional Cost)</label>
-              <div className="extra-services">
-                {venue.extraServices.map((service, index) => (
-                  <span key={index} className="service-tag extra">
-                    💰 {service}
-                  </span>
+        {/* Minimum Attendees */}
+        <div className="info-group">
+          <label>Minimum Attendees</label>
+          <div className="info-value">
+            {venue.minAttendees ? (
+              <div className="minimum-attendees">
+                <span className="attendees-number">{venue.minAttendees}</span>
+                <span className="attendees-label">
+                  minimum attendees per event
+                </span>
+              </div>
+            ) : (
+              <span className="no-info">No minimum attendee requirement</span>
+            )}
+          </div>
+        </div>
+
+        {/* Floor Plans */}
+        <div className="info-group">
+          <label>Floor Plans</label>
+          <div className="floor-plans-container">
+            {venue.floorPlanImages && venue.floorPlanImages.length > 0 ? (
+              <div className="floor-plans-grid">
+                {venue.floorPlanImages.map((image, index) => (
+                  <div key={index} className="floor-plan-item">
+                    <img
+                      src={image.url}
+                      alt={`Floor plan ${index + 1}`}
+                      className="floor-plan-image"
+                    />
+                    <span className="floor-plan-name">
+                      {image.name || `Floor Plan ${index + 1}`}
+                    </span>
+                  </div>
                 ))}
               </div>
+            ) : (
+              <span className="no-info">No floor plans available</span>
+            )}
+          </div>
+        </div>
+
+        {/* Overall Capacity Summary */}
+        <div className="info-group">
+          <label>Capacity Summary</label>
+          <div className="capacity-summary">
+            <div className="summary-item">
+              <span className="summary-label">Maximum Capacity:</span>
+              <span className="summary-value">
+                {venue.venueSize || "Not specified"} guests
+              </span>
             </div>
-          )}
+            {venue.minAttendees && (
+              <div className="summary-item">
+                <span className="summary-label">Minimum per Event:</span>
+                <span className="summary-value">
+                  {venue.minAttendees} guests
+                </span>
+              </div>
+            )}
+            <div className="summary-item">
+              <span className="summary-label">Available Layouts:</span>
+              <span className="summary-value">
+                {availableLayouts.length} configurations
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
