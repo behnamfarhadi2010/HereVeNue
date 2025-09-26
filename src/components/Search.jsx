@@ -1,8 +1,6 @@
-// src/components/Search.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import venues from "../data";
-import { useVenue } from "../contexts/VenueContext";
+import { useVenue } from "../contexts/VenueContext"; // Import context
 import "../styles/main.css";
 
 export default function Search() {
@@ -11,22 +9,41 @@ export default function Search() {
   const [venueName, setvenueName] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate();
-  const { searchVenues } = useVenue();
+
+  // Use the venue context - you can use venues or other values from context
+  const { venues, searchVenues } = useVenue();
 
   const handleSearch = (e) => {
     e.preventDefault();
 
+    // You can use the context values here if needed
+    console.log("Total venues in context:", venues.length);
+
+    // Example: Preview search results using searchVenues function
     const filters = {
-      venueSize: venueSize.trim(),
       eventType: eventType.trim(),
+      venueSize: venueSize.trim(),
       venueName: venueName.trim(),
       city: city.trim(),
     };
-    console.log("Search filters:", filters);
 
-    const filteredResults = searchVenues(filters);
-    console.log("Filtered results from Context:", filteredResults);
-    navigate("/venues", { state: { results: filteredResults } });
+    const previewResults = searchVenues(filters);
+    console.log(
+      "Would find",
+      previewResults.length,
+      "venues with current filters"
+    );
+
+    // Create query parameters object
+    const queryParams = new URLSearchParams();
+
+    if (eventType.trim()) queryParams.append("type", eventType.trim());
+    if (venueSize.trim()) queryParams.append("size", venueSize.trim());
+    if (venueName.trim()) queryParams.append("name", venueName.trim());
+    if (city.trim()) queryParams.append("city", city.trim());
+
+    // Navigate with query string
+    navigate(`/venues?${queryParams.toString()}`);
   };
 
   return (
@@ -45,21 +62,20 @@ export default function Search() {
         </div>
       </div>
 
-      {/* GUESTS */}
+      {/* VENUE NAME */}
       <div className="filter-group">
-        <label> Name </label>
-        <p className="filter-description"> Venue Name</p>
+        <label>NAME</label>
+        <p className="filter-description">Venue Name</p>
         <div className="select-wrapper">
           <input
             type="text"
-            id="guests"
             placeholder="Venue name"
-            min="1"
             value={venueName}
             onChange={(e) => setvenueName(e.target.value)}
           />
         </div>
       </div>
+
       {/* VENUE SIZE */}
       <div className="filter-group">
         <label>VENUE SIZE</label>
@@ -81,7 +97,6 @@ export default function Search() {
         <div className="select-wrapper">
           <input
             type="text"
-            id="location"
             placeholder="e.g., St. John's"
             value={city}
             onChange={(e) => setCity(e.target.value)}
@@ -92,6 +107,11 @@ export default function Search() {
       <button className="search-btn" type="submit">
         Search
       </button>
+
+      {/* Optional: Display venue count from context */}
+      <div style={{ marginTop: "10px", fontSize: "0.9rem", color: "#666" }}>
+        Browse from {venues.length} available venues
+      </div>
     </form>
   );
 }
