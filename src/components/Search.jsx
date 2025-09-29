@@ -107,11 +107,6 @@ export default function Search() {
       <button className="search-btn" type="submit">
         Search
       </button>
-
-      {/* Optional: Display venue count from context */}
-      <div style={{ marginTop: "10px", fontSize: "0.9rem", color: "#666" }}>
-        Browse from {venues.length} available venues
-      </div>
     </form>
   );
 }
