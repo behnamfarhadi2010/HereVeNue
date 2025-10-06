@@ -626,6 +626,266 @@ const VenueDetails = () => {
             </div>
           </div>
         </div>
+        {/* Step 6: Features & Amenities */}
+        <div className="venue-info-section step6-section">
+          <h2>Features & Amenities</h2>
+
+          {/* Licenses */}
+          <div className="info-group">
+            <label>Licenses</label>
+            <div className="amenities-list">
+              {venue.weddingLicense ? (
+                <div className="amenity-item">
+                  <span className="amenity-icon">📜</span>
+                  <div>
+                    <strong>Wedding License</strong>
+                    <p className="amenity-description">
+                      A civil marriage / permission can be performed by a
+                      recognized affiliate or religious body at your venue.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <span className="no-info">No special licenses specified</span>
+              )}
+            </div>
+          </div>
+
+          {/* Facilities */}
+          <div className="info-group">
+            <label>Available Facilities</label>
+            <div className="facilities-container">
+              {Object.entries(venue).some(
+                ([key, value]) => key.startsWith("facility_") && value
+              ) ? (
+                <div className="facilities-grid">
+                  {venue.facility_Wi_Fi && (
+                    <span className="facility-tag">📶 Wi-Fi</span>
+                  )}
+                  {venue.facility_Projector && (
+                    <span className="facility-tag">📽️ Projector</span>
+                  )}
+                  {venue.facility_Flatscreen_TV && (
+                    <span className="facility-tag">📺 Flatscreen TV</span>
+                  )}
+                  {venue.facility_Whiteboard && (
+                    <span className="facility-tag">📋 Whiteboard</span>
+                  )}
+                  {venue.facility_Flipchart && (
+                    <span className="facility-tag">📊 Flipchart</span>
+                  )}
+                  {venue.facility_PA_system_speakers && (
+                    <span className="facility-tag">
+                      🔊 PA system / speakers
+                    </span>
+                  )}
+                  {venue.facility_Conference_call_facilities && (
+                    <span className="facility-tag">
+                      📞 Conference call facilities
+                    </span>
+                  )}
+                  {venue.facility_Air_conditioning && (
+                    <span className="facility-tag">❄️ Air conditioning</span>
+                  )}
+                  {venue.facility_Natural_light && (
+                    <span className="facility-tag">☀️ Natural light</span>
+                  )}
+                  {venue.facility_Storage_space && (
+                    <span className="facility-tag">📦 Storage space</span>
+                  )}
+                  {venue.facility_Quiet_space && (
+                    <span className="facility-tag">🤫 Quiet space</span>
+                  )}
+                </div>
+              ) : (
+                <span className="no-info">
+                  No standard facilities specified
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Custom Facilities */}
+          {venue.customFacilities && venue.customFacilities.length > 0 && (
+            <div className="info-group">
+              <label>Custom Facilities</label>
+              <div className="custom-facilities-list">
+                {venue.customFacilities.map((facility, index) => (
+                  <div key={index} className="custom-facility-item">
+                    <span className="facility-icon">⭐</span>
+                    <span>{facility}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Music & Sound */}
+          <div className="info-group">
+            <label>Music & Sound Options</label>
+            <div className="music-options">
+              {venue.playOwnMusic ||
+              venue.bringOwnDJ ||
+              venue.noiseRestrictions ? (
+                <div className="options-list">
+                  {venue.playOwnMusic && (
+                    <div className="music-option">
+                      <span className="option-icon">🎵</span>
+                      <div>
+                        <strong>Clients can play their own music</strong>
+                        <p className="option-description">
+                          Customers can connect their devices to the in-house
+                          speakers.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.bringOwnDJ && (
+                    <div className="music-option">
+                      <span className="option-icon">🎧</span>
+                      <div>
+                        <strong>Clients can bring their own DJ</strong>
+                        <p className="option-description">
+                          Customers can invite their own DJ with equipment.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.noiseRestrictions && (
+                    <div className="music-option">
+                      <span className="option-icon">🔇</span>
+                      <div>
+                        <strong>Space has noise restrictions</strong>
+                        <p className="option-description">
+                          Loud noise permitted until designated hours.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <span className="no-info">
+                  No music and sound options specified
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Accessibility */}
+          <div className="info-group">
+            <label>Accessibility Features</label>
+            <div className="accessibility-container">
+              {/* Space Accessibility */}
+              <div className="accessibility-section">
+                <h4>Space Accessibility</h4>
+                <div className="accessibility-features">
+                  {venue.wheelchairAccessible ||
+                  venue.accessibleToilet ||
+                  venue.stepFreeEntrance ? (
+                    <div className="features-list">
+                      {venue.wheelchairAccessible && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">♿</span>
+                          <div>
+                            <strong>Wheelchair accessible</strong>
+                            <p className="feature-description">
+                              The entrance and path is wide enough for a
+                              wheelchair user, the access is accessible without
+                              steps or with a lift if steps are present.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {venue.accessibleToilet && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">🚽</span>
+                          <div>
+                            <strong>Accessible toilet</strong>
+                            <p className="feature-description">
+                              There is an accessible toilet facility within the
+                              space.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {venue.stepFreeEntrance && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">🚶</span>
+                          <div>
+                            <strong>Step-free guest entrance</strong>
+                            <p className="feature-description">
+                              The guest entrance is free of steps and barriers
+                              and the space is on street level.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="no-info">
+                      No space accessibility features specified
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Venue Accessibility */}
+              <div className="accessibility-section">
+                <h4>Venue Accessibility</h4>
+                <div className="accessibility-features">
+                  {venue.accessibleParking ||
+                  venue.liftAllFloors ||
+                  venue.cargolift ? (
+                    <div className="features-list">
+                      {venue.accessibleParking && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">🅿️</span>
+                          <div>
+                            <strong>Accessible parking spot</strong>
+                            <p className="feature-description">
+                              There is a private parking spot at least 11 feet
+                              wide or designated public parking for
+                              disabilities.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {venue.liftAllFloors && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">🛗</span>
+                          <div>
+                            <strong>Lift to all floors</strong>
+                            <p className="feature-description">
+                              If this venue is multi-leveled, there is a lift
+                              that serves all floors.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {venue.cargolift && (
+                        <div className="accessibility-feature">
+                          <span className="feature-icon">📦</span>
+                          <div>
+                            <strong>Cargo lift</strong>
+                            <p className="feature-description">
+                              This venue is multi-leveled, there is a cargo lift
+                              to facilitate transportation of goods between
+                              floors.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="no-info">
+                      No venue accessibility features specified
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

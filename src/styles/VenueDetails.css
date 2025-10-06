@@ -106,13 +106,7 @@
   gap: 10px;
   margin-top: 8px;
 }
-.features-list {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 8px;
-}
+
 .dimensions-grid {
   grid-column: 1 / -1;
   display: grid;
@@ -464,6 +458,182 @@
   font-weight: 600;
 }
 
+/* Step 6: Features & Amenities Styles */
+
+.step6-section h2 {
+  color: #333;
+  /* width: 90%; */
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  font-size: 24px;
+}
+
+/* Facilities Grid */
+.facilities-container {
+  margin-top: 15px;
+}
+
+.facilities-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.facility-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.facility-tag:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* Custom Facilities */
+.custom-facilities-list {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.custom-facility-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #e7f3ff;
+  border: 1px solid #b3d9ff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.facility-icon {
+  font-size: 14px;
+}
+
+/* Music & Sound Options */
+.music-options {
+  margin-top: 15px;
+}
+
+.options-list {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.music-option {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #ec676a;
+}
+
+.option-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.option-description {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Accessibility Features */
+.accessibility-container {
+  grid-column: 1 / -1;
+  margin-top: 15px;
+}
+
+.accessibility-section {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.accessibility-section h4 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.accessibility-features {
+  margin-top: 10px;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.accessibility-feature {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.feature-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.feature-description {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Enhanced hover effects for Step 6 */
+.facility-tag:hover,
+.custom-facility-item:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.music-option:hover,
+.accessibility-feature:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left-color: #e34949;
+  transition: all 0.3s ease;
+}
+
+/* Consistent spacing for all sections */
+.venue-info-section {
+  margin-bottom: 20px;
+}
+
+.venue-info-section:last-of-type {
+  margin-bottom: 0;
+}
+
 /* Responsive design for Step 5 */
 @media (max-width: 768px) {
   .layouts-grid {
@@ -545,3 +715,5 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
+
+/* Responsive Design for Step 6 */
