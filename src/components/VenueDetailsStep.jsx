@@ -886,6 +886,437 @@ const VenueDetails = () => {
             </div>
           </div>
         </div>
+        {/* Step 7: Pricing & Opening Hours */}
+        <div className="venue-info-section step7-section">
+          <h2>Pricing & Opening Hours</h2>
+
+          {/* Simple currency formatter for this step */}
+          {(() => {
+            const formatCurrency = (amount) => {
+              if (!amount && amount !== 0) return "Not specified";
+              const numericAmount =
+                typeof amount === "string"
+                  ? amount.replace(/[^\d.-]/g, "")
+                  : amount;
+              const numberValue = parseFloat(numericAmount);
+              if (isNaN(numberValue)) return "Invalid amount";
+              return new Intl.NumberFormat("en-CA", {
+                style: "currency",
+                currency: "CAD",
+              }).format(numberValue);
+            };
+
+            return (
+              <>
+                {/* Pricing Option */}
+                <div className="info-group">
+                  <label>Pricing Model</label>
+                  <div className="pricing-model">
+                    {venue.pricingOption ? (
+                      <div className="pricing-option-display">
+                        {venue.pricingOption === "hireFee" && (
+                          <div className="pricing-option-card selected">
+                            <span className="pricing-icon">💰</span>
+                            <div>
+                              <strong>Hire fee only</strong>
+                              <p className="pricing-description">
+                                We charge based on hire fee per hour or per day.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        {venue.pricingOption === "customPricing" && (
+                          <div className="pricing-option-card selected">
+                            <span className="pricing-icon">⚡</span>
+                            <div>
+                              <strong>Custom pricing</strong>
+                              <p className="pricing-description">
+                                We charge based on minimum spend, price per
+                                person or hire fee.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="no-info">
+                        No pricing model specified
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Opening Hours */}
+                <div className="info-group">
+                  <label>Opening Hours</label>
+                  <div className="opening-hours-container">
+                    {[
+                      "monday",
+                      "tuesday",
+                      "wednesday",
+                      "thursday",
+                      "friday",
+                      "saturday",
+                      "sunday",
+                    ].some(
+                      (day) => venue[day] && venue[day].status === "open"
+                    ) ? (
+                      <div className="opening-hours-table">
+                        {[
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday",
+                          "Sunday",
+                        ].map((day) => {
+                          const dayData = venue[day.toLowerCase()] || {
+                            status: "closed",
+                          };
+                          const hourlyRates =
+                            venue[`${day.toLowerCase()}HourlyRates`] || [];
+
+                          return (
+                            <div key={day} className="day-row">
+                              <div className="day-header">
+                                <span className="day-name">{day}</span>
+                                <span
+                                  className={`day-status ${dayData.status}`}
+                                >
+                                  {dayData.status === "open"
+                                    ? "🟢 Open"
+                                    : "🔴 Closed"}
+                                </span>
+                              </div>
+
+                              {dayData.status === "open" && (
+                                <div className="day-details">
+                                  {/* Hourly Rates */}
+                                  {hourlyRates.length > 0 && (
+                                    <div className="hourly-rates-section">
+                                      <strong>Hourly Rates:</strong>
+                                      <div className="rates-list">
+                                        {hourlyRates.map((rate, index) => (
+                                          <div
+                                            key={index}
+                                            className="rate-item"
+                                          >
+                                            <span className="rate-price">
+                                              {rate.price || "Not specified"}
+                                            </span>
+                                            <span className="rate-time">
+                                              {rate.time || "No time specified"}
+                                            </span>
+                                            <span className="rate-note">
+                                              Inc. sales tax per hour
+                                            </span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Full Day Rate */}
+                                  {dayData.fullDayRate && (
+                                    <div className="full-day-rate-section">
+                                      <strong>Full Day Rate:</strong>
+                                      <div className="rate-item">
+                                        <span className="rate-price">
+                                          {dayData.fullDayRate}
+                                        </span>
+                                        <span className="rate-note">
+                                          Inc. sales tax per day
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <span className="no-info">
+                        No opening hours specified
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Additional Charges */}
+                {(venue.cleaningFee ||
+                  venue.securityDeposit ||
+                  venue.serviceFee) && (
+                  <div className="info-group">
+                    <label>Additional Charges</label>
+                    <div className="additional-charges-grid">
+                      {venue.cleaningFee && (
+                        <div className="charge-item">
+                          <span className="charge-label">Cleaning Fee:</span>
+                          <span className="charge-value">
+                            {formatCurrency(venue.cleaningFee)}
+                          </span>
+                        </div>
+                      )}
+                      {venue.securityDeposit && (
+                        <div className="charge-item">
+                          <span className="charge-label">
+                            Security Deposit:
+                          </span>
+                          <span className="charge-value">
+                            {formatCurrency(venue.securityDeposit)}
+                          </span>
+                        </div>
+                      )}
+                      {venue.serviceFee && (
+                        <div className="charge-item">
+                          <span className="charge-label">Service Fee:</span>
+                          <span className="charge-value">
+                            {formatCurrency(venue.serviceFee)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Minimum Booking Requirements */}
+                {(venue.minBookingHours || venue.minBookingNotice) && (
+                  <div className="info-group">
+                    <label>Minimum Booking Requirements</label>
+                    <div className="booking-requirements-grid">
+                      {venue.minBookingHours && (
+                        <div className="requirement-item">
+                          <span className="requirement-label">
+                            Minimum Hours:
+                          </span>
+                          <span className="requirement-value">
+                            {venue.minBookingHours} hours
+                          </span>
+                        </div>
+                      )}
+                      {venue.minBookingNotice && (
+                        <div className="requirement-item">
+                          <span className="requirement-label">
+                            Advance Notice:
+                          </span>
+                          <span className="requirement-value">
+                            {venue.minBookingNotice} days
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Pricing Details */}
+                {venue.pricingComment && (
+                  <div className="info-group">
+                    <label>Pricing Details</label>
+                    <div className="pricing-comment">
+                      <p className="description-text">{venue.pricingComment}</p>
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
+        </div>
+        {/* Step 8: Rules & Cancellations */}
+        <div className="venue-info-section step8-section">
+          <h2>Rules & Cancellations</h2>
+
+          {/* Rules Section */}
+          <div className="info-group">
+            <label>Rules of the Space</label>
+            <div className="rules-container">
+              {venue.rules ? (
+                <div className="rules-content">
+                  <div className="rules-text">
+                    <p className="description-text">{venue.rules}</p>
+                  </div>
+                </div>
+              ) : (
+                <span className="no-info">No rules specified</span>
+              )}
+            </div>
+          </div>
+
+          {/* Cancellation Policy */}
+          <div className="info-group">
+            <label>Cancellation Policy</label>
+            <div className="cancellation-policy-container">
+              {venue.cancellationPolicy ? (
+                <div className="policy-display">
+                  {venue.cancellationPolicy === "veryFlexible" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">🔄</span>
+                      <div>
+                        <strong>Very Flexible</strong>
+                        <p className="policy-description">
+                          Cancellations up to 24 hours from event start time
+                          will receive a full refund. Cancellations for events
+                          starting within 24 hours are non-refundable.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.cancellationPolicy === "flexible" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">📅</span>
+                      <div>
+                        <strong>Flexible</strong>
+                        <p className="policy-description">
+                          Cancellations 7 days in advance will receive a full
+                          refund. Cancellations 7 days to 24 hours in advance
+                          will receive a 50% refund. Cancellations for events
+                          starting within 24 hours are non-refundable.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.cancellationPolicy === "standard30" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">📋</span>
+                      <div>
+                        <strong>Standard 30 Day</strong>
+                        <p className="policy-description">
+                          Cancellations 30 days in advance will receive a full
+                          refund. Cancellations 30 days to 7 days in advance
+                          will receive a 50% refund. Cancellations for events
+                          starting within 7 days are non-refundable.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.cancellationPolicy === "standard60" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">📊</span>
+                      <div>
+                        <strong>Standard 60 Day</strong>
+                        <p className="policy-description">
+                          Cancellations 60 days in advance will receive a full
+                          refund. Cancellations 60 days to 30 days in advance
+                          will receive a 50% refund. Cancellations for events
+                          starting within 30 days are non-refundable.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {venue.cancellationPolicy === "custom" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">⚡</span>
+                      <div>
+                        <strong>Custom Policy</strong>
+                        <p className="policy-description">
+                          Custom cancellation policy with specific notice
+                          periods.
+                        </p>
+                        {(venue.customPolicy_atLeast ||
+                          venue.customPolicy_lessThan) && (
+                          <div className="custom-policy-details">
+                            {venue.customPolicy_atLeast && (
+                              <div className="policy-detail">
+                                <span>At least:</span>
+                                <strong>
+                                  {venue.customPolicy_atLeast} days prior
+                                </strong>
+                              </div>
+                            )}
+                            {venue.customPolicy_lessThan && (
+                              <div className="policy-detail">
+                                <span>Less than:</span>
+                                <strong>
+                                  {venue.customPolicy_lessThan} days prior
+                                </strong>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {venue.cancellationPolicy === "other" && (
+                    <div className="policy-card">
+                      <span className="policy-icon">❓</span>
+                      <div>
+                        <strong>Other</strong>
+                        <p className="policy-description">
+                          None of the standard cancellation policies can be
+                          applied to this venue.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <span className="no-info">
+                  No cancellation policy specified
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Rescheduling Policy */}
+          <div className="info-group">
+            <label>Rescheduling Policy</label>
+            <div className="rescheduling-policy">
+              {venue.allowRescheduling ? (
+                <div className="rescheduling-enabled">
+                  <span className="rescheduling-icon">✅</span>
+                  <div>
+                    <strong>Rescheduling Allowed</strong>
+                    <p className="rescheduling-description">
+                      Guests may move the event date of a confirmed booking to
+                      another date within{" "}
+                      <strong>{venue.rescheduleMonths || "3"} months</strong>{" "}
+                      from the original date, at no cost.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="rescheduling-disabled">
+                  <span className="rescheduling-icon">❌</span>
+                  <div>
+                    <strong>Rescheduling Not Allowed</strong>
+                    <p className="rescheduling-description">
+                      Date changes are not permitted for confirmed bookings.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Submission Information */}
+          {(venue.submittedAt || venue.status) && (
+            <div className="info-group">
+              <label>Submission Information</label>
+              <div className="submission-details">
+                {venue.submittedAt && (
+                  <div className="submission-item">
+                    <span className="submission-label">Submitted:</span>
+                    <span className="submission-value">
+                      {new Date(venue.submittedAt).toLocaleDateString()} at{" "}
+                      {new Date(venue.submittedAt).toLocaleTimeString()}
+                    </span>
+                  </div>
+                )}
+                {venue.status && (
+                  <div className="submission-item">
+                    <span className="submission-label">Status:</span>
+                    <span className={`status-badge ${venue.status}`}>
+                      {venue.status.charAt(0).toUpperCase() +
+                        venue.status.slice(1)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
