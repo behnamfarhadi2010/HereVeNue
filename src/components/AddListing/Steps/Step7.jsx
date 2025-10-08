@@ -55,15 +55,7 @@ const Step7 = ({ formData, handleChange, prevStep, nextStep }) => {
     }
   };
 
-  const handleHourlyRateAdd = (day) => {
-    const currentRates = formData[`${day.toLowerCase()}HourlyRates`] || [];
-    handleChange({
-      target: {
-        name: `${day.toLowerCase()}HourlyRates`,
-        value: [...currentRates, { price: "", time: "" }],
-      },
-    });
-  };
+  // REMOVED: handleHourlyRateAdd function since it's not used anymore
 
   const handleHourlyRateChange = (day, index, field, value) => {
     const currentRates = formData[`${day.toLowerCase()}HourlyRates`] || [];
@@ -171,29 +163,10 @@ const Step7 = ({ formData, handleChange, prevStep, nextStep }) => {
                               )
                             }
                           />
-                          <input
-                            type="text"
-                            placeholder="00 am"
-                            value={rate.time || ""}
-                            onChange={(e) =>
-                              handleHourlyRateChange(
-                                day,
-                                index,
-                                "time",
-                                e.target.value
-                              )
-                            }
-                          />
                           <span>Inc. sales tax per hour</span>
                         </div>
                       ))}
-                      <button
-                        type="button"
-                        className="add-rate-btn"
-                        onClick={() => handleHourlyRateAdd(day)}
-                      >
-                        + Add hourly rate
-                      </button>
+                      {/* REMOVED: Add hourly rate button since it's not needed */}
                     </div>
 
                     <div className="full-day-rate">
@@ -201,7 +174,7 @@ const Step7 = ({ formData, handleChange, prevStep, nextStep }) => {
                       <div className="rate-input">
                         <input
                           type="text"
-                          placeholder="C$ 777"
+                          placeholder="$ 00"
                           value={dayData.fullDayRate || ""}
                           onChange={(e) =>
                             handleDayChange(day, "fullDayRate", e.target.value)
@@ -229,6 +202,31 @@ const Step7 = ({ formData, handleChange, prevStep, nextStep }) => {
                 type="text"
                 name="cleaningFee"
                 value={formData.cleaningFee || ""}
+                onChange={handleChange}
+                placeholder="$ 00"
+              />
+            </div>
+          </div>
+          {/* Add base hourly and daily rates for the BookingSidebar to use */}
+          <div className="charge-item">
+            <span>Base hourly rate (for days without specific rates)</span>
+            <div className="charge-input">
+              <input
+                type="text"
+                name="hourlyRate"
+                value={formData.hourlyRate || ""}
+                onChange={handleChange}
+                placeholder="$ 00"
+              />
+            </div>
+          </div>
+          <div className="charge-item">
+            <span>Base daily rate</span>
+            <div className="charge-input">
+              <input
+                type="text"
+                name="dailyRate"
+                value={formData.dailyRate || ""}
                 onChange={handleChange}
                 placeholder="$ 00"
               />

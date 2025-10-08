@@ -1,0 +1,306 @@
+/* Booking Sidebar Styles */
+.booking-sidebar {
+  flex: 1;
+  position: sticky;
+  top: 20px;
+  max-width: 400px;
+}
+
+.booking-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Pricing Header */
+.pricing-header {
+  margin-bottom: 12px;
+}
+
+.hourly-rate,
+.daily-rate {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.hourly-rate .price,
+.daily-rate .price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.hourly-rate .period,
+.daily-rate .period {
+  font-size: 14px;
+  color: #666;
+}
+
+.daily-rate {
+  margin-top: 4px;
+}
+
+.minimum-hours {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Booking Sections */
+.booking-section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* Date and Time */
+.date-time-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-picker {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 12px;
+  color: #666;
+  pointer-events: none;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-select {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+}
+
+.time-separator {
+  color: #666;
+  font-size: 14px;
+}
+
+.duration-display {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* People Selector */
+.people-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.capacity-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.capacity-icon {
+  font-size: 16px;
+}
+
+.guest-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.counter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.counter-btn:hover:not(:disabled) {
+  border-color: #ec676a;
+  color: #ec676a;
+}
+
+.guest-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Price Breakdown */
+.price-breakdown {
+  margin: 16px 0;
+}
+
+.price-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.cleaning-fee {
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.cleaning-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cleaning-option input[type="checkbox"] {
+  margin: 0;
+}
+
+.price-line.total {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 12px;
+}
+
+.tax-note {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Book Button */
+.book-button {
+  width: 100%;
+  padding: 14px;
+  background: #ec676a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.book-button:hover:not(:disabled) {
+  background: #e34949;
+}
+
+.book-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Security Note */
+.security-note {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 12px;
+}
+/* Venue Details Layout */
+.venue-details-content {
+  width: 100%;
+}
+
+.venue-details-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.venue-info-sections {
+  flex: 2;
+  min-width: 0; /* Prevents flex item from overflowing */
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .venue-details-layout {
+    flex-direction: column;
+  }
+
+  .booking-sidebar {
+    order: -1; /* Move booking sidebar to top on mobile */
+  }
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .booking-sidebar {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 30px;
+  }
+
+  .date-time-grid {
+    flex-direction: column;
+  }
+
+  .time-inputs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .people-selector {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
