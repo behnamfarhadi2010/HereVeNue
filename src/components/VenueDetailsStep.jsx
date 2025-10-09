@@ -4,6 +4,7 @@ import { useVenue } from "../contexts/VenueContext";
 import "../styles/VenueDetails.css";
 import Header from "./Header";
 import BookingSidebar from "../components/BookingSidebar.jsx";
+import MessageHostSidebar from "../components/MessageHostSidebar.jsx";
 
 const VenueDetails = () => {
   const { id } = useParams();
@@ -1355,7 +1356,10 @@ const VenueDetails = () => {
           </div>
 
           {/* Right side - Booking Sidebar */}
-          <BookingSidebar venue={venue} />
+          <div className="booking-sidebar-container">
+            <BookingSidebar venue={venue} />
+            <MessageHostSidebar venue={venue} />
+          </div>
         </div>
       </div>
     </>

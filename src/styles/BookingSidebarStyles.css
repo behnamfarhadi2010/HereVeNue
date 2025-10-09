@@ -2,8 +2,9 @@
 .booking-sidebar {
   flex: 1;
   position: sticky;
+  width: 100%;
   top: 20px;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .booking-card {
