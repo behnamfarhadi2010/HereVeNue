@@ -1,9 +1,17 @@
 /* Booking Sidebar Styles */
+/* Make the entire container sticky */
+.booking-sidebar-container {
+  position: sticky;
+  top: 100px; /* Adjust based on your header height */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .booking-sidebar {
   flex: 1;
-  position: sticky;
+  position: static;
   width: 100%;
-  top: 20px;
+  top: 110px;
   max-width: 380px;
 }
 
