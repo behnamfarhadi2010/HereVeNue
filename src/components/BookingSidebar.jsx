@@ -275,7 +275,7 @@ const BookingSidebar = ({ venue }) => {
                 min={new Date().toISOString().split("T")[0]}
                 className="date-picker"
               />
-              <span className="dropdown-icon">▼</span>
+              <span className="dropdown-icon"> </span>
             </div>
             <div className="time-inputs">
               <select
@@ -314,7 +314,7 @@ const BookingSidebar = ({ venue }) => {
           <label className="section-label">People</label>
           <div className="people-selector">
             <div className="capacity-info">
-              <span className="capacity-icon">☒</span>
+              <span className="capacity-icon"> </span>
               <span className="capacity-text">
                 Max {pricingData.maxCapacity}
               </span>

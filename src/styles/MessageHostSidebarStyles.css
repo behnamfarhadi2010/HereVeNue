@@ -1,6 +1,6 @@
 /* styles/MessageHostSidebarStyles.css */
 .message-host-sidebar {
-  margin-top: 20px;
+  margin-top: -15px;
   width: 100%;
   max-width: 380px;
   position: sticky;
@@ -144,22 +144,246 @@
   color: #000;
   cursor: pointer;
 }
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Higher z-index to ensure it's above header */
+  padding: 20px;
+}
 
-/* Responsive Design */
+.message-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px; /* Reduced from 600px to make it more square */
+  max-height: 80vh; /* Reduced height */
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.modal-content {
+  padding: 0 24px;
+  max-height: calc(80vh - 140px); /* Limit content height */
+  overflow-y: auto;
+}
+
+.modal-section {
+  padding: 16px 0;
+}
+
+.modal-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #000;
+}
+
+.modal-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #000;
+}
+
+.host-description {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.instruction {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 10px 0;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.check-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.event-type {
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.modal-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0;
+}
+
+.modal-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 12px;
+  min-height: 80px;
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.catering-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catering-info {
+  font-size: 13px;
+  margin: 0 0 6px 0;
+  color: #000;
+}
+
+.catering-detail {
+  font-size: 12px;
+  margin: 2px 0;
+  color: #666;
+  padding-left: 10px;
+}
+
+.modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-radius: 0 0 12px 12px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background: transparent;
+  color: #000;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cancel-btn:hover {
+  background: #f5f5f5;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #333;
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .message-host-sidebar {
-    max-width: 100%;
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-start; /* Align to top on mobile */
+    padding-top: 60px; /* Add space for mobile header */
   }
 
-  .message-host-card {
-    padding: 20px;
+  .message-modal {
+    max-height: 85vh;
+    max-width: 95vw;
+  }
+
+  .modal-header,
+  .modal-content,
+  .modal-actions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .modal-actions {
+    flex-direction: row;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    flex: 1;
   }
 }
 
-/* Focus states for accessibility */
-.message-input:focus,
-.send-message-btn:focus,
-.favorite-checkbox:focus {
-  outline: 2px solid #000;
-  outline-offset: 2px;
+@media (max-width: 480px) {
+  .message-modal {
+    max-width: 100vw;
+    max-height: 90vh;
+    border-radius: 12px 12px 0 0;
+    margin-top: auto;
+  }
+
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
 }
