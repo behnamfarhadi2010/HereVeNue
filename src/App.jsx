@@ -17,6 +17,7 @@ import AddListing from "./components/AddListing/AddListing.jsx";
 import { VenueProvider } from "./contexts/VenueContext";
 import UserDashboard from "./pages/UserDashboard";
 import VenueDetailsStep from "./components/VenueDetailsStep";
+import PaymentPage from "./components/PaymentPage"; // Add this import
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           {/*مسیر صفحه لاگین مکان */}
           <Route path="/venues" element={<Venues />} />
           <Route path="/venue/:id" element={<VenueDetailsStep />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
           {/*مسیر لاگین */}
         </Routes>
       </Router>

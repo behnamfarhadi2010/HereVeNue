@@ -1,8 +1,10 @@
 // components/BookingSidebar.jsx
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/BookingSidebarStyles.css";
 
 const BookingSidebar = ({ venue }) => {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("11:00");
@@ -163,6 +165,11 @@ const BookingSidebar = ({ venue }) => {
   };
 
   const handleBookRequest = () => {
+    if (!selectedDate) {
+      alert("Please select a date to continue with booking.");
+      return;
+    }
+
     if (!currentPricing.isOpen) {
       alert(
         "Sorry, the venue is closed on the selected date. Please choose another date."
@@ -170,26 +177,29 @@ const BookingSidebar = ({ venue }) => {
       return;
     }
 
-    const bookingData = {
-      venueId: venue.id,
-      venueName: venue.venueName,
+    // Prepare booking details for payment page
+    const bookingDetails = {
       date: selectedDate,
-      startTime,
-      endTime,
-      hours,
-      guestCount,
-      includeCleaning,
-      subtotal,
+      startTime: startTime,
+      endTime: endTime,
+      guests: guestCount,
+      hours: hours,
+      includeCleaning: includeCleaning,
+      subtotal: subtotal,
       cleaningFee: includeCleaning ? pricingData.cleaningFee : 0,
-      total,
+      total: total,
       hourlyRate: currentPricing.hourlyRate,
-      dailyRate: currentPricing.dailyRate,
     };
 
-    console.log("Booking request:", bookingData);
-    alert(
-      "Booking request submitted! This would connect to your booking system."
-    );
+    console.log("Navigating to payment with:", bookingDetails);
+
+    // Navigate to payment page with booking details
+    navigate(`/payment/${venue.id}`, {
+      state: {
+        bookingDetails,
+        venue,
+      },
+    });
   };
 
   // Show loading while extracting pricing data
@@ -274,6 +284,7 @@ const BookingSidebar = ({ venue }) => {
                 onChange={(e) => setSelectedDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
                 className="date-picker"
+                required
               />
               <span className="dropdown-icon"> </span>
             </div>
@@ -396,7 +407,12 @@ const BookingSidebar = ({ venue }) => {
         </button>
 
         {/* Security Note */}
-        <div className="security-note">You won't be charged yet</div>
+        <div className="security-note">
+          <strong>You won't be charged yet</strong>
+          <p>
+            Your booking won't be confirmed until the host accepts your request
+          </p>
+        </div>
       </div>
     </div>
   );
