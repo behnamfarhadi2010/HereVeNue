@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
 import Header from "./Header";
-// import "../styles/PaymentPage.css";
+import "../styles/PaymentPage.css";
 
 const PaymentPage = () => {
   const { id } = useParams();
@@ -333,7 +333,6 @@ const PaymentPage = () => {
                     Responsive Customer Service
                   </li>
                 </ul>
-                <button className="learn-more-btn">Learn more</button>
               </div>
             </div>
           </div>
