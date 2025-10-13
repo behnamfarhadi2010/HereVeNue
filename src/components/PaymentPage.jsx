@@ -333,6 +333,7 @@ const PaymentPage = () => {
                     Responsive Customer Service
                   </li>
                 </ul>
+                <button className="learn-more-btn">Learn more</button>
               </div>
             </div>
           </div>
