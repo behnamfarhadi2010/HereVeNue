@@ -18,6 +18,7 @@ import { VenueProvider } from "./contexts/VenueContext";
 import UserDashboard from "./pages/UserDashboard";
 import VenueDetailsStep from "./components/VenueDetailsStep";
 import PaymentPage from "./components/PaymentPage"; // Add this import
+import MyMap from "./components/MyMap.jsx";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
           {/*مسیر لاگین */}
         </Routes>
       </Router>
+      <MyMap />
     </VenueProvider>
   );
 };
