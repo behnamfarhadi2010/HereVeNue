@@ -23,10 +23,8 @@ const PaymentPage = () => {
   const venue = venues.find((v) => v.id === parseInt(id));
 
   // State for payment form
-  //   const [paymentMethod, setPaymentMethod] = useState("googlePay");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  //   const [cvv, setCvv] = useState("");
   const [country, setCountry] = useState("Canada");
   const [postalCode, setPostalCode] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -47,23 +45,59 @@ const PaymentPage = () => {
 
   // Calculate pricing based on venue data and booking details
   const calculatePricing = () => {
-    const hourlyRate = venue.hourlyRate || venue.dailyRate / 8 || 105; // Fallback to $105 if no rate
-    const basePrice = hourlyRate * bookingDetails.hours;
-    const cleaningFee = venue.cleaningFee || 55;
-    const serviceFee = venue.serviceFee || 0;
-    const taxRate = 0.13; // 13% tax
-    const subtotal = basePrice + cleaningFee + serviceFee;
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
+    try {
+      // Safely parse all values with defaults
+      const hourlyRate =
+        parseFloat(venue.hourlyRate) ||
+        (venue.dailyRate ? parseFloat(venue.dailyRate) / 8 : 105);
+
+      const cleaningFee = parseFloat(venue.cleaningFee) || 0;
+      const serviceFee = parseFloat(venue.serviceFee) || 0;
+      const hours = parseInt(bookingDetails.hours) || 2;
+
+      // Ensure we have valid numbers
+      if (isNaN(hourlyRate) || isNaN(hours)) {
+        console.error("Invalid pricing data:", { hourlyRate, hours });
+        return getDefaultPricing();
+      }
+
+      const basePrice = hourlyRate * hours;
+      const taxRate = 0.15;
+      const subtotal = basePrice + cleaningFee + serviceFee;
+      const tax = subtotal * taxRate;
+      const total = subtotal + tax;
+
+      return {
+        hourlyRate,
+        basePrice,
+        cleaningFee,
+        serviceFee,
+        tax,
+        total,
+        hours,
+      };
+    } catch (error) {
+      console.error("Error calculating pricing:", error);
+      return getDefaultPricing();
+    }
+  };
+
+  // Fallback pricing if calculation fails
+  const getDefaultPricing = () => {
+    const hourlyRate = 105;
+    const hours = parseInt(bookingDetails.hours) || 2;
+    const basePrice = hourlyRate * hours;
+    const tax = basePrice * 0.15;
+    const total = basePrice + tax;
 
     return {
       hourlyRate,
       basePrice,
-      cleaningFee,
-      serviceFee,
+      cleaningFee: 0,
+      serviceFee: 0,
       tax,
       total,
-      hours: bookingDetails.hours,
+      hours,
     };
   };
 
@@ -105,10 +139,16 @@ const PaymentPage = () => {
   };
 
   const formatCurrency = (amount) => {
+    // Ensure amount is a valid number
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount)) {
+      return "$0.00";
+    }
+
     return new Intl.NumberFormat("en-CA", {
       style: "currency",
       currency: "CAD",
-    }).format(amount);
+    }).format(numericAmount);
   };
 
   return (
@@ -295,7 +335,7 @@ const PaymentPage = () => {
                   </div>
                   {pricing.cleaningFee > 0 && (
                     <div className="price-row">
-                      <span>Cleaning fee ⏱</span>
+                      <span>Cleaning fee </span>
                       <span>{formatCurrency(pricing.cleaningFee)}</span>
                     </div>
                   )}
@@ -310,7 +350,7 @@ const PaymentPage = () => {
                     <span>{formatCurrency(pricing.total)}</span>
                   </div>
                   <div className="tax-note">
-                    <span>(sales tax included)</span>
+                    <span>(About 15% sales tax included)</span>
                   </div>
                 </div>
               </div>

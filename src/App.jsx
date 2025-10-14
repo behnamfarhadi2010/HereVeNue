@@ -19,6 +19,7 @@ import UserDashboard from "./pages/UserDashboard";
 import VenueDetailsStep from "./components/VenueDetailsStep";
 import PaymentPage from "./components/PaymentPage"; // Add this import
 import MyMap from "./components/MyMap.jsx";
+import BookingConfirmation from "./components/BookingConfirmation";
 
 const App = () => {
   return (
@@ -42,6 +43,10 @@ const App = () => {
           <Route path="/venue/:id" element={<VenueDetailsStep />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
           {/*مسیر لاگین */}
+          <Route
+            path="/booking-confirmation/:id"
+            element={<BookingConfirmation />}
+          />
         </Routes>
       </Router>
       <MyMap />

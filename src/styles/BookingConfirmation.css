@@ -1,0 +1,343 @@
+/* styles/BookingConfirmation.css */
+.confirmation-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.confirmation-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.success-header {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: #ec676a;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 20px;
+}
+
+.success-message {
+  color: #6b7280;
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.confirmation-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+/* Summary Cards */
+.summary-card,
+.payment-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.summary-card h2,
+.payment-card h2 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 20px;
+}
+
+.summary-row,
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-row:last-child,
+.payment-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.total-amount {
+  font-size: 20px;
+  font-weight: bold;
+  color: #10b981;
+}
+
+/* What Happens Next Section */
+.next-steps {
+  margin-top: 32px;
+}
+
+.next-steps h2 {
+  margin: 0 0 24px 0;
+  color: #1f2937;
+  font-size: 20px;
+}
+
+.steps-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: #ec676a;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  display: block;
+  color: #1f2937;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.step-content p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Sidebar Styles */
+.confirmation-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.venue-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.venue-card h3 {
+  margin: 0 0 16px 0;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.venue-location,
+.venue-contact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.venue-location i,
+.venue-contact i {
+  width: 16px;
+  color: #6b7280;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background: #ec676a;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #ec676b;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn-outline {
+  background: white;
+  color: #374151;
+  border: 2px solid #d1d5db;
+}
+
+.btn-outline:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+/* Support Card */
+.support-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.support-card h4 {
+  margin: 0 0 12px 0;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.support-card p {
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.error-state h2 {
+  color: #ef4444;
+  margin-bottom: 16px;
+}
+
+.error-state p {
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.back-button {
+  background: #ec676a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background: #ec676b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .confirmation-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .confirmation-content {
+    padding: 16px;
+  }
+
+  .success-header {
+    padding: 30px 16px;
+  }
+
+  .step {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .step-number {
+    align-self: center;
+  }
+}
+
+/* Animation for success icon */
+@keyframes successCheck {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-icon {
+  animation: successCheck 0.6s ease-out;
+}
