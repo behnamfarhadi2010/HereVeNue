@@ -5,13 +5,14 @@ import "../styles/ClientLogin.css";
 import "../styles/Login.css";
 import "../styles/main.css";
 import Header from "../components/Header";
-import checkLogin from "./checkLogin"; // Import the checkLogin function
+import checkLogin from "./checkLogin";
 
 const ClientLogin = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Attempting login with:", user, password);
@@ -21,8 +22,15 @@ const ClientLogin = () => {
     setMessage(result.message);
     if (result.success && typeof window !== "undefined") {
       localStorage.setItem("authUser", user);
-      console.log("User stored in localStorage");
-      navigate("/userdashboard");
+      localStorage.setItem("userType", result.userType); // Store user type
+      console.log("User stored in localStorage, type:", result.userType);
+
+      // Redirect based on user type
+      if (result.userType === "venue_owner") {
+        navigate("/dashboard"); // Venue owner dashboard
+      } else {
+        navigate("/userdashboard"); // Regular user dashboard
+      }
     }
   };
 
@@ -39,7 +47,7 @@ const ClientLogin = () => {
           <form className="Clientlogin-box-user" onSubmit={handleLogin}>
             <input
               type="text"
-              placeholder="user"
+              placeholder="Username"
               className="Clientlogin-input"
               value={user}
               onChange={(e) => setUser(e.target.value)}
