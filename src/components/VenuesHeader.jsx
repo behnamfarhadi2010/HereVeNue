@@ -1,8 +1,9 @@
-// src/components/Search.jsx
+// src/components/VenuesHeader.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "../styles/testVenuesearch.css";
+// import "../styles/VenuesResultSearch.css";
 import { useVenue } from "../contexts/VenueContext";
 
 export default function Search() {
@@ -29,6 +30,7 @@ export default function Search() {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault(); // Prevent default form submission behavior
       handleSearch();
     }
   };

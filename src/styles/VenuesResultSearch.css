@@ -1,0 +1,91 @@
+/* Search Box Styles */
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  /* padding: 40px 20px; */
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  flex-wrap: wrap;
+  width: 80%;
+  margin-left: 3rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-description {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
+  font-family: inherit;
+}
+
+.select-wrapper input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.select-wrapper input::placeholder {
+  color: #999;
+}
+
+.select-wrapper input:hover {
+  border-color: #c8d1d9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .search-box {
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px 20px;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-box {
+    padding: 20px 15px;
+    gap: 15px;
+  }
+
+  .select-wrapper input {
+    padding: 10px 14px;
+  }
+}

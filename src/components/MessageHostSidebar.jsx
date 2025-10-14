@@ -1,24 +1,25 @@
 // components/MessageHostSidebar.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/MessageHostSidebarStyles.css";
 
 const MessageHostSidebar = ({ venue }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageData, setMessageData] = useState({
-    introduceYourself: false,
-    aboutActivity: false,
-    useSpace: false,
-    eventType: "Event Space",
-    date: "2025-10-23",
-    startTime: "9:00 am",
-    endTime: "11:00 am",
     flexibleDates: false,
-    people: 44,
     messageText: "",
     requireCatering: false,
     ownCatering: true,
   });
+
+  // Load favorite status from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem("userFavorites");
+    if (savedFavorites) {
+      const favorites = JSON.parse(savedFavorites);
+      setIsFavorited(favorites.includes(venue.id));
+    }
+  }, [venue.id]);
 
   const handleSendMessage = () => {
     setShowMessageModal(true);
@@ -39,42 +40,40 @@ const MessageHostSidebar = ({ venue }) => {
     alert("Message sent to host! They typically respond within 1 hour.");
     setShowMessageModal(false);
     setMessageData({
-      introduceYourself: false,
-      aboutActivity: false,
-      useSpace: false,
-      eventType: "Event Space",
-      date: "2025-10-23",
-      startTime: "9:00 am",
-      endTime: "11:00 am",
       flexibleDates: false,
-      people: 44,
       messageText: "",
       requireCatering: false,
       ownCatering: true,
     });
   };
 
-  const handleCheckboxChange = (field) => {
-    setMessageData((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
-
-  const handleInputChange = (field, value) => {
-    setMessageData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
   const toggleFavorite = () => {
+    const savedFavorites = localStorage.getItem("userFavorites");
+    let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+
+    let updatedFavorites;
+    if (isFavorited) {
+      // Remove from favorites
+      updatedFavorites = favorites.filter((id) => id !== venue.id);
+    } else {
+      // Add to favorites
+      updatedFavorites = [...favorites, venue.id];
+    }
+
+    // Update localStorage
+    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
+
+    // Update local state
     setIsFavorited(!isFavorited);
+
     console.log(
       `${venue.venueName} ${
         !isFavorited ? "added to" : "removed from"
       } favorites`
     );
+
+    // Optional: Trigger a custom event to notify other components
+    window.dispatchEvent(new Event("favoritesUpdated"));
   };
 
   return (
@@ -128,7 +127,9 @@ const MessageHostSidebar = ({ venue }) => {
                 onChange={toggleFavorite}
                 className="favorite-checkbox"
               />
-              <span className="favorite-label">Add to Favourites</span>
+              <span className="favorite-label">
+                {isFavorited ? "Remove from Favourites" : "Add to Favourites"}
+              </span>
             </label>
           </div>
         </div>
@@ -149,73 +150,27 @@ const MessageHostSidebar = ({ venue }) => {
                 <p className="host-description">
                   Your Personal Event Manager from Sorry Studio
                 </p>
-
-                <div className="checklist">
-                  {/* <label className="check-item">
-                    <input
-                      type="checkbox"
-                      checked={messageData.introduceYourself}
-                      onChange={() => handleCheckboxChange("introduceYourself")}
-                    />
-                    <span>Introduce yourself</span>
-                  </label>
-                  <label className="check-item">
-                    <input
-                      type="checkbox"
-                      checked={messageData.aboutActivity}
-                      onChange={() => handleCheckboxChange("aboutActivity")}
-                    />
-                    <span>Tell the host about your activity</span>
-                  </label>
-                  <label className="check-item">
-                    <input
-                      type="checkbox"
-                      checked={messageData.useSpace}
-                      onChange={() => handleCheckboxChange("useSpace")}
-                    />
-                    <span>
-                      Let the host know how you'd like to use the space
-                    </span>
-                  </label> */}
-                </div>
               </div>
 
               <div className="modal-divider"></div>
 
               {/* Event Details */}
               <div className="modal-section">
-                {/* <h4>Event type</h4>
-                <div className="event-type">Event Space</div> */}
-
-                {/* <h4>Date and time</h4> */}
                 <div className="checklist">
-                  {/* <label className="check-item"> */}
-                  {/* <input type="checkbox" checked={true} readOnly />
-                    <span>2025-10-23</span>
-                  </label>
-                  <label className="check-item">
-                    <input type="checkbox" checked={true} readOnly />
-                    <span>9:00 am</span>
-                  </label>
-                  <label className="check-item">
-                    <input type="checkbox" checked={true} readOnly />
-                    <span>11:00 am</span>
-                  </label> */}
                   <label className="check-item">
                     <input
                       type="checkbox"
                       checked={messageData.flexibleDates}
-                      onChange={() => handleCheckboxChange("flexibleDates")}
+                      onChange={(e) =>
+                        setMessageData((prev) => ({
+                          ...prev,
+                          flexibleDates: e.target.checked,
+                        }))
+                      }
                     />
                     <span>I'm flexible on dates and time</span>
                   </label>
                 </div>
-
-                {/* <h4>People</h4>
-                <label className="check-item">
-                  <input type="checkbox" checked={true} readOnly />
-                  <span>44</span>
-                </label> */}
               </div>
 
               <div className="modal-divider"></div>
@@ -231,7 +186,10 @@ const MessageHostSidebar = ({ venue }) => {
                 <textarea
                   value={messageData.messageText}
                   onChange={(e) =>
-                    handleInputChange("messageText", e.target.value)
+                    setMessageData((prev) => ({
+                      ...prev,
+                      messageText: e.target.value,
+                    }))
                   }
                   className="modal-textarea"
                   placeholder="Type your message here..."
@@ -243,7 +201,12 @@ const MessageHostSidebar = ({ venue }) => {
                     <input
                       type="checkbox"
                       checked={messageData.requireCatering}
-                      onChange={() => handleCheckboxChange("requireCatering")}
+                      onChange={(e) =>
+                        setMessageData((prev) => ({
+                          ...prev,
+                          requireCatering: e.target.checked,
+                        }))
+                      }
                     />
                     <span>I require catering</span>
                   </label>
@@ -251,7 +214,12 @@ const MessageHostSidebar = ({ venue }) => {
                     <input
                       type="checkbox"
                       checked={messageData.ownCatering}
-                      onChange={() => handleCheckboxChange("ownCatering")}
+                      onChange={(e) =>
+                        setMessageData((prev) => ({
+                          ...prev,
+                          ownCatering: e.target.checked,
+                        }))
+                      }
                     />
                     <span>I want my own catering</span>
                   </label>

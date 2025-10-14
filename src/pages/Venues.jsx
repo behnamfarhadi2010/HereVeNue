@@ -1,15 +1,24 @@
 // src/pages/Venues.jsx
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
+import { useLocation, useNavigate } from "react-router-dom";
 import MyMap from "../components/MyMap";
 import VenuesHeader from "../components/VenuesHeader";
 import { useVenue } from "../contexts/VenueContext";
 
 export default function Venues() {
   const location = useLocation();
-  const navigate = useNavigate(); // Add navigate function
+  const navigate = useNavigate();
   const { searchVenues } = useVenue();
   const [filteredVenues, setFilteredVenues] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+
+  // Load favorites from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem("userFavorites");
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
+  }, []);
 
   useEffect(() => {
     // Parse query parameters from URL
@@ -32,6 +41,38 @@ export default function Venues() {
     setFilteredVenues(results);
   }, [location.search, searchVenues]);
 
+  // Toggle favorite status for a venue
+  const toggleFavorite = (venueId, e) => {
+    e.stopPropagation(); // Prevent card click when clicking favorite button
+
+    const savedFavorites = localStorage.getItem("userFavorites");
+    let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+
+    let updatedFavorites;
+    if (favorites.includes(venueId)) {
+      // Remove from favorites
+      updatedFavorites = favorites.filter((id) => id !== venueId);
+    } else {
+      // Add to favorites
+      updatedFavorites = [...favorites, venueId];
+    }
+
+    // Update localStorage
+    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
+
+    // Update local state
+    setFavorites(updatedFavorites);
+
+    // Notify other components
+    window.dispatchEvent(new Event("favoritesUpdated"));
+
+    console.log(
+      `Venue ${venueId} ${
+        !favorites.includes(venueId) ? "added to" : "removed from"
+      } favorites`
+    );
+  };
+
   return (
     <div>
       <VenuesHeader />
@@ -44,20 +85,53 @@ export default function Venues() {
                 <div
                   key={venue.id}
                   className="venue-card"
-                  onClick={() => navigate(`/venue/${venue.id}`)} // Add this line
-                  style={{ cursor: "pointer" }} // Add this style
+                  onClick={() => navigate(`/venue/${venue.id}`)}
+                  style={{ cursor: "pointer", position: "relative" }}
                 >
                   {venue.floorPlanImages?.[0]?.url && (
-                    <img
-                      src={venue.floorPlanImages[0].url}
-                      alt={venue.venueName}
-                      style={{
-                        width: "330px",
-                        height: "200px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={venue.floorPlanImages[0].url}
+                        alt={venue.venueName}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      {/* Favorite Heart Button */}
+                      <button
+                        className={`favorite-heart-btn ${
+                          favorites.includes(venue.id) ? "favorited" : ""
+                        }`}
+                        onClick={(e) => toggleFavorite(venue.id, e)}
+                        title={
+                          favorites.includes(venue.id)
+                            ? "Remove from favorites"
+                            : "Add to favorites"
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "10px",
+                          right: "10px",
+                          background: "rgba(255, 255, 255, 0.9)",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "36px",
+                          height: "36px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          fontSize: "18px",
+                          transition: "all 0.2s ease",
+                          zIndex: 10,
+                        }}
+                      >
+                        {favorites.includes(venue.id) ? "❤️" : "🤍"}
+                      </button>
+                    </div>
                   )}
 
                   <div style={{ padding: "10px" }}>

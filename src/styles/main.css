@@ -270,7 +270,78 @@ select {
   margin-left: 8rem;
   margin-top: 20rem;
 }
+/* Add to your main.css file */
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
 
+.user-menu:hover {
+  background-color: #f5f5f5;
+}
+
+.user-menu:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  z-index: 1000;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background-color: #f5f5f5;
+  color: #e74c3c;
+}
+
+/* If you want a simpler version without dropdown, use this instead: */
+.user-menu-simple {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  text-decoration: none;
+}
+
+.logout-btn-simple {
+  margin-left: 12px;
+  padding: 4px 12px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.logout-btn-simple:hover {
+  background: #c0392b;
+}
 @media (max-width: 768px) {
   .hero-content {
     flex-direction: column;
