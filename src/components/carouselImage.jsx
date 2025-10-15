@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
 import "../styles/VenueCarousel.css";
 
 const VenueCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { venues } = useVenue();
+  const navigate = useNavigate(); // Add navigate hook
 
   // Calculate how many slides we need (each slide shows 4 venues)
   const itemsPerSlide = 4;
@@ -29,6 +31,17 @@ const VenueCarousel = () => {
     setCurrentIndex(index);
   };
 
+  // Handle venue click  ,  redirect to venue details page
+  const handleVenueClick = (venueId) => {
+    navigate(`/venue/${venueId}`);
+  };
+
+  // Handle "Explore Venue" button click
+  const handleExploreClick = (venueId, e) => {
+    e.stopPropagation(); // Prevent the card click from triggering
+    navigate(`/venue/${venueId}`);
+  };
+
   // Auto-advance the carousel only if we have venues
   useEffect(() => {
     if (totalSlides <= 1) return;
@@ -40,7 +53,7 @@ const VenueCarousel = () => {
     return () => clearInterval(interval);
   }, [currentIndex, totalSlides, nextSlide]);
 
-  // Get image for venue - use floorPlanImages if available
+  // Get image for venue ,  use floorPlanImages
   const getVenueImage = (venue) => {
     return venue.floorPlanImages?.[0]?.url || "../assets/ovblogo.png";
   };
@@ -78,7 +91,12 @@ const VenueCarousel = () => {
                   slideIndex * itemsPerSlide + itemsPerSlide
                 )
                 .map((venue, index) => (
-                  <div key={venue.id || index} className="venue-card">
+                  <div
+                    key={venue.id || index}
+                    className="venue-card"
+                    onClick={() => handleVenueClick(venue.id)}
+                    style={{ cursor: "pointer" }} // Add pointer cursor
+                  >
                     <div className="venue-image-container">
                       <img
                         src={getVenueImage(venue)}
@@ -89,7 +107,12 @@ const VenueCarousel = () => {
                         }}
                       />
                       <div className="venue-overlay">
-                        <button className="venue-button">Explore Venue</button>
+                        <button
+                          className="venue-button"
+                          onClick={(e) => handleExploreClick(venue.id, e)}
+                        >
+                          Explore Venue
+                        </button>
                       </div>
                     </div>
                     <div className="venue-content">
