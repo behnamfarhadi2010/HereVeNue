@@ -58,7 +58,7 @@ function Header() {
         navigate("/userdashboard");
       }
     } else {
-      navigate("/userdashboard");
+      navigate("/dashboard");
     }
   };
 
@@ -68,6 +68,16 @@ function Header() {
       navigate("/userdashboard", { state: { activeTab: "favorites" } });
     } else {
       // If not logged in, redirect to login page
+      navigate("/login");
+    }
+  };
+
+  const handleListVenueClick = () => {
+    if (currentUser) {
+      // If user is logged in, go to the venue listing page
+      navigate("/dashboard");
+    } else {
+      // If not logged in, redirect to login page first
       navigate("/login");
     }
   };
@@ -118,10 +128,14 @@ function Header() {
               </div>
             ) : (
               // Show "List your venue" for venue owners and logged out users
-              <Link to="/add-listing">
+              <div
+                className="list-venue-link"
+                onClick={handleListVenueClick}
+                style={{ cursor: "pointer" }}
+              >
                 <img src={Home24} alt="Home icon" width="24" height="24" />
                 <span>List your venue</span>
-              </Link>
+              </div>
             )}
           </li>
         </ul>
