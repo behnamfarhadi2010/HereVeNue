@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import { useVenue } from "../contexts/VenueContext";
 import "../styles/userDashboard.css";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("current");
   const [favorites, setFavorites] = useState([]);
   const { venues } = useVenue();
+
+  // Check for activeTab from navigation state
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
 
   // Load favorites from localStorage and listen for updates
   const loadFavorites = () => {
@@ -36,32 +44,10 @@ const UserDashboard = () => {
     };
   }, []);
 
-  const toggleFavorite = (venueId) => {
-    let updatedFavorites;
-    if (favorites.includes(venueId)) {
-      updatedFavorites = favorites.filter((id) => id !== venueId);
-    } else {
-      updatedFavorites = [...favorites, venueId];
-    }
-
-    setFavorites(updatedFavorites);
-    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
-    window.dispatchEvent(new Event("favoritesUpdated"));
-  };
-
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
 
   const handleBrowseVenues = () => {
     navigate("/venues", { state: { results: venues } });
-  };
-
-  const handleViewVenue = (venueId) => {
-    navigate(`/venue/${venueId}`);
-  };
-
-  const handleRequestBook = (venueId) => {
-    // Navigate to payment page with venue ID
-    navigate(`/payment/${venueId}`);
   };
 
   return (
@@ -113,7 +99,7 @@ const UserDashboard = () => {
           ) : activeTab === "past" ? (
             <div className="past-enquiries">
               <div className="no-enquiries">
-                <div className="no-enquiries-icon"></div>
+                <div className="no-enquiries-icon"> </div>
                 <h2>No past enquiries</h2>
                 <p>Your past enquiries will appear here once completed.</p>
               </div>
@@ -134,20 +120,8 @@ const UserDashboard = () => {
                               className="venue-image"
                             />
                           ) : (
-                            <div className="image-placeholder"></div>
+                            <div className="image-placeholder"> </div>
                           )}
-                          <button
-                            className={`favorite-btn ${
-                              favorites.includes(venue.id) ? "favorited" : ""
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevent card click
-                              toggleFavorite(venue.id);
-                            }}
-                            title="Remove from favorites"
-                          >
-                            ❤️
-                          </button>
                         </div>
                         <div className="venue-info">
                           <h3>{venue.venueName || "Unnamed Venue"}</h3>
@@ -166,20 +140,6 @@ const UserDashboard = () => {
                               ))}
                             </div>
                           )}
-                          <div className="venue-actions">
-                            <button
-                              className="view-venue-btn"
-                              onClick={() => handleViewVenue(venue.id)}
-                            >
-                              View Details
-                            </button>
-                            <button
-                              className="request-book-btn"
-                              onClick={() => handleRequestBook(venue.id)}
-                            >
-                              Request a Book
-                            </button>
-                          </div>
                         </div>
                       </div>
                     ))}
@@ -187,7 +147,7 @@ const UserDashboard = () => {
                 </div>
               ) : (
                 <div className="no-favorites">
-                  <div className="no-favorites-icon"></div>
+                  <div className="no-favorites-icon"> </div>
                   <h2>No favorite venues yet</h2>
                   <p>Start browsing venues and add them to your favorites!</p>
                   <button className="cta-button" onClick={handleBrowseVenues}>

@@ -16,8 +16,6 @@ function Header() {
       const authUser = localStorage.getItem("authUser");
       const storedUserType = localStorage.getItem("userType");
 
-      console.log("Header - Loading user data:", { authUser, storedUserType });
-
       if (authUser) {
         setCurrentUser(authUser);
         setUserType(storedUserType);
@@ -31,13 +29,10 @@ function Header() {
 
     // Listen for storage changes
     const handleStorageChange = () => {
-      console.log("Header - Storage changed, reloading user data");
       loadUserData();
     };
 
     window.addEventListener("storage", handleStorageChange);
-
-    // Also listen for custom login events
     window.addEventListener("userLoggedIn", loadUserData);
 
     return () => {
@@ -47,7 +42,6 @@ function Header() {
   }, []);
 
   const handleLogout = () => {
-    console.log("Header - Logging out user");
     localStorage.removeItem("authUser");
     localStorage.removeItem("userType");
     setCurrentUser(null);
@@ -57,7 +51,6 @@ function Header() {
 
   const handleUserClick = () => {
     if (currentUser && userType) {
-      console.log("Header - User clicked, type:", userType);
       // Redirect based on user type
       if (userType === "venue_owner") {
         navigate("/dashboard");
@@ -65,14 +58,19 @@ function Header() {
         navigate("/userdashboard");
       }
     } else {
-      console.log(
-        "Header - No user type found, redirecting to owner dashboard"
-      );
-      navigate("/dashboard");
+      navigate("/userdashboard");
     }
   };
 
-  console.log("Header - Current state:", { currentUser, userType });
+  const handleFavoritesClick = () => {
+    if (currentUser) {
+      // Redirect to userdashboard with favorites tab active
+      navigate("/userdashboard", { state: { activeTab: "favorites" } });
+    } else {
+      // If not logged in, redirect to login page
+      navigate("/login");
+    }
+  };
 
   return (
     <header>
@@ -108,10 +106,23 @@ function Header() {
             )}
           </li>
           <li>
-            <Link to="/about">
-              <img src={Home24} alt="Home icon" width="24" height="24" />
-              <span>List your venue</span>
-            </Link>
+            {currentUser && userType === "user" ? (
+              // Show "Favorites" only for regular users
+              <div
+                className="favorites-link"
+                onClick={handleFavoritesClick}
+                style={{ cursor: "pointer" }}
+              >
+                <img src={Home24} alt="Favorites icon" width="24" height="24" />
+                <span>Favorites</span>
+              </div>
+            ) : (
+              // Show "List your venue" for venue owners and logged out users
+              <Link to="/add-listing">
+                <img src={Home24} alt="Home icon" width="24" height="24" />
+                <span>List your venue</span>
+              </Link>
+            )}
           </li>
         </ul>
       </nav>
