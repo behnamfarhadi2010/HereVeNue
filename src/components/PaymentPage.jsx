@@ -276,9 +276,9 @@ const PaymentPage = () => {
                   {/* Terms Notice */}
                   <div className="terms-notice">
                     <p>
-                      By providing your card information, you allow Tagvenue
-                      Limited to charge your card for future payments in
-                      accordance with their terms.
+                      By providing your card information, you allow OVB Limited
+                      to charge your card for future payments in accordance with
+                      their terms.
                     </p>
                   </div>
 
@@ -358,7 +358,7 @@ const PaymentPage = () => {
               {/* Payment Protection */}
               <div className="protection-card">
                 <h3>Payment protection</h3>
-                <p>Book and pay on Tagvenue and get:</p>
+                <p>Book and pay on OVB and get:</p>
                 <ul className="protection-features">
                   <li>
                     <i className="fas fa-check"></i>

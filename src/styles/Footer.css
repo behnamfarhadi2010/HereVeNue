@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* Footer Main Styles */
+.OVB-footer {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 40px 0 20px;
+  width: 120%;
+  margin-left: -30px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Footer Sections - Flexbox Layout */
+.footer-sections {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Individual Section Styles */
+.footer-section h3 {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section li {
+  margin-bottom: 8px;
+}
+
+/* Link Styles */
+.footer-section a {
+  color: #b0b0b0;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-section a:hover {
+  color: #b0b0b0;
+  transform: translateX(2px);
+}
+
+.footer-section strong a {
+  color: #b0b0b0;
+  font-weight: 400;
+}
+
+.footer-section strong a:hover {
+  color: #b0b0b0;
+}
+
+/* Footer Bottom Section */
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #444, transparent);
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.footer-bottom p {
+  color: #888;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* Responsive Design - Flexbox Adjustments */
+@media (max-width: 768px) {
+  .footer-sections {
+    justify-content: flex-start;
+    gap: 25px;
+  }
+
+  .footer-section {
+    flex: 0 0 calc(50% - 25px);
+    min-width: 180px;
+  }
+
+  .footer-container {
+    padding: 0 15px;
+  }
+
+  .OVB-footer {
+    padding: 30px 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-sections {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-section {
+    flex: 1;
+    min-width: 100%;
+  }
+
+  .footer-section h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .footer-section a {
+    font-size: 13px;
+  }
+
+  .footer-container {
+    padding: 0 10px;
+  }
+
+  .OVB-footer {
+    padding: 25px 0 15px;
+  }
+}
+
+/* Large screens optimization */
+@media (min-width: 1200px) {
+  .footer-sections {
+    justify-content: space-around;
+  }
+}
+
+/* Animation for smooth hover effects */
+.footer-section a {
+  position: relative;
+}
+
+.footer-section a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.footer-section a:hover::after {
+  width: 100%;
+}
+
+/* Focus states for accessibility */
+.footer-section a:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Print styles */
+@media print {
+  .OVB-footer {
+    display: none;
+  }
+}

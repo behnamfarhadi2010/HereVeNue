@@ -327,6 +327,7 @@ select {
   color: #333;
   text-decoration: none;
 }
+
 /* Favorites Link Styles */
 .favorites-link {
   display: flex;
