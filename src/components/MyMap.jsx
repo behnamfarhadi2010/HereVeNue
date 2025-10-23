@@ -3,26 +3,26 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useVenue } from "../contexts/VenueContext";
 import "leaflet/dist/leaflet.css";
 
-// Static coordinates for St. John's area venues
-const getStaticCoordinates = (venueId) => {
-  // Create consistent coordinates based on venue ID
-  const basePosition = [47.5605, -52.7128]; // St. John's center
-
-  // Generate slightly different positions for each venue
-  const venuesCount = 8;
-  const index = venueId % venuesCount;
-
-  const latOffset = (index % 4) * 0.02; // 0.01 degree ~ 1.1km
-  const lngOffset = Math.floor(index / 4) * 0.01;
-
-  return [
-    basePosition[0] + latOffset - 0.015, // Spread them out a bit
-    basePosition[1] + lngOffset - 0.015,
-  ];
-};
-
 const MyMap = () => {
+  // Static coordinates for St. John's area venues
+
   const { venues } = useVenue();
+  const getStaticCoordinates = (venueId) => {
+    // Create consistent coordinates based on venue ID
+    const basePosition = [47.5605, -52.7128]; // St. John's center
+
+    // Generate slightly different positions for each venue
+    // const venuesCount = 8;
+    const index = venueId % venues.length; // Simple hash to spread out markers
+
+    const latOffset = (index % venues.length) * 0.02; // 0.01 degree ~ 1.1km
+    const lngOffset = Math.floor(index / venues.length) * 0.01;
+
+    return [
+      basePosition[0] + latOffset - 0.015, // Spread them out a bit
+      basePosition[1] + lngOffset - 0.015,
+    ];
+  };
 
   // Calculate map center based on venues or use default
   const mapCenter =
