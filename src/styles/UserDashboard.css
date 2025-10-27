@@ -408,6 +408,157 @@
     margin-bottom: 8px;
   }
 }
+
+/* Booking Cards */
+.bookings-grid {
+  width: 100%;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.booking-image-container {
+  width: 200px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.booking-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.booking-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.booking-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background: #d1edff;
+  color: #0c5460;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.booking-location {
+  color: #666;
+  margin: 0;
+}
+
+.booking-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.booking-details p {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.booking-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.view-venue-btn,
+.contact-host-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-venue-btn {
+  background: #f8f9fa;
+  color: #333;
+  border: 1px solid #dee2e6;
+}
+
+.view-venue-btn:hover {
+  background: #e9ecef;
+}
+
+.contact-host-btn {
+  background: #007bff;
+  color: white;
+}
+
+.contact-host-btn:hover {
+  background: #0056b3;
+}
+
+/* Past bookings styling */
+.past-booking {
+  opacity: 0.8;
+}
+
+.past-booking:hover {
+  opacity: 1;
+}
+
+/* Count badges */
+.count-badge {
+  background: #007bff;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-container {

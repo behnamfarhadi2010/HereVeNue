@@ -103,6 +103,44 @@ const PaymentPage = () => {
 
   const pricing = calculatePricing();
 
+  // Function to save booking to localStorage
+  const saveBooking = () => {
+    const booking = {
+      id: Date.now(), // Unique booking ID
+      venueId: venue.id,
+      venueName: venue.venueName,
+      venueImage: venue.floorPlanImages?.[0]?.url,
+      city: venue.city,
+      country: venue.country,
+      venueSize: venue.venueSize,
+      venueTypes: venue.venueTypes,
+      bookingDetails: bookingDetails,
+      pricing: pricing,
+      paymentDetails: {
+        cardLastFour: cardNumber.slice(-4),
+        total: pricing.total,
+      },
+      status: "pending", // pending, confirmed, cancelled, completed
+      bookedAt: new Date().toISOString(),
+    };
+
+    // Get existing bookings from localStorage
+    const existingBookings = JSON.parse(
+      localStorage.getItem("userBookings") || "[]"
+    );
+
+    // Add new booking
+    const updatedBookings = [...existingBookings, booking];
+
+    // Save back to localStorage
+    localStorage.setItem("userBookings", JSON.stringify(updatedBookings));
+
+    // Trigger event to notify other components
+    window.dispatchEvent(new Event("bookingsUpdated"));
+
+    return booking;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
@@ -110,6 +148,9 @@ const PaymentPage = () => {
     // Simulate API call
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Save the booking to localStorage
+      const booking = saveBooking();
 
       // Navigate to confirmation page
       navigate(`/booking-confirmation/${venue.id}`, {
@@ -120,6 +161,7 @@ const PaymentPage = () => {
             total: pricing.total,
           },
           venue,
+          bookingId: booking.id,
         },
       });
     } catch (error) {
