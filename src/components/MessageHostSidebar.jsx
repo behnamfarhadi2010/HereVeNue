@@ -30,12 +30,46 @@ const MessageHostSidebar = ({ venue }) => {
   };
 
   const handleSubmitMessage = () => {
-    console.log("Message to host:", {
+    // Create message object
+    const messageToHost = {
       venueId: venue.id,
       venueName: venue.venueName,
       ...messageData,
       timestamp: new Date().toISOString(),
-    });
+    };
+
+    console.log("Message to host:", messageToHost);
+
+    // Save to localStorage for owner
+    const existingMessages = JSON.parse(
+      localStorage.getItem("ownerMessages") || "[]"
+    );
+    const newMessage = {
+      id: Date.now(),
+      userId: "admin",
+      userName: "Admin", // ← CHANGED TO "Admin"
+      venueId: venue.id,
+      venueName: venue.venueName,
+      message: messageData.messageText,
+      timestamp: new Date().toISOString(),
+      read: false,
+      flexibleDates: messageData.flexibleDates,
+      requireCatering: messageData.requireCatering,
+      ownCatering: messageData.ownCatering,
+    };
+
+    const updatedMessages = [newMessage, ...existingMessages];
+    localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
+
+    // Trigger custom event for owner dashboard
+    window.dispatchEvent(
+      new CustomEvent("ownerMessageEvent", {
+        detail: {
+          type: "NEW_MESSAGE",
+          ...newMessage,
+        },
+      })
+    );
 
     alert("Message sent to host! They typically respond within 1 hour.");
     setShowMessageModal(false);

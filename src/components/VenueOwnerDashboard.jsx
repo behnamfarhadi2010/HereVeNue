@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
 import Header from "./Header";
+import OwnerRequestsAndMessages from "./OwnerRequestsAndMessages"; // Add this import
+
 const VenueOwnerDashboard = () => {
   const venueContext = useVenue();
   const deleteVenue = venueContext.deleteVenue;
@@ -40,6 +42,9 @@ const VenueOwnerDashboard = () => {
           </button>
           <span className="venue-count">Total Venues: {venues.length}</span>
         </div>
+
+        {/* Add the new component here */}
+        <OwnerRequestsAndMessages />
 
         <div className="venues-list">
           {venues.map((venue) => (
@@ -87,7 +92,6 @@ const VenueOwnerDashboard = () => {
                 >
                   Edit
                 </button>
-                {/* <button className="view-btn">View</button> */}
                 <button
                   className="delete-btn"
                   onClick={() => deleteVenue(venue.id)}
