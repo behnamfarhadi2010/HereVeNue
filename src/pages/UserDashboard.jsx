@@ -10,6 +10,7 @@ const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("current");
   const [favorites, setFavorites] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [messages, setMessages] = useState([]);
   const { venues } = useVenue();
 
   // Check for activeTab from navigation state
@@ -39,9 +40,25 @@ const UserDashboard = () => {
     }
   };
 
+  // Load messages from localStorage
+  const loadMessages = () => {
+    const savedMessages = localStorage.getItem("ownerMessages");
+    if (savedMessages) {
+      const allMessages = JSON.parse(savedMessages);
+      // Filter messages sent by the current user (Admin)
+      const userMessages = allMessages.filter(
+        (message) => message.userName === "Admin"
+      );
+      setMessages(userMessages);
+    } else {
+      setMessages([]);
+    }
+  };
+
   useEffect(() => {
     loadFavorites();
     loadBookings();
+    loadMessages();
 
     const handleFavoritesUpdate = () => {
       loadFavorites();
@@ -51,16 +68,24 @@ const UserDashboard = () => {
       loadBookings();
     };
 
+    const handleMessagesUpdate = () => {
+      loadMessages();
+    };
+
     window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
     window.addEventListener("bookingsUpdated", handleBookingsUpdate);
+    window.addEventListener("ownerMessageEvent", handleMessagesUpdate);
     window.addEventListener("storage", handleFavoritesUpdate);
     window.addEventListener("storage", handleBookingsUpdate);
+    window.addEventListener("storage", handleMessagesUpdate);
 
     return () => {
       window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
       window.removeEventListener("bookingsUpdated", handleBookingsUpdate);
+      window.removeEventListener("ownerMessageEvent", handleMessagesUpdate);
       window.removeEventListener("storage", handleFavoritesUpdate);
       window.removeEventListener("storage", handleBookingsUpdate);
+      window.removeEventListener("storage", handleMessagesUpdate);
     };
   }, []);
 
@@ -85,12 +110,19 @@ const UserDashboard = () => {
     navigate(`/venue/${venueId}`);
   };
 
+  const handleFollowUp = (messageId, venueName) => {
+    alert(`Follow up on your message about ${venueName}`);
+    // You can implement follow-up functionality here
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -151,6 +183,12 @@ const UserDashboard = () => {
             onClick={() => setActiveTab("favorites")}
           >
             Favorites <span className="count-badge">{favorites.length}</span>
+          </button>
+          <button
+            className={`tab-button ${activeTab === "messages" ? "active" : ""}`}
+            onClick={() => setActiveTab("messages")}
+          >
+            Messages <span className="count-badge">{messages.length}</span>
           </button>
         </div>
 
@@ -293,7 +331,7 @@ const UserDashboard = () => {
                 </div>
               )}
             </div>
-          ) : (
+          ) : activeTab === "favorites" ? (
             <div className="favorites-section">
               {favoriteVenues.length > 0 ? (
                 <div className="favorites-grid">
@@ -336,9 +374,97 @@ const UserDashboard = () => {
                 </div>
               ) : (
                 <div className="no-favorites">
-                  <div className="no-favorites-icon">⭐</div>
+                  <div className="no-favorites-icon"></div>
                   <h2>No favorite venues yet</h2>
                   <p>Start browsing venues and add them to your favorites!</p>
+                  <button className="cta-button" onClick={handleBrowseVenues}>
+                    Browse Venues
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            // Messages Tab Content
+            <div className="messages-section">
+              {messages.length > 0 ? (
+                <div className="messages-list">
+                  <h2>Your Messages ({messages.length})</h2>
+                  {messages.map((message) => {
+                    const venue = venues.find((v) => v.id === message.venueId);
+                    return (
+                      <div
+                        key={message.id}
+                        className={`message-card ${
+                          message.read ? "read" : "unread"
+                        }`}
+                      >
+                        <div className="message-header">
+                          <div className="message-sender">
+                            <h4>To: Venue Owner</h4>
+                            <span className="venue-name">
+                              {message.venueName ||
+                                venue?.venueName ||
+                                "Unknown Venue"}
+                            </span>
+                          </div>
+                          <div className="message-meta">
+                            <span className="message-time">
+                              {formatDate(message.timestamp)}
+                            </span>
+                            <span
+                              className={`status-indicator ${
+                                message.read ? "read" : "unread"
+                              }`}
+                            >
+                              {message.read ? "✓ Read" : "◷ Pending"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="message-content">
+                          <p>{message.message}</p>
+
+                          {/* Message Details */}
+                          <div className="message-details">
+                            {message.flexibleDates && (
+                              <span className="message-tag">
+                                Flexible on dates
+                              </span>
+                            )}
+                            {message.requireCatering && (
+                              <span className="message-tag">
+                                Requires catering
+                              </span>
+                            )}
+                            {message.ownCatering && (
+                              <span className="message-tag">Own catering</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="message-actions">
+                          <button
+                            className="view-venue-btn"
+                            onClick={() => handleViewVenue(message.venueId)}
+                          >
+                            View Venue
+                          </button>
+                          <button
+                            className="follow-up-btn"
+                            onClick={() =>
+                              handleFollowUp(message.id, message.venueName)
+                            }
+                          ></button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="no-messages">
+                  <div className="no-messages-icon">💬</div>
+                  <h2>No messages sent yet</h2>
+                  <p>
+                    Your messages to hosts will appear here once you send them.
+                  </p>
                   <button className="cta-button" onClick={handleBrowseVenues}>
                     Browse Venues
                   </button>
