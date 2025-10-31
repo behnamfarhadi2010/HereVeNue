@@ -1,0 +1,322 @@
+.owner-requests-messages {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  color: #333;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.venue-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.venue-filter label {
+  font-weight: 500;
+  color: #666;
+}
+
+.venue-filter select {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+}
+
+.interaction-tabs {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 24px;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.tab-button.active {
+  color: #ec676a;
+  border-bottom: 2px solid #007bff;
+}
+
+.tab-button:hover {
+  color: #ec676a;
+}
+
+.count-badge {
+  background: #ff4757;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Request Cards */
+.request-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  background: #fafafa;
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.request-info h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.user-info {
+  color: #666;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.request-date {
+  color: #999;
+  margin: 0;
+  font-size: 12px;
+}
+
+.booking-details {
+  background: white;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.special-requests {
+  background: white;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.special-requests p {
+  margin: 8px 0 0 0;
+  color: #666;
+  font-style: italic;
+}
+
+/* Action Buttons */
+.request-actions,
+.confirmed-actions,
+.message-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.confirm-btn,
+.complete-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confirm-btn:hover,
+.complete-btn:hover {
+  background: #218838;
+}
+
+.decline-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.decline-btn:hover {
+  background: #c82333;
+}
+
+.contact-user-btn,
+.reply-btn,
+.view-venue-btn {
+  background: #136d9a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.contact-user-btn:hover,
+.reply-btn:hover,
+.view-venue-btn:hover {
+  background: #147caf;
+}
+
+/* Message Cards */
+.message-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.message-card.unread {
+  background: #f0f8ff;
+  border-left: 4px solid #ec676a;
+}
+
+.message-card.read {
+  background: #fafafa;
+}
+
+.message-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.message-sender h4 {
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.venue-name {
+  color: #666;
+  font-size: 12px;
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-time {
+  color: #999;
+  font-size: 12px;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: #ec676a;
+  border-radius: 50%;
+}
+
+.message-content {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* No Data States */
+.no-requests,
+.no-messages {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.no-data-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.no-requests h3,
+.no-messages h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.no-requests p,
+.no-messages p {
+  margin: 0;
+}
