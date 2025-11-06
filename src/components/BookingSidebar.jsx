@@ -1,10 +1,12 @@
 // components/BookingSidebar.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMessages } from "../contexts/MessageContext";
 import "../styles/BookingSidebarStyles.css";
 
 const BookingSidebar = ({ venue }) => {
   const navigate = useNavigate();
+  const { createBookingRequest } = useMessages();
   const [selectedDate, setSelectedDate] = useState("");
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("11:00");

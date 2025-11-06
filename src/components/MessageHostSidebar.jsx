@@ -1,5 +1,6 @@
 // components/MessageHostSidebar.jsx
 import React, { useState, useEffect } from "react";
+import { useMessages } from "../contexts/MessageContext";
 import "../styles/MessageHostSidebarStyles.css";
 
 const MessageHostSidebar = ({ venue }) => {
@@ -11,6 +12,9 @@ const MessageHostSidebar = ({ venue }) => {
     requireCatering: false,
     ownCatering: true,
   });
+
+  // Get sendMessage from context
+  const { sendMessage } = useMessages();
 
   // Load favorite status from localStorage on component mount
   useEffect(() => {
@@ -30,46 +34,12 @@ const MessageHostSidebar = ({ venue }) => {
   };
 
   const handleSubmitMessage = () => {
-    // Create message object
-    const messageToHost = {
+    // Use context to send message instead of localStorage + events
+    sendMessage({
       venueId: venue.id,
       venueName: venue.venueName,
       ...messageData,
-      timestamp: new Date().toISOString(),
-    };
-
-    console.log("Message to host:", messageToHost);
-
-    // Save to localStorage for owner
-    const existingMessages = JSON.parse(
-      localStorage.getItem("ownerMessages") || "[]"
-    );
-    const newMessage = {
-      id: Date.now(),
-      userId: "admin",
-      userName: "Admin", // ← CHANGED TO "Admin"
-      venueId: venue.id,
-      venueName: venue.venueName,
-      message: messageData.messageText,
-      timestamp: new Date().toISOString(),
-      read: false,
-      flexibleDates: messageData.flexibleDates,
-      requireCatering: messageData.requireCatering,
-      ownCatering: messageData.ownCatering,
-    };
-
-    const updatedMessages = [newMessage, ...existingMessages];
-    localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
-
-    // Trigger custom event for owner dashboard
-    window.dispatchEvent(
-      new CustomEvent("ownerMessageEvent", {
-        detail: {
-          type: "NEW_MESSAGE",
-          ...newMessage,
-        },
-      })
-    );
+    });
 
     alert("Message sent to host! They typically respond within 1 hour.");
     setShowMessageModal(false);
@@ -87,17 +57,12 @@ const MessageHostSidebar = ({ venue }) => {
 
     let updatedFavorites;
     if (isFavorited) {
-      // Remove from favorites
       updatedFavorites = favorites.filter((id) => id !== venue.id);
     } else {
-      // Add to favorites
       updatedFavorites = [...favorites, venue.id];
     }
 
-    // Update localStorage
     localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
-
-    // Update local state
     setIsFavorited(!isFavorited);
 
     console.log(
@@ -106,7 +71,6 @@ const MessageHostSidebar = ({ venue }) => {
       } favorites`
     );
 
-    // Optional: Trigger a custom event to notify other components
     window.dispatchEvent(new Event("favoritesUpdated"));
   };
 

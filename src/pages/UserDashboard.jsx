@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import { useVenue } from "../contexts/VenueContext";
+import { useMessages } from "../contexts/MessageContext";
+import ChatModal from "../components/ChatModal";
 import "../styles/userDashboard.css";
 
 const UserDashboard = () => {
@@ -9,9 +11,22 @@ const UserDashboard = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("current");
   const [favorites, setFavorites] = useState([]);
-  const [bookings, setBookings] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const { venues } = useVenue();
+
+  // Get data from MessageContext
+  const { bookingRequests, getUserConversations, getUnreadCount } =
+    useMessages();
+
+  // Get user's conversations
+  const userConversations = getUserConversations("admin");
+  const unreadCount = getUnreadCount("admin");
+
+  // Current user object
+  const currentUser = {
+    id: "admin",
+    name: "Admin",
+  };
 
   // Check for activeTab from navigation state
   useEffect(() => {
@@ -30,74 +45,31 @@ const UserDashboard = () => {
     }
   };
 
-  // Load bookings from localStorage
-  const loadBookings = () => {
-    const savedBookings = localStorage.getItem("userBookings");
-    if (savedBookings) {
-      setBookings(JSON.parse(savedBookings));
-    } else {
-      setBookings([]);
-    }
-  };
-
-  // Load messages from localStorage
-  const loadMessages = () => {
-    const savedMessages = localStorage.getItem("ownerMessages");
-    if (savedMessages) {
-      const allMessages = JSON.parse(savedMessages);
-      // Filter messages sent by the current user (Admin)
-      const userMessages = allMessages.filter(
-        (message) => message.userName === "Admin"
-      );
-      setMessages(userMessages);
-    } else {
-      setMessages([]);
-    }
-  };
-
   useEffect(() => {
     loadFavorites();
-    loadBookings();
-    loadMessages();
 
     const handleFavoritesUpdate = () => {
       loadFavorites();
     };
 
-    const handleBookingsUpdate = () => {
-      loadBookings();
-    };
-
-    const handleMessagesUpdate = () => {
-      loadMessages();
-    };
-
     window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
-    window.addEventListener("bookingsUpdated", handleBookingsUpdate);
-    window.addEventListener("ownerMessageEvent", handleMessagesUpdate);
     window.addEventListener("storage", handleFavoritesUpdate);
-    window.addEventListener("storage", handleBookingsUpdate);
-    window.addEventListener("storage", handleMessagesUpdate);
 
     return () => {
       window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
-      window.removeEventListener("bookingsUpdated", handleBookingsUpdate);
-      window.removeEventListener("ownerMessageEvent", handleMessagesUpdate);
       window.removeEventListener("storage", handleFavoritesUpdate);
-      window.removeEventListener("storage", handleBookingsUpdate);
-      window.removeEventListener("storage", handleMessagesUpdate);
     };
   }, []);
 
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
 
   // Get current bookings (pending and confirmed)
-  const currentBookings = bookings.filter(
+  const currentBookings = bookingRequests.filter(
     (booking) => booking.status === "pending" || booking.status === "confirmed"
   );
 
   // Get past bookings (cancelled and completed)
-  const pastBookings = bookings.filter(
+  const pastBookings = bookingRequests.filter(
     (booking) =>
       booking.status === "cancelled" || booking.status === "completed"
   );
@@ -110,9 +82,38 @@ const UserDashboard = () => {
     navigate(`/venue/${venueId}`);
   };
 
-  const handleFollowUp = (messageId, venueName) => {
-    alert(`Follow up on your message about ${venueName}`);
-    // You can implement follow-up functionality here
+  const handleOpenChat = (conversation) => {
+    setSelectedConversation(conversation);
+  };
+
+  const handleCloseChat = () => {
+    setSelectedConversation(null);
+  };
+
+  // Toggle favorite venue
+  const toggleFavorite = (venueId, event) => {
+    event.stopPropagation(); // Prevent card click
+
+    const savedFavorites = localStorage.getItem("userFavorites");
+    let currentFavorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+
+    let updatedFavorites;
+    if (currentFavorites.includes(venueId)) {
+      // Remove from favorites
+      updatedFavorites = currentFavorites.filter((id) => id !== venueId);
+    } else {
+      // Add to favorites
+      updatedFavorites = [...currentFavorites, venueId];
+    }
+
+    // Update localStorage
+    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
+
+    // Update local state
+    setFavorites(updatedFavorites);
+
+    // Trigger custom event to notify other components
+    window.dispatchEvent(new Event("favoritesUpdated"));
   };
 
   const formatDate = (dateString) => {
@@ -153,6 +154,12 @@ const UserDashboard = () => {
     );
   };
 
+  const getUnreadCountForConversation = (conversation) => {
+    return conversation.messages.filter(
+      (msg) => msg.senderId !== "admin" && !msg.read
+    ).length;
+  };
+
   return (
     <div className="user-dashboard">
       <Header />
@@ -188,7 +195,11 @@ const UserDashboard = () => {
             className={`tab-button ${activeTab === "messages" ? "active" : ""}`}
             onClick={() => setActiveTab("messages")}
           >
-            Messages <span className="count-badge">{messages.length}</span>
+            Messages{" "}
+            <span className="count-badge">{userConversations.length}</span>
+            {unreadCount > 0 && (
+              <span className="unread-indicator">{unreadCount}</span>
+            )}
           </button>
         </div>
 
@@ -207,14 +218,25 @@ const UserDashboard = () => {
                               src={booking.venueImage}
                               alt={booking.venueName}
                               className="booking-image"
+                              onClick={() => handleViewVenue(booking.venueId)}
                             />
                           ) : (
-                            <div className="image-placeholder">🏢</div>
+                            <div
+                              className="image-placeholder"
+                              onClick={() => handleViewVenue(booking.venueId)}
+                            >
+                              🏢
+                            </div>
                           )}
                         </div>
                         <div className="booking-info">
                           <div className="booking-header">
-                            <h3>{booking.venueName}</h3>
+                            <h3
+                              onClick={() => handleViewVenue(booking.venueId)}
+                              className="clickable-title"
+                            >
+                              {booking.venueName}
+                            </h3>
                             {getStatusBadge(booking.status)}
                           </div>
                           <p className="booking-location">
@@ -286,14 +308,25 @@ const UserDashboard = () => {
                               src={booking.venueImage}
                               alt={booking.venueName}
                               className="booking-image"
+                              onClick={() => handleViewVenue(booking.venueId)}
                             />
                           ) : (
-                            <div className="image-placeholder">🏢</div>
+                            <div
+                              className="image-placeholder"
+                              onClick={() => handleViewVenue(booking.venueId)}
+                            >
+                              🏢
+                            </div>
                           )}
                         </div>
                         <div className="booking-info">
                           <div className="booking-header">
-                            <h3>{booking.venueName}</h3>
+                            <h3
+                              onClick={() => handleViewVenue(booking.venueId)}
+                              className="clickable-title"
+                            >
+                              {booking.venueName}
+                            </h3>
                             {getStatusBadge(booking.status)}
                           </div>
                           <p className="booking-location">
@@ -338,7 +371,20 @@ const UserDashboard = () => {
                   <h2>Your Favorite Venues ({favoriteVenues.length})</h2>
                   <div className="venues-list">
                     {favoriteVenues.map((venue) => (
-                      <div key={venue.id} className="favorite-venue-card">
+                      <div
+                        key={venue.id}
+                        className="favorite-venue-card"
+                        onClick={() => handleViewVenue(venue.id)}
+                      >
+                        {/* Favorite Heart Icon */}
+                        <button
+                          className="favorite-heart-btn active"
+                          onClick={(e) => toggleFavorite(venue.id, e)}
+                          aria-label="Remove from favorites"
+                        >
+                          ❤️
+                        </button>
+
                         <div className="venue-image-container">
                           {venue.floorPlanImages?.[0]?.url ? (
                             <img
@@ -358,14 +404,26 @@ const UserDashboard = () => {
                           <p className="venue-capacity">
                             👥 Capacity: {venue.venueSize} people
                           </p>
-                          {venue.venueTypes && (
+                          {venue.venueTypes && venue.venueTypes.length > 0 && (
                             <div className="venue-types">
-                              {venue.venueTypes.map((type, index) => (
-                                <span key={index} className="venue-type-tag">
-                                  {type}
+                              {venue.venueTypes
+                                .slice(0, 3)
+                                .map((type, index) => (
+                                  <span key={index} className="venue-type-tag">
+                                    {type}
+                                  </span>
+                                ))}
+                              {venue.venueTypes.length > 3 && (
+                                <span className="venue-type-tag">
+                                  +{venue.venueTypes.length - 3} more
                                 </span>
-                              ))}
+                              )}
                             </div>
+                          )}
+                          {venue.hourlyRate && (
+                            <p className="venue-price">
+                              From {venue.hourlyRate} / hour
+                            </p>
                           )}
                         </div>
                       </div>
@@ -374,7 +432,7 @@ const UserDashboard = () => {
                 </div>
               ) : (
                 <div className="no-favorites">
-                  <div className="no-favorites-icon"></div>
+                  <div className="no-favorites-icon">💙</div>
                   <h2>No favorite venues yet</h2>
                   <p>Start browsing venues and add them to your favorites!</p>
                   <button className="cta-button" onClick={handleBrowseVenues}>
@@ -384,75 +442,81 @@ const UserDashboard = () => {
               )}
             </div>
           ) : (
-            // Messages Tab Content
+            // Messages Tab Content - Now showing conversations
             <div className="messages-section">
-              {messages.length > 0 ? (
-                <div className="messages-list">
-                  <h2>Your Messages ({messages.length})</h2>
-                  {messages.map((message) => {
-                    const venue = venues.find((v) => v.id === message.venueId);
+              {userConversations.length > 0 ? (
+                <div className="conversations-list">
+                  <h2>Your Conversations ({userConversations.length})</h2>
+                  {userConversations.map((conversation) => {
+                    const venue = venues.find(
+                      (v) => v.id === conversation.venueId
+                    );
+                    const lastMessage =
+                      conversation.messages[conversation.messages.length - 1];
+                    const conversationUnreadCount =
+                      getUnreadCountForConversation(conversation);
+
                     return (
                       <div
-                        key={message.id}
-                        className={`message-card ${
-                          message.read ? "read" : "unread"
+                        key={conversation.id}
+                        className={`conversation-card ${
+                          conversationUnreadCount > 0 ? "has-unread" : ""
                         }`}
+                        onClick={() => handleOpenChat(conversation)}
                       >
-                        <div className="message-header">
-                          <div className="message-sender">
-                            <h4>To: Venue Owner</h4>
-                            <span className="venue-name">
-                              {message.venueName ||
+                        <div className="conversation-header">
+                          <div className="conversation-info">
+                            <h4>
+                              {conversation.venueName ||
                                 venue?.venueName ||
                                 "Unknown Venue"}
+                            </h4>
+                            <span className="conversation-participants">
+                              with Venue Owner
                             </span>
                           </div>
-                          <div className="message-meta">
-                            <span className="message-time">
-                              {formatDate(message.timestamp)}
+                          <div className="conversation-meta">
+                            <span className="conversation-time">
+                              {formatDate(conversation.lastMessageTime)}
                             </span>
-                            <span
-                              className={`status-indicator ${
-                                message.read ? "read" : "unread"
-                              }`}
-                            >
-                              {message.read ? "✓ Read" : "◷ Pending"}
-                            </span>
+                            {conversationUnreadCount > 0 && (
+                              <span className="conversation-unread-badge">
+                                {conversationUnreadCount}
+                              </span>
+                            )}
                           </div>
                         </div>
-                        <div className="message-content">
-                          <p>{message.message}</p>
 
-                          {/* Message Details */}
-                          <div className="message-details">
-                            {message.flexibleDates && (
-                              <span className="message-tag">
-                                Flexible on dates
-                              </span>
-                            )}
-                            {message.requireCatering && (
-                              <span className="message-tag">
-                                Requires catering
-                              </span>
-                            )}
-                            {message.ownCatering && (
-                              <span className="message-tag">Own catering</span>
-                            )}
-                          </div>
+                        <div className="conversation-preview">
+                          <span className="last-message-sender">
+                            {lastMessage.senderId === "admin"
+                              ? "You: "
+                              : "Owner: "}
+                          </span>
+                          <span className="last-message-text">
+                            {lastMessage.text}
+                          </span>
                         </div>
-                        <div className="message-actions">
+
+                        <div className="conversation-actions">
+                          <button
+                            className="open-chat-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenChat(conversation);
+                            }}
+                          >
+                            Open Chat
+                          </button>
                           <button
                             className="view-venue-btn"
-                            onClick={() => handleViewVenue(message.venueId)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewVenue(conversation.venueId);
+                            }}
                           >
                             View Venue
                           </button>
-                          <button
-                            className="follow-up-btn"
-                            onClick={() =>
-                              handleFollowUp(message.id, message.venueName)
-                            }
-                          ></button>
                         </div>
                       </div>
                     );
@@ -461,9 +525,10 @@ const UserDashboard = () => {
               ) : (
                 <div className="no-messages">
                   <div className="no-messages-icon">💬</div>
-                  <h2>No messages sent yet</h2>
+                  <h2>No conversations yet</h2>
                   <p>
-                    Your messages to hosts will appear here once you send them.
+                    Your conversations with hosts will appear here once you send
+                    them a message.
                   </p>
                   <button className="cta-button" onClick={handleBrowseVenues}>
                     Browse Venues
@@ -474,6 +539,15 @@ const UserDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Chat Modal */}
+      {selectedConversation && (
+        <ChatModal
+          conversation={selectedConversation}
+          onClose={handleCloseChat}
+          currentUser={currentUser}
+        />
+      )}
     </div>
   );
 };

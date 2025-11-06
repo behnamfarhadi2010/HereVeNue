@@ -1,133 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useVenue } from "../contexts/VenueContext";
+import { useMessages } from "../contexts/MessageContext";
 import { useNavigate } from "react-router-dom";
+import ChatModal from "../components/ChatModal";
 import "../styles/ownerRequestsAndMessages.css";
 
 const OwnerRequestsAndMessages = () => {
   const [activeTab, setActiveTab] = useState("requests");
-  const [bookingRequests, setBookingRequests] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const { venues } = useVenue();
   const navigate = useNavigate();
 
-  // Load booking requests from localStorage
-  const loadBookingRequests = () => {
-    const savedBookings = localStorage.getItem("userBookings");
-    if (savedBookings) {
-      const allBookings = JSON.parse(savedBookings);
-      // Filter bpending and confirmed
-      const relevantBookings = allBookings.filter(
-        (booking) =>
-          booking.status === "pending" || booking.status === "confirmed"
-      );
-      setBookingRequests(relevantBookings);
-    } else {
-      setBookingRequests([]);
-    }
+  // Get data and functions from MessageContext
+  const {
+    bookingRequests,
+    getUserConversations,
+    getUnreadCount,
+    updateBookingStatus,
+    pendingRequestsCount,
+  } = useMessages();
+
+  // Get owner's conversations
+  const ownerConversations = getUserConversations("owner");
+  const unreadCount = getUnreadCount("owner");
+
+  // Current user object (owner)
+  const currentUser = {
+    id: "owner",
+    name: "Venue Owner",
   };
-
-  // Load messages from localStorage
-  const loadMessages = () => {
-    const savedMessages = localStorage.getItem("ownerMessages");
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    } else {
-      setMessages([]);
-    }
-  };
-
-  // Listen for new messages from MessageHostSidebar
-  useEffect(() => {
-    const handleNewMessage = (event) => {
-      if (event.detail && event.detail.type === "NEW_MESSAGE") {
-        const newMessage = {
-          id: Date.now(),
-          userId: "admin",
-          userName: "Admin",
-          venueId: event.detail.venueId,
-          venueName: event.detail.venueName,
-          message: event.detail.messageText,
-          timestamp: new Date().toISOString(),
-          read: false,
-          flexibleDates: event.detail.flexibleDates,
-          requireCatering: event.detail.requireCatering,
-          ownCatering: event.detail.ownCatering,
-        };
-
-        const updatedMessages = [newMessage, ...messages];
-        setMessages(updatedMessages);
-        localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
-      }
-    };
-
-    window.addEventListener("ownerMessageEvent", handleNewMessage);
-
-    return () => {
-      window.removeEventListener("ownerMessageEvent", handleNewMessage);
-    };
-  }, [messages]);
-
-  useEffect(() => {
-    loadBookingRequests();
-    loadMessages();
-
-    // Listen for booking updates from PaymentPage
-    const handleBookingsUpdate = () => {
-      loadBookingRequests();
-    };
-
-    // Listen for custom event when new booking is created
-    const handleNewBooking = (event) => {
-      if (event.detail && event.detail.type === "NEW_BOOKING") {
-        loadBookingRequests();
-      }
-    };
-
-    window.addEventListener("bookingsUpdated", handleBookingsUpdate);
-    window.addEventListener("storage", handleBookingsUpdate);
-    window.addEventListener("newBookingEvent", handleNewBooking);
-
-    return () => {
-      window.removeEventListener("bookingsUpdated", handleBookingsUpdate);
-      window.removeEventListener("storage", handleBookingsUpdate);
-      window.removeEventListener("newBookingEvent", handleNewBooking);
-    };
-  }, []);
 
   const handleBookingAction = (bookingId, action) => {
-    const savedBookings = localStorage.getItem("userBookings");
-    if (savedBookings) {
-      const bookings = JSON.parse(savedBookings);
-      const updatedBookings = bookings.map((booking) => {
-        if (booking.id === bookingId) {
-          return {
-            ...booking,
-            status: action,
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return booking;
-      });
-      localStorage.setItem("userBookings", JSON.stringify(updatedBookings));
-      loadBookingRequests();
-
-      // Trigger event for other components to update
-      window.dispatchEvent(new Event("bookingsUpdated"));
-    }
+    updateBookingStatus(bookingId, action);
   };
 
-  const handleMarkAsRead = (messageId) => {
-    const updatedMessages = messages.map((msg) =>
-      msg.id === messageId ? { ...msg, read: true } : msg
-    );
-    setMessages(updatedMessages);
-    localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
+  const handleOpenChat = (conversation) => {
+    setSelectedConversation(conversation);
   };
 
-  const handleReplyToMessage = (messageId, userName) => {
-    // (Temporarily) Just alert for now
-    alert(`Reply to ${userName} - Message ID: ${messageId}`);
-    //  reply message logic would go here (I don't know yet how can I do this)
+  const handleCloseChat = () => {
+    setSelectedConversation(null);
   };
 
   const handleViewVenue = (venueId) => {
@@ -172,10 +84,27 @@ const OwnerRequestsAndMessages = () => {
     );
   };
 
-  const unreadMessagesCount = messages.filter((msg) => !msg.read).length;
-  const pendingRequestsCount = bookingRequests.filter(
-    (req) => req.status === "pending"
-  ).length;
+  const getUnreadCountForConversation = (conversation) => {
+    return conversation.messages.filter(
+      (msg) => msg.senderId !== "owner" && !msg.read
+    ).length;
+  };
+
+  // Get venue image helper function
+  const getVenueImage = (request, venue) => {
+    // First check if booking has stored image
+    if (request.venueImage) {
+      return request.venueImage;
+    }
+
+    // Then check venue floorPlanImages
+    if (venue?.floorPlanImages && venue.floorPlanImages.length > 0) {
+      return venue.floorPlanImages[0].url;
+    }
+
+    // Return null for placeholder
+    return null;
+  };
 
   return (
     <div className="owner-requests-messages">
@@ -195,7 +124,11 @@ const OwnerRequestsAndMessages = () => {
           className={`tab-button ${activeTab === "messages" ? "active" : ""}`}
           onClick={() => setActiveTab("messages")}
         >
-          Messages <span className="count-badge">{unreadMessagesCount}</span>
+          Messages{" "}
+          <span className="count-badge">{ownerConversations.length}</span>
+          {unreadCount > 0 && (
+            <span className="unread-indicator">{unreadCount}</span>
+          )}
         </button>
       </div>
 
@@ -207,116 +140,140 @@ const OwnerRequestsAndMessages = () => {
                 <h3>Booking Requests ({bookingRequests.length})</h3>
                 {bookingRequests.map((request) => {
                   const venue = venues.find((v) => v.id === request.venueId);
+                  const venueImage = getVenueImage(request, venue);
+
                   return (
                     <div key={request.id} className="request-card">
-                      <div className="request-header">
-                        <div className="request-info">
-                          <h4>
-                            {request.venueName ||
-                              venue?.venueName ||
-                              "Unknown Venue"}
-                          </h4>
-                          <p className="user-info">From: Admin</p>
-                          <p className="request-date">
-                            Submitted:{" "}
-                            {formatDate(
-                              request.submittedAt ||
-                                request.createdAt ||
-                                new Date().toISOString()
-                            )}
-                          </p>
-                        </div>
-                        <div className="request-status">
-                          {getStatusBadge(request.status)}
-                        </div>
-                      </div>
-
-                      <div className="booking-details">
-                        <div className="detail-row">
-                          <span>
-                            <strong>Date:</strong>{" "}
-                            {formatDate(request.bookingDetails?.date)}
-                          </span>
-                          <span>
-                            <strong>Time:</strong>{" "}
-                            {request.bookingDetails?.startTime} -{" "}
-                            {request.bookingDetails?.endTime}
-                          </span>
-                        </div>
-                        <div className="detail-row">
-                          <span>
-                            <strong>Guests:</strong>{" "}
-                            {request.bookingDetails?.guests} people
-                          </span>
-                          <span>
-                            <strong>Total:</strong>{" "}
-                            {formatCurrency(request.pricing?.total)}
-                          </span>
-                        </div>
-                        <div className="detail-row">
-                          <span>
-                            <strong>Duration:</strong>{" "}
-                            {request.bookingDetails?.hours} hours
-                          </span>
-                          <span>
-                            <strong>Hourly Rate:</strong>{" "}
-                            {formatCurrency(request.pricing?.hourlyRate)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {request.specialRequests && (
-                        <div className="special-requests">
-                          <strong>Special Requests:</strong>
-                          <p>{request.specialRequests}</p>
-                        </div>
-                      )}
-
-                      {request.status === "pending" && (
-                        <div className="request-actions">
-                          <button
-                            className="confirm-btn"
-                            onClick={() =>
-                              handleBookingAction(request.id, "confirmed")
-                            }
-                          >
-                            Confirm Booking
-                          </button>
-                          <button
-                            className="decline-btn"
-                            onClick={() =>
-                              handleBookingAction(request.id, "cancelled")
-                            }
-                          >
-                            Decline
-                          </button>
-                          <button
-                            className="contact-user-btn"
+                      {/* Venue Image */}
+                      <div className="request-venue-image">
+                        {venueImage ? (
+                          <img
+                            src={venueImage}
+                            alt={request.venueName || "Venue"}
+                            className="venue-thumbnail"
+                            onClick={() => handleViewVenue(request.venueId)}
+                          />
+                        ) : (
+                          <div
+                            className="venue-placeholder"
                             onClick={() => handleViewVenue(request.venueId)}
                           >
-                            View Venue
-                          </button>
-                        </div>
-                      )}
+                            🏢
+                          </div>
+                        )}
+                      </div>
 
-                      {request.status === "confirmed" && (
-                        <div className="confirmed-actions">
-                          <button
-                            className="complete-btn"
-                            onClick={() =>
-                              handleBookingAction(request.id, "completed")
-                            }
-                          >
-                            Mark as Completed
-                          </button>
-                          <button
-                            className="contact-user-btn"
-                            onClick={() => handleViewVenue(request.venueId)}
-                          >
-                            View Venue
-                          </button>
+                      {/* Request Details */}
+                      <div className="request-content">
+                        <div className="request-header">
+                          <div className="request-info">
+                            <h4>
+                              {request.venueName ||
+                                venue?.venueName ||
+                                "Unknown Venue"}
+                            </h4>
+                            <p className="user-info">From: Admin</p>
+                            <p className="request-date">
+                              Submitted:{" "}
+                              {formatDate(
+                                request.submittedAt ||
+                                  request.createdAt ||
+                                  new Date().toISOString()
+                              )}
+                            </p>
+                          </div>
+                          <div className="request-status">
+                            {getStatusBadge(request.status)}
+                          </div>
                         </div>
-                      )}
+
+                        <div className="booking-details">
+                          <div className="detail-row">
+                            <span>
+                              <strong>Date:</strong>{" "}
+                              {formatDate(request.bookingDetails?.date)}
+                            </span>
+                            <span>
+                              <strong>Time:</strong>{" "}
+                              {request.bookingDetails?.startTime} -{" "}
+                              {request.bookingDetails?.endTime}
+                            </span>
+                          </div>
+                          <div className="detail-row">
+                            <span>
+                              <strong>Guests:</strong>{" "}
+                              {request.bookingDetails?.guests} people
+                            </span>
+                            <span>
+                              <strong>Total:</strong>{" "}
+                              {formatCurrency(request.pricing?.total)}
+                            </span>
+                          </div>
+                          <div className="detail-row">
+                            <span>
+                              <strong>Duration:</strong>{" "}
+                              {request.bookingDetails?.hours} hours
+                            </span>
+                            <span>
+                              <strong>Hourly Rate:</strong>{" "}
+                              {formatCurrency(request.pricing?.hourlyRate)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {request.specialRequests && (
+                          <div className="special-requests">
+                            <strong>Special Requests:</strong>
+                            <p>{request.specialRequests}</p>
+                          </div>
+                        )}
+
+                        {request.status === "pending" && (
+                          <div className="request-actions">
+                            <button
+                              className="confirm-btn"
+                              onClick={() =>
+                                handleBookingAction(request.id, "confirmed")
+                              }
+                            >
+                              Confirm Booking
+                            </button>
+                            <button
+                              className="decline-btn"
+                              onClick={() =>
+                                handleBookingAction(request.id, "cancelled")
+                              }
+                            >
+                              Decline
+                            </button>
+                            <button
+                              className="contact-user-btn"
+                              onClick={() => handleViewVenue(request.venueId)}
+                            >
+                              View Venue
+                            </button>
+                          </div>
+                        )}
+
+                        {request.status === "confirmed" && (
+                          <div className="confirmed-actions">
+                            <button
+                              className="complete-btn"
+                              onClick={() =>
+                                handleBookingAction(request.id, "completed")
+                              }
+                            >
+                              Mark as Completed
+                            </button>
+                            <button
+                              className="contact-user-btn"
+                              onClick={() => handleViewVenue(request.venueId)}
+                            >
+                              View Venue
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
@@ -331,71 +288,93 @@ const OwnerRequestsAndMessages = () => {
           </div>
         ) : (
           <div className="messages-section">
-            {messages.length > 0 ? (
-              <div className="messages-list">
-                <h3>Messages ({messages.length})</h3>
-                {messages.map((message) => {
-                  const venue = venues.find((v) => v.id === message.venueId);
+            {ownerConversations.length > 0 ? (
+              <div className="conversations-list">
+                <h3>Conversations ({ownerConversations.length})</h3>
+                {ownerConversations.map((conversation) => {
+                  const venue = venues.find(
+                    (v) => v.id === conversation.venueId
+                  );
+                  const lastMessage =
+                    conversation.messages[conversation.messages.length - 1];
+                  const conversationUnreadCount =
+                    getUnreadCountForConversation(conversation);
+
                   return (
                     <div
-                      key={message.id}
-                      className={`message-card ${
-                        message.read ? "read" : "unread"
+                      key={conversation.id}
+                      className={`conversation-card ${
+                        conversationUnreadCount > 0 ? "has-unread" : ""
                       }`}
-                      onClick={() =>
-                        !message.read && handleMarkAsRead(message.id)
-                      }
+                      onClick={() => handleOpenChat(conversation)}
                     >
-                      <div className="message-header">
-                        <div className="message-sender">
+                      <div className="conversation-header">
+                        <div className="conversation-info">
                           <h4>Admin</h4>
                           <span className="venue-name">
-                            {message.venueName ||
+                            {conversation.venueName ||
                               venue?.venueName ||
                               "Unknown Venue"}
                           </span>
                         </div>
-                        <div className="message-meta">
-                          <span className="message-time">
-                            {formatDate(message.timestamp)}
+                        <div className="conversation-meta">
+                          <span className="conversation-time">
+                            {formatDate(conversation.lastMessageTime)}
                           </span>
-                          {!message.read && (
-                            <span className="unread-dot"></span>
+                          {conversationUnreadCount > 0 && (
+                            <span className="conversation-unread-badge">
+                              {conversationUnreadCount}
+                            </span>
                           )}
                         </div>
                       </div>
-                      <div className="message-content">
-                        <p>{message.message}</p>
 
-                        {/* Message Details */}
+                      <div className="conversation-preview">
+                        <span className="last-message-sender">
+                          {lastMessage.senderId === "owner"
+                            ? "You: "
+                            : "Admin: "}
+                        </span>
+                        <span className="last-message-text">
+                          {lastMessage.text}
+                        </span>
+                      </div>
+
+                      {/* Message Details */}
+                      {conversation.metadata && (
                         <div className="message-details">
-                          {message.flexibleDates && (
+                          {conversation.metadata.flexibleDates && (
                             <span className="message-tag">
                               Flexible on dates
                             </span>
                           )}
-                          {message.requireCatering && (
+                          {conversation.metadata.requireCatering && (
                             <span className="message-tag">
                               Requires catering
                             </span>
                           )}
-                          {message.ownCatering && (
+                          {conversation.metadata.ownCatering && (
                             <span className="message-tag">Own catering</span>
                           )}
                         </div>
-                      </div>
-                      <div className="message-actions">
+                      )}
+
+                      <div className="conversation-actions">
                         <button
                           className="reply-btn"
-                          onClick={() =>
-                            handleReplyToMessage(message.id, "Admin")
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenChat(conversation);
+                          }}
                         >
                           Reply
                         </button>
                         <button
                           className="view-venue-btn"
-                          onClick={() => handleViewVenue(message.venueId)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewVenue(conversation.venueId);
+                          }}
                         >
                           View Venue
                         </button>
@@ -414,6 +393,15 @@ const OwnerRequestsAndMessages = () => {
           </div>
         )}
       </div>
+
+      {/* Chat Modal */}
+      {selectedConversation && (
+        <ChatModal
+          conversation={selectedConversation}
+          onClose={handleCloseChat}
+          currentUser={currentUser}
+        />
+      )}
     </div>
   );
 };
