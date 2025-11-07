@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MyMap from "../components/MyMap";
 import VenuesHeader from "../components/VenuesHeader";
 import { useVenue } from "../contexts/VenueContext";
+import "../styles/VenuesPage.css";
 
 export default function Venues() {
   const location = useLocation();
