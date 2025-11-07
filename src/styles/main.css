@@ -15,68 +15,80 @@ body {
   padding: 20px;
   background-color: rgb(255, 255, 255);
 }
+
 header {
   display: flex;
   position: sticky;
-  top: 0; /* so it stays visible */
+  top: 0;
   width: 100%;
   background-color: #fff;
-  padding: 10px 5%; /* safe padding */
+  padding: 10px 5%;
   z-index: 1000;
   align-items: center;
   justify-content: space-between;
-  /* border-bottom: 1px solid #eee; subtle divider */
+  left: 0;
+  right: 0;
 }
+
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
   src: url("../assets/logo.png");
-  /* width: 100px;
-  height: 100px; */
-  margin-top: -3.4rem;
-  margin-left: 8.9rem;
+  margin: 0;
+  flex-shrink: 0;
 }
+
 nav {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  width: 100%;
+  width: auto;
   background-color: #ffffff;
-  padding: 9px 5%;
-  margin-right: -4rem;
+  padding: 9px 0;
+  margin: 0;
 }
 
 nav ul {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
+  gap: 10px;
 }
+
 nav ul a {
   display: flex;
-  margin-left: 20px;
+  margin: 0;
   list-style: none;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   color: inherit;
+  padding: 8px 12px;
 }
+
 nav ul li {
   list-style-type: none;
 }
+
 .menu {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  width: 100%;
-  padding: 0 8% 5% 8%;
+  justify-content: flex-end;
+  width: auto;
+  padding: 0;
+  gap: 15px;
 }
 
 .menu img {
-  padding: 0 10px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
+
 main {
   display: flex;
   flex-direction: row;
@@ -84,34 +96,30 @@ main {
   padding: 0 8% 5% 8%;
   align-items: center;
   width: 100%;
-  /* margin-top: 20px; */
 }
+
 .hero-section {
   width: 100%;
   margin-top: 120px;
   display: flex;
   flex-direction: column;
-
-  /* background-color: #ea9a9a;
-  align-items: first baseline; */
 }
+
 .mainpage {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   height: 40vh;
-  /* padding: 20px; */
 }
+
 .hero-content {
   max-width: 80%;
   display: flex;
   flex-direction: column;
   margin: 10px -22px 2px -22px;
-  /* padding: 20px; */
   display: flex;
   align-items: center;
-  /* backkground-color: rgb(255, 255, 255); */
   position: relative;
   z-index: 1;
   height: 22vh;
@@ -132,7 +140,6 @@ main {
 .trust-badge {
   color: #666;
   font-size: 14px;
-  /* margin-bottom: 10px; */
   margin-top: 1rem;
 }
 
@@ -141,15 +148,15 @@ h1 {
   color: #333;
   margin-bottom: 30px;
 }
+
 .hero-section span {
-  display: inline-block; /* wrap tightly around the text */
+  display: inline-block;
   background-color: #ea9091;
   padding: 4px 8px;
   margin-bottom: 1rem;
   border-radius: 8px;
   color: #4d4242;
   vertical-align: middle;
-  /* protect against flex parent stretching */
   flex: 0 0 auto;
   align-self: flex-start;
 }
@@ -177,6 +184,7 @@ h1 {
   text-transform: uppercase;
   margin-bottom: 5px;
 }
+
 .filter-group input:hover,
 .filter-group input:focus {
   border-color: #ec676a;
@@ -191,6 +199,7 @@ h1 {
 .select-wrapper {
   position: relative;
 }
+
 #guests,
 #location,
 form input[type="text"] {
@@ -203,6 +212,7 @@ form input[type="text"] {
   background-color: white;
   font-size: 14px;
 }
+
 #guests:hover,
 #location:hover,
 form input[type="text"]:hover,
@@ -213,6 +223,7 @@ form input[type="text"]:focus {
   box-shadow: 0 0 0 3px rgba(236, 103, 106, 0.25);
   outline: none;
 }
+
 select {
   width: 100%;
   padding: 12px 15px;
@@ -252,7 +263,6 @@ select {
 
 .hero-image img {
   width: 90%;
-
   height: 100%;
   object-fit: cover;
   align-items: center;
@@ -270,7 +280,7 @@ select {
   margin-left: 8rem;
   margin-top: 20rem;
 }
-/* Add to your main.css file */
+
 .user-menu {
   position: relative;
   display: flex;
@@ -319,7 +329,6 @@ select {
   color: #e74c3c;
 }
 
-/* If you want a simpler version without dropdown, use this instead: */
 .user-menu-simple {
   display: flex;
   align-items: center;
@@ -328,7 +337,6 @@ select {
   text-decoration: none;
 }
 
-/* Favorites Link Styles */
 .favorites-link {
   display: flex;
   align-items: center;
@@ -345,12 +353,12 @@ select {
   color: #007bff;
 }
 
-/* Ensure the favorites link looks consistent with other menu items */
 .menu ul li .favorites-link {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .logout-btn-simple {
   margin-left: 12px;
   padding: 4px 12px;
@@ -365,16 +373,202 @@ select {
 .logout-btn-simple:hover {
   background: #c0392b;
 }
-@media (max-width: 768px) {
+
+/* ===== RESPONSIVE DESIGN FOR ALL DEVICES ===== */
+
+/* Large Desktop (1200px and above) */
+@media (min-width: 1200px) {
+  body {
+    width: 85%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .tagline h2 {
+    font-size: 36px;
+  }
+}
+
+/* Desktop (1024px - 1199px) */
+@media (max-width: 1199px) {
+  body {
+    width: 90%;
+  }
+
+  main {
+    padding: 0 5% 5% 5%;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
   .hero-content {
-    flex-direction: column;
+    max-width: 85%;
+  }
+
+  .search-container {
+    width: 85%;
+  }
+
+  .hero-image img {
+    right: 6em;
+  }
+
+  .tagline h2 {
+    font-size: 32px;
+    margin-left: 5rem;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (max-width: 1023px) {
+  body {
+    width: 95%;
+    padding: 15px;
+  }
+
+  header {
+    padding: 10px 3%;
+  }
+
+  nav ul {
+    gap: 8px;
+  }
+
+  nav ul a {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .menu {
+    gap: 12px;
+  }
+
+  .menu img {
+    width: 22px;
+    height: 22px;
+  }
+
+  main {
+    padding: 0 3% 5% 3%;
+  }
+
+  .hero-section {
+    margin-top: 80px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .hero-content {
+    max-width: 90%;
   }
 
   .search-container {
     width: 90%;
+    padding: 25px;
+  }
+
+  .hero-image {
+    width: 55%;
+  }
+
+  .hero-image img {
+    right: 4em;
+  }
+
+  .tagline h2 {
+    font-size: 28px;
+    margin-left: 3rem;
+    margin-top: 15rem;
+  }
+}
+
+/* Mobile (481px - 767px) */
+@media (max-width: 767px) {
+  body {
+    width: 100%;
+    padding: 10px;
+  }
+
+  header {
+    padding: 10px 3%;
+    flex-wrap: wrap;
+  }
+
+  nav ul {
+    gap: 5px;
+  }
+
+  nav ul a {
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+
+  .menu {
+    gap: 10px;
+  }
+
+  .menu img {
+    width: 20px;
+    height: 20px;
+  }
+
+  main {
+    padding: 0 2% 5% 2%;
+  }
+
+  .hero-section {
+    margin-top: 60px;
+  }
+
+  .mainpage {
+    flex-direction: column;
+    height: auto;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    max-width: 100%;
+    margin: 10px 0;
+    height: auto;
+  }
+
+  .search-container {
+    width: 100%;
     padding: 20px;
     margin: 0 auto;
-    padding-left: 1rem;
+    top: 0;
+    margin-top: 1.5rem;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 2rem;
+    padding: 15px;
+  }
+
+  #guests,
+  #location,
+  form input[type="text"] {
+    width: 100%;
+  }
+
+  .search-btn {
+    width: 100%;
+    align-self: stretch;
   }
 
   .hero-image {
@@ -385,7 +579,178 @@ select {
     border-radius: 8px;
   }
 
+  .hero-image img {
+    width: 100%;
+    right: 0;
+    border-radius: 12px;
+  }
+
+  .tagline h2 {
+    font-size: 24px;
+    margin-left: 1rem;
+    margin-top: 10rem;
+    justify-content: center;
+  }
+
+  .user-menu,
+  .favorites-link {
+    padding: 6px 8px;
+  }
+
+  .dropdown-menu {
+    min-width: 100px;
+  }
+}
+
+/* Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+  body {
+    padding: 8px;
+  }
+
+  header {
+    padding: 8px 2%;
+  }
+
+  .logo img {
+    max-height: 35px;
+  }
+
+  nav ul {
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+
+  nav ul a {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .menu {
+    gap: 8px;
+  }
+
+  .menu img {
+    width: 18px;
+    height: 18px;
+  }
+
+  main {
+    padding: 0 2% 3% 2%;
+  }
+
+  .hero-section {
+    margin-top: 40px;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .trust-badge {
+    font-size: 12px;
+  }
+
+  .hero-section span {
+    padding: 3px 6px;
+    font-size: 13px;
+  }
+
+  .search-container {
+    padding: 15px;
+    margin-top: 1rem;
+  }
+
   .search-box {
-    flex-direction: column;
+    padding: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .filter-group label {
+    font-size: 11px;
+  }
+
+  .filter-description {
+    font-size: 12px;
+  }
+
+  #guests,
+  #location,
+  form input[type="text"],
+  select {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .search-btn {
+    padding: 0 20px;
+    font-size: 14px;
+    height: 40px;
+  }
+
+  .hero-image {
+    height: 250px;
+    margin-top: 15px;
+  }
+
+  .tagline h2 {
+    font-size: 20px;
+    margin-left: 0.5rem;
+    margin-top: 8rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .user-menu,
+  .favorites-link {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .logout-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .logout-btn-simple {
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+
+  .dropdown-menu {
+    min-width: 90px;
+  }
+}
+
+/* Extra Small Mobile (up to 320px) */
+@media (max-width: 320px) {
+  body {
+    padding: 5px;
+  }
+
+  header {
+    padding: 6px 2%;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .search-container {
+    padding: 12px;
+  }
+
+  .search-box {
+    padding: 10px;
+  }
+
+  .hero-image {
+    height: 200px;
+  }
+
+  .tagline h2 {
+    font-size: 18px;
+    margin-top: 6rem;
   }
 }
