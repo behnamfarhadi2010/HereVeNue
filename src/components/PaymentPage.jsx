@@ -22,6 +22,11 @@ const PaymentPage = () => {
 
   const venue = venues.find((v) => v.id === parseInt(id));
 
+  // State for contact information
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
   // State for payment form
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -115,7 +120,9 @@ const PaymentPage = () => {
         id: Date.now(),
         venueId: venue.id,
         venueName: venue.venueName,
-        userName: "Guest User", // Replace with actual user name from context
+        userName: fullName,
+        userEmail: email,
+        userPhone: phone,
         status: "pending",
         bookingDetails: bookingDetails,
         pricing: pricing,
@@ -328,7 +335,13 @@ const PaymentPage = () => {
                     type="submit"
                     className={`submit-btn ${isProcessing ? "processing" : ""}`}
                     disabled={
-                      isProcessing || !cardNumber || !expiryDate || !postalCode
+                      isProcessing ||
+                      !fullName ||
+                      !email ||
+                      !phone ||
+                      !cardNumber ||
+                      !expiryDate ||
+                      !postalCode
                     }
                   >
                     {isProcessing ? "Processing..." : "Request to Book"}
@@ -407,6 +420,45 @@ const PaymentPage = () => {
                   </li>
                 </ul>
                 <button className="learn-more-btn">Learn more</button>
+              </div>
+
+              {/* Contact Information Card - NEW */}
+              <div className="contact-info-card">
+                <h3>Contact Information</h3>
+                <div className="contact-form">
+                  <div className="form-group">
+                    <label>Full Name *</label>
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="John Doe"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Email Address *</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="john.doe@example.com"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Phone Number *</label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+1 (123) 456-7890"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

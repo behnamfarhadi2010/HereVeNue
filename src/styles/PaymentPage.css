@@ -5,7 +5,56 @@
   padding: 20px;
   background: white;
 }
+/* Contact Information Card */
+.contact-info-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
 
+.contact-info-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  color: #222;
+  font-weight: 600;
+}
+
+.contact-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.contact-form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.contact-form label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.contact-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.contact-form input:focus {
+  outline: none;
+  border-color: #ff385c;
+}
+
+.contact-form input::placeholder {
+  color: #999;
+}
 .back-button {
   background: none;
   border: 1px solid #ddd;
