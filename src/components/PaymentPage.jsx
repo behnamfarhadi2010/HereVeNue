@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
+import { sendBookingConfirmation } from "..src/services/emailService";
 import Header from "./Header";
 import "../styles/PaymentPage.css";
 
@@ -111,8 +112,8 @@ const PaymentPage = () => {
     e.preventDefault();
     setIsProcessing(true);
 
-    // Simulate API call
     try {
+      // Simulate payment processing
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Create booking object
@@ -150,6 +151,16 @@ const PaymentPage = () => {
         })
       );
 
+      // Send confirmation email via EmailJS
+      console.log("Sending confirmation email...");
+      const emailResult = await sendBookingConfirmation(newBooking);
+
+      if (emailResult.success) {
+        console.log("Confirmation email sent successfully!");
+      } else {
+        console.error("Failed to send confirmation email:", emailResult.error);
+      }
+
       // Navigate to confirmation page
       navigate(`/booking-confirmation/${venue.id}`, {
         state: {
@@ -164,6 +175,7 @@ const PaymentPage = () => {
       });
     } catch (error) {
       console.error("Payment failed:", error);
+      alert("Something went wrong with your booking. Please try again.");
       setIsProcessing(false);
     }
   };
@@ -422,7 +434,7 @@ const PaymentPage = () => {
                 <button className="learn-more-btn">Learn more</button>
               </div>
 
-              {/* Contact Information Card - NEW */}
+              {/* Contact Information Card */}
               <div className="contact-info-card">
                 <h3>Contact Information</h3>
                 <div className="contact-form">
