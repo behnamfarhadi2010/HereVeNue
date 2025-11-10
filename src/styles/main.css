@@ -121,10 +121,15 @@ main {
   display: flex;
   align-items: center;
   position: relative;
-  z-index: 1;
+  /* z-index: 1; */
   height: 22vh;
 }
-
+.hero-content {
+  font-size: 28px;
+  z-index: 1;
+  color: #000000;
+  margin-bottom: 10px;
+}
 .search-container {
   width: 80%;
   padding: 30px;
@@ -160,7 +165,10 @@ h1 {
   flex: 0 0 auto;
   align-self: flex-start;
 }
-
+.hero-section h2 {
+  font-size: 19px;
+  z-index: 1;
+}
 .search-box {
   display: flex;
   gap: 5px;
