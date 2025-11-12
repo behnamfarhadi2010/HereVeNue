@@ -12,7 +12,7 @@ const ChatModal = ({ conversation, onClose, currentUser }) => {
     // Mark messages as read when opening the chat
     markConversationAsRead(conversation.id, currentUser.id);
     scrollToBottom();
-  }, [conversation.id, currentUser.id]);
+  }, [conversation.id, currentUser.id, markConversationAsRead]);
 
   useEffect(() => {
     scrollToBottom();

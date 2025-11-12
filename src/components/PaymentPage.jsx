@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
-import { sendBookingConfirmation } from "../services/emailService";
+import { sendBookingConfirmation } from "../Services/emailService";
 import Header from "./Header";
 import "../styles/PaymentPage.css";
 
