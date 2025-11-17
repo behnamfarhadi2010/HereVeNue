@@ -4,22 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MyMap from "../components/MyMap";
 import VenuesHeader from "../components/VenuesHeader";
 import { useVenue } from "../contexts/VenueContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 import "../styles/VenuesPage.css";
 
 export default function Venues() {
   const location = useLocation();
   const navigate = useNavigate();
   const { searchVenues } = useVenue();
+  const { favorites, toggleFavorite, isFavorited } = useFavorites();
   const [filteredVenues, setFilteredVenues] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-
-  // Load favorites from localStorage on component mount
-  useEffect(() => {
-    const savedFavorites = localStorage.getItem("userFavorites");
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
-    }
-  }, []);
 
   useEffect(() => {
     // Parse query parameters from URL
@@ -42,36 +35,10 @@ export default function Venues() {
     setFilteredVenues(results);
   }, [location.search, searchVenues]);
 
-  // Toggle favorite status for a venue
-  const toggleFavorite = (venueId, e) => {
+  // Toggle favorite status for a venue using context
+  const handleToggleFavorite = (venueId, e) => {
     e.stopPropagation(); // Prevent card click when clicking favorite button
-
-    const savedFavorites = localStorage.getItem("userFavorites");
-    let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-
-    let updatedFavorites;
-    if (favorites.includes(venueId)) {
-      // Remove from favorites
-      updatedFavorites = favorites.filter((id) => id !== venueId);
-    } else {
-      // Add to favorites
-      updatedFavorites = [...favorites, venueId];
-    }
-
-    // Update localStorage
-    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
-
-    // Update local state
-    setFavorites(updatedFavorites);
-
-    // Notify other components
-    window.dispatchEvent(new Event("favoritesUpdated"));
-
-    console.log(
-      `Venue ${venueId} ${
-        !favorites.includes(venueId) ? "added to" : "removed from"
-      } favorites`
-    );
+    toggleFavorite(venueId);
   };
 
   return (
@@ -104,11 +71,11 @@ export default function Venues() {
                       {/* Favorite Heart Button */}
                       <button
                         className={`favorite-heart-btn ${
-                          favorites.includes(venue.id) ? "favorited" : ""
+                          isFavorited(venue.id) ? "favorited" : ""
                         }`}
-                        onClick={(e) => toggleFavorite(venue.id, e)}
+                        onClick={(e) => handleToggleFavorite(venue.id, e)}
                         title={
-                          favorites.includes(venue.id)
+                          isFavorited(venue.id)
                             ? "Remove from favorites"
                             : "Add to favorites"
                         }
@@ -130,7 +97,7 @@ export default function Venues() {
                           zIndex: 10,
                         }}
                       >
-                        {favorites.includes(venue.id) ? "❤️" : "🤍"}
+                        {isFavorited(venue.id) ? "❤️" : "🤍"}
                       </button>
                     </div>
                   )}

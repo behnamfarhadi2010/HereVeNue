@@ -21,37 +21,40 @@ import PaymentPage from "./components/PaymentPage";
 import MyMap from "./components/MyMap.jsx";
 import BookingConfirmation from "./components/BookingConfirmation";
 import { MessageProvider } from "./contexts/MessageContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 
 const App = () => {
   return (
     <VenueProvider>
       <MessageProvider>
-        <Router>
-          <div className="app-container">
-            {/* Routes */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/client-login" element={<ClientLogin />} />
-              <Route path="/venue-login" element={<VenueLogin />} />
-              <Route path="/my-dashboard" element={<MyDashboard />} />
-              <Route path="/add-listing" element={<AddListing />} />
-              <Route path="/dashboard" element={<VenueOwnerDashboard />} />
-              <Route path="/userdashboard" element={<UserDashboard />} />
-              <Route path="/venues" element={<Venues />} />
-              <Route path="/venue/:id" element={<VenueDetailsStep />} />
-              <Route path="/payment/:id" element={<PaymentPage />} />
-              <Route
-                path="/booking-confirmation/:id"
-                element={<BookingConfirmation />}
-              />
-            </Routes>
+        <FavoritesProvider>
+          <Router>
+            <div className="app-container">
+              {/* Routes */}
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/client-login" element={<ClientLogin />} />
+                <Route path="/venue-login" element={<VenueLogin />} />
+                <Route path="/my-dashboard" element={<MyDashboard />} />
+                <Route path="/add-listing" element={<AddListing />} />
+                <Route path="/dashboard" element={<VenueOwnerDashboard />} />
+                <Route path="/userdashboard" element={<UserDashboard />} />
+                <Route path="/venues" element={<Venues />} />
+                <Route path="/venue/:id" element={<VenueDetailsStep />} />
+                <Route path="/payment/:id" element={<PaymentPage />} />
+                <Route
+                  path="/booking-confirmation/:id"
+                  element={<BookingConfirmation />}
+                />
+              </Routes>
 
-            {/* Footer */}
-            <Footer />
-          </div>
-        </Router>
-        <MyMap />
+              {/* Footer */}
+              <Footer />
+            </div>
+          </Router>
+          <MyMap />
+        </FavoritesProvider>
       </MessageProvider>
     </VenueProvider>
   );

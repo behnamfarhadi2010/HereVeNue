@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import { useVenue } from "../contexts/VenueContext";
 import { useMessages } from "../contexts/MessageContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 import ChatModal from "../components/ChatModal";
 import "../styles/userDashboard.css";
 
@@ -10,13 +11,12 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("current");
-  const [favorites, setFavorites] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const { venues } = useVenue();
 
-  // Get data from MessageContext
+  const { venues } = useVenue();
   const { bookingRequests, getUserConversations, getUnreadCount } =
     useMessages();
+  const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
   // Get user's conversations
   const userConversations = getUserConversations("admin");
@@ -35,32 +35,7 @@ const UserDashboard = () => {
     }
   }, [location.state]);
 
-  // Load favorites from localStorage
-  const loadFavorites = () => {
-    const savedFavorites = localStorage.getItem("userFavorites");
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
-    } else {
-      setFavorites([]);
-    }
-  };
-
-  useEffect(() => {
-    loadFavorites();
-
-    const handleFavoritesUpdate = () => {
-      loadFavorites();
-    };
-
-    window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
-    window.addEventListener("storage", handleFavoritesUpdate);
-
-    return () => {
-      window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
-      window.removeEventListener("storage", handleFavoritesUpdate);
-    };
-  }, []);
-
+  // Get favorite venues using context
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
 
   // Get current bookings (pending and confirmed)
@@ -90,30 +65,10 @@ const UserDashboard = () => {
     setSelectedConversation(null);
   };
 
-  // Toggle favorite venue
-  const toggleFavorite = (venueId, event) => {
+  // Toggle favorite venue using context
+  const handleToggleFavorite = (venueId, event) => {
     event.stopPropagation(); // Prevent card click
-
-    const savedFavorites = localStorage.getItem("userFavorites");
-    let currentFavorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-
-    let updatedFavorites;
-    if (currentFavorites.includes(venueId)) {
-      // Remove from favorites
-      updatedFavorites = currentFavorites.filter((id) => id !== venueId);
-    } else {
-      // Add to favorites
-      updatedFavorites = [...currentFavorites, venueId];
-    }
-
-    // Update localStorage
-    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
-
-    // Update local state
-    setFavorites(updatedFavorites);
-
-    // Trigger custom event to notify other components
-    window.dispatchEvent(new Event("favoritesUpdated"));
+    toggleFavorite(venueId);
   };
 
   const formatDate = (dateString) => {
@@ -378,11 +333,13 @@ const UserDashboard = () => {
                       >
                         {/* Favorite Heart Icon */}
                         <button
-                          className="favorite-heart-btn active"
-                          onClick={(e) => toggleFavorite(venue.id, e)}
+                          className={`favorite-heart-btn ${
+                            isFavorited(venue.id) ? "active" : ""
+                          }`}
+                          onClick={(e) => handleToggleFavorite(venue.id, e)}
                           aria-label="Remove from favorites"
                         >
-                          ❤️
+                          {isFavorited(venue.id) ? "❤️" : "🤍"}
                         </button>
 
                         <div className="venue-image-container">
