@@ -1,7 +1,7 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
 import VenueOwnerDashboard from "./components/VenueOwnerDashboard.jsx";
 import Footer from "./components/Footer.jsx";
 

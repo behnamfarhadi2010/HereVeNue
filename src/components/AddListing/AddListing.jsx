@@ -9,7 +9,7 @@ import Step5 from "./Steps/Step5";
 import Step6 from "./Steps/Step6";
 import Step7 from "./Steps/Step7";
 import Step8 from "./Steps/Step8";
-// import "../../styles/Add-listing.css";
+import "../../styles/Add-listing.css";
 import Header from "../Header";
 
 const AddListing = () => {
