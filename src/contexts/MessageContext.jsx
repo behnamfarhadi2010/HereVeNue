@@ -1,5 +1,11 @@
 // contexts/MessageContext.jsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 const MessageContext = createContext();
 
@@ -15,6 +21,7 @@ export const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [bookingRequests, setBookingRequests] = useState([]);
   const [conversations, setConversations] = useState([]);
+  const [lastUpdate, setLastUpdate] = useState(Date.now()); // Track updates
 
   // Load data from storage on mount
   useEffect(() => {
@@ -23,14 +30,14 @@ export const MessageProvider = ({ children }) => {
     loadConversations();
   }, []);
 
-  const loadMessages = () => {
+  const loadMessages = useCallback(() => {
     const savedMessages = localStorage.getItem("ownerMessages");
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
     }
-  };
+  }, []);
 
-  const loadBookingRequests = () => {
+  const loadBookingRequests = useCallback(() => {
     const savedBookings = localStorage.getItem("userBookings");
     if (savedBookings) {
       const allBookings = JSON.parse(savedBookings);
@@ -41,14 +48,14 @@ export const MessageProvider = ({ children }) => {
       );
       setBookingRequests(relevantBookings);
     }
-  };
+  }, []);
 
-  const loadConversations = () => {
+  const loadConversations = useCallback(() => {
     const savedConversations = localStorage.getItem("conversations");
     if (savedConversations) {
       setConversations(JSON.parse(savedConversations));
     }
-  };
+  }, []);
 
   // Create a new booking request (called from PaymentPage)
   const createBookingRequest = (bookingData) => {
@@ -68,6 +75,7 @@ export const MessageProvider = ({ children }) => {
 
     // Update state
     loadBookingRequests();
+    setLastUpdate(Date.now()); // Trigger re-render
 
     return newBooking;
   };
@@ -89,9 +97,7 @@ export const MessageProvider = ({ children }) => {
       });
       localStorage.setItem("userBookings", JSON.stringify(updatedBookings));
       loadBookingRequests();
-
-      // Trigger event for other components
-      window.dispatchEvent(new Event("bookingsUpdated"));
+      setLastUpdate(Date.now()); // Trigger re-render
     }
   };
 
@@ -143,6 +149,7 @@ export const MessageProvider = ({ children }) => {
     const updatedConversations = [newConversation, ...conversations];
     setConversations(updatedConversations);
     localStorage.setItem("conversations", JSON.stringify(updatedConversations));
+    setLastUpdate(Date.now()); // Trigger re-render
 
     return { message: newMessage, conversationId };
   };
@@ -171,6 +178,7 @@ export const MessageProvider = ({ children }) => {
 
     setConversations(updatedConversations);
     localStorage.setItem("conversations", JSON.stringify(updatedConversations));
+    setLastUpdate(Date.now()); // Trigger re-render
 
     return updatedConversations.find((c) => c.id === conversationId);
   };
@@ -192,6 +200,7 @@ export const MessageProvider = ({ children }) => {
 
     setConversations(updatedConversations);
     localStorage.setItem("conversations", JSON.stringify(updatedConversations));
+    setLastUpdate(Date.now()); // Trigger re-render
   };
 
   // Get conversations for a specific user
@@ -219,7 +228,34 @@ export const MessageProvider = ({ children }) => {
     );
     setMessages(updatedMessages);
     localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
+    setLastUpdate(Date.now()); // Trigger re-render
   };
+
+  // Refresh all data from localStorage
+  const refreshData = useCallback(() => {
+    loadMessages();
+    loadBookingRequests();
+    loadConversations();
+    setLastUpdate(Date.now());
+  }, [loadMessages, loadBookingRequests, loadConversations]);
+
+  // Poll for updates (optional - for syncing between tabs)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Check if localStorage has been updated by another tab
+      const savedConversations = localStorage.getItem("conversations");
+      if (savedConversations) {
+        const parsed = JSON.parse(savedConversations);
+        // Only update if there's a difference
+        if (JSON.stringify(parsed) !== JSON.stringify(conversations)) {
+          setConversations(parsed);
+          setLastUpdate(Date.now());
+        }
+      }
+    }, 2000); // Check every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [conversations]);
 
   // Get user-specific messages (sent by the current user) - legacy support
   const getUserMessages = () => {
@@ -252,6 +288,8 @@ export const MessageProvider = ({ children }) => {
     getUnreadCount,
     unreadCount,
     pendingRequestsCount,
+    lastUpdate, // Export this so components can use it as a dependency
+    refreshData, // Export refresh function
   };
 
   return (

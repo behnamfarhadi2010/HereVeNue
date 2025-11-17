@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useVenue } from "../contexts/VenueContext";
 import { useMessages } from "../contexts/MessageContext";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import "../styles/ownerRequestsAndMessages.css";
 const OwnerRequestsAndMessages = () => {
   const [activeTab, setActiveTab] = useState("requests");
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedConversationId, setSelectedConversationId] = useState(null); // Track ID separately
   const { venues } = useVenue();
   const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const OwnerRequestsAndMessages = () => {
     getUnreadCount,
     updateBookingStatus,
     pendingRequestsCount,
+    lastUpdate, // This will trigger re-renders when messages update
   } = useMessages();
 
   // Get owner's conversations
@@ -30,16 +32,30 @@ const OwnerRequestsAndMessages = () => {
     name: "Venue Owner",
   };
 
+  // Update selected conversation when conversations change
+  useEffect(() => {
+    if (selectedConversationId) {
+      const updatedConversation = ownerConversations.find(
+        (conv) => conv.id === selectedConversationId
+      );
+      if (updatedConversation) {
+        setSelectedConversation(updatedConversation);
+      }
+    }
+  }, [ownerConversations, selectedConversationId, lastUpdate]);
+
   const handleBookingAction = (bookingId, action) => {
     updateBookingStatus(bookingId, action);
   };
 
   const handleOpenChat = (conversation) => {
     setSelectedConversation(conversation);
+    setSelectedConversationId(conversation.id); // Track ID
   };
 
   const handleCloseChat = () => {
     setSelectedConversation(null);
+    setSelectedConversationId(null); // Clear ID
   };
 
   const handleViewVenue = (venueId) => {
@@ -248,6 +264,20 @@ const OwnerRequestsAndMessages = () => {
                             </button>
                             <button
                               className="contact-user-btn"
+                              onClick={() => {
+                                // Find conversation for this venue and open it
+                                const conversation = ownerConversations.find(
+                                  (conv) => conv.venueId === request.venueId
+                                );
+                                if (conversation) {
+                                  handleOpenChat(conversation);
+                                }
+                              }}
+                            >
+                              Contact User
+                            </button>
+                            <button
+                              className="view-venue-btn"
                               onClick={() => handleViewVenue(request.venueId)}
                             >
                               View Venue
@@ -267,6 +297,20 @@ const OwnerRequestsAndMessages = () => {
                             </button>
                             <button
                               className="contact-user-btn"
+                              onClick={() => {
+                                // Find conversation for this venue and open it
+                                const conversation = ownerConversations.find(
+                                  (conv) => conv.venueId === request.venueId
+                                );
+                                if (conversation) {
+                                  handleOpenChat(conversation);
+                                }
+                              }}
+                            >
+                              Contact User
+                            </button>
+                            <button
+                              className="view-venue-btn"
                               onClick={() => handleViewVenue(request.venueId)}
                             >
                               View Venue
@@ -280,7 +324,7 @@ const OwnerRequestsAndMessages = () => {
               </div>
             ) : (
               <div className="no-requests">
-                <div className="no-data-icon"></div>
+                <div className="no-data-icon">📋</div>
                 <h3>No booking requests</h3>
                 <p>You don't have any booking requests at the moment.</p>
               </div>
@@ -385,7 +429,7 @@ const OwnerRequestsAndMessages = () => {
               </div>
             ) : (
               <div className="no-messages">
-                <div className="no-data-icon"></div>
+                <div className="no-data-icon">💬</div>
                 <h3>No messages</h3>
                 <p>You don't have any messages at the moment.</p>
               </div>

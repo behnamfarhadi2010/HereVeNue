@@ -1,3 +1,4 @@
+// pages/UserDashboard.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
@@ -5,7 +6,7 @@ import { useVenue } from "../contexts/VenueContext";
 import { useMessages } from "../contexts/MessageContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 import ChatModal from "../components/ChatModal";
-import "../styles/userDashboard.css";
+import "../styles/UserDashboard.css";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -14,11 +15,16 @@ const UserDashboard = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   const { venues } = useVenue();
-  const { bookingRequests, getUserConversations, getUnreadCount } =
-    useMessages();
+  const {
+    bookingRequests,
+    getUserConversations,
+    getUnreadCount,
+    markConversationAsRead,
+    lastUpdate, // This will trigger re-renders when messages update
+  } = useMessages();
   const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
-  // Get user's conversations
+  // Get user's conversations - use "admin" as the user ID (not "user")
   const userConversations = getUserConversations("admin");
   const unreadCount = getUnreadCount("admin");
 
@@ -34,6 +40,23 @@ const UserDashboard = () => {
       setActiveTab(location.state.activeTab);
     }
   }, [location.state]);
+
+  // Update selected conversation when conversations change
+  useEffect(() => {
+    if (selectedConversation) {
+      const updatedConversation = userConversations.find(
+        (conv) => conv.id === selectedConversation.id
+      );
+      if (
+        updatedConversation &&
+        JSON.stringify(updatedConversation) !==
+          JSON.stringify(selectedConversation)
+      ) {
+        setSelectedConversation(updatedConversation);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userConversations, lastUpdate]);
 
   // Get favorite venues using context
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
@@ -58,6 +81,8 @@ const UserDashboard = () => {
   };
 
   const handleOpenChat = (conversation) => {
+    // Mark conversation as read when opening
+    markConversationAsRead(conversation.id, currentUser.id);
     setSelectedConversation(conversation);
   };
 
@@ -115,6 +140,14 @@ const UserDashboard = () => {
     ).length;
   };
 
+  // Get venue image helper function
+  const getVenueImage = (venue) => {
+    if (venue?.floorPlanImages && venue.floorPlanImages.length > 0) {
+      return venue.floorPlanImages[0].url;
+    }
+    return null;
+  };
+
   return (
     <div className="user-dashboard">
       <Header />
@@ -165,71 +198,89 @@ const UserDashboard = () => {
                 <div className="bookings-grid">
                   <h2>Your Current Bookings ({currentBookings.length})</h2>
                   <div className="bookings-list">
-                    {currentBookings.map((booking) => (
-                      <div key={booking.id} className="booking-card">
-                        <div className="booking-image-container">
-                          {booking.venueImage ? (
-                            <img
-                              src={booking.venueImage}
-                              alt={booking.venueName}
-                              className="booking-image"
-                              onClick={() => handleViewVenue(booking.venueId)}
-                            />
-                          ) : (
-                            <div
-                              className="image-placeholder"
-                              onClick={() => handleViewVenue(booking.venueId)}
-                            >
-                              🏢
+                    {currentBookings.map((booking) => {
+                      const venue = venues.find(
+                        (v) => v.id === booking.venueId
+                      );
+                      const venueImage = getVenueImage(venue);
+
+                      return (
+                        <div key={booking.id} className="booking-card">
+                          <div className="booking-image-container">
+                            {venueImage ? (
+                              <img
+                                src={venueImage}
+                                alt={booking.venueName}
+                                className="booking-image"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              />
+                            ) : (
+                              <div
+                                className="image-placeholder"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              >
+                                🏢
+                              </div>
+                            )}
+                          </div>
+                          <div className="booking-info">
+                            <div className="booking-header">
+                              <h3
+                                onClick={() => handleViewVenue(booking.venueId)}
+                                className="clickable-title"
+                              >
+                                {booking.venueName}
+                              </h3>
+                              {getStatusBadge(booking.status)}
                             </div>
-                          )}
+                            <p className="booking-location">
+                              📍 {booking.city}, {booking.country}
+                            </p>
+                            <div className="booking-details">
+                              <p>
+                                <strong>Date:</strong>{" "}
+                                {formatDate(booking.bookingDetails?.date)}
+                              </p>
+                              <p>
+                                <strong>Time:</strong>{" "}
+                                {booking.bookingDetails?.startTime} -{" "}
+                                {booking.bookingDetails?.endTime}
+                              </p>
+                              <p>
+                                <strong>Guests:</strong>{" "}
+                                {booking.bookingDetails?.guests} people
+                              </p>
+                              <p>
+                                <strong>Total:</strong>{" "}
+                                {formatCurrency(booking.pricing?.total)}
+                              </p>
+                            </div>
+                            <div className="booking-actions">
+                              <button
+                                className="view-venue-btn"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              >
+                                View Venue
+                              </button>
+                              {/* Find conversation for this venue */}
+                              <button
+                                className="contact-host-btn"
+                                onClick={() => {
+                                  const conversation = userConversations.find(
+                                    (conv) => conv.venueId === booking.venueId
+                                  );
+                                  if (conversation) {
+                                    handleOpenChat(conversation);
+                                  }
+                                }}
+                              >
+                                Contact Host
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                        <div className="booking-info">
-                          <div className="booking-header">
-                            <h3
-                              onClick={() => handleViewVenue(booking.venueId)}
-                              className="clickable-title"
-                            >
-                              {booking.venueName}
-                            </h3>
-                            {getStatusBadge(booking.status)}
-                          </div>
-                          <p className="booking-location">
-                            📍 {booking.city}, {booking.country}
-                          </p>
-                          <div className="booking-details">
-                            <p>
-                              <strong>Date:</strong>{" "}
-                              {formatDate(booking.bookingDetails.date)}
-                            </p>
-                            <p>
-                              <strong>Time:</strong>{" "}
-                              {booking.bookingDetails.startTime} -{" "}
-                              {booking.bookingDetails.endTime}
-                            </p>
-                            <p>
-                              <strong>Guests:</strong>{" "}
-                              {booking.bookingDetails.guests} people
-                            </p>
-                            <p>
-                              <strong>Total:</strong>{" "}
-                              {formatCurrency(booking.pricing.total)}
-                            </p>
-                          </div>
-                          <div className="booking-actions">
-                            <button
-                              className="view-venue-btn"
-                              onClick={() => handleViewVenue(booking.venueId)}
-                            >
-                              View Venue
-                            </button>
-                            <button className="contact-host-btn">
-                              Contact Host
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ) : (
@@ -252,63 +303,83 @@ const UserDashboard = () => {
                 <div className="bookings-grid">
                   <h2>Your Past Bookings ({pastBookings.length})</h2>
                   <div className="bookings-list">
-                    {pastBookings.map((booking) => (
-                      <div
-                        key={booking.id}
-                        className="booking-card past-booking"
-                      >
-                        <div className="booking-image-container">
-                          {booking.venueImage ? (
-                            <img
-                              src={booking.venueImage}
-                              alt={booking.venueName}
-                              className="booking-image"
-                              onClick={() => handleViewVenue(booking.venueId)}
-                            />
-                          ) : (
-                            <div
-                              className="image-placeholder"
-                              onClick={() => handleViewVenue(booking.venueId)}
-                            >
-                              🏢
+                    {pastBookings.map((booking) => {
+                      const venue = venues.find(
+                        (v) => v.id === booking.venueId
+                      );
+                      const venueImage = getVenueImage(venue);
+
+                      return (
+                        <div
+                          key={booking.id}
+                          className="booking-card past-booking"
+                        >
+                          <div className="booking-image-container">
+                            {venueImage ? (
+                              <img
+                                src={venueImage}
+                                alt={booking.venueName}
+                                className="booking-image"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              />
+                            ) : (
+                              <div
+                                className="image-placeholder"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              >
+                                🏢
+                              </div>
+                            )}
+                          </div>
+                          <div className="booking-info">
+                            <div className="booking-header">
+                              <h3
+                                onClick={() => handleViewVenue(booking.venueId)}
+                                className="clickable-title"
+                              >
+                                {booking.venueName}
+                              </h3>
+                              {getStatusBadge(booking.status)}
                             </div>
-                          )}
-                        </div>
-                        <div className="booking-info">
-                          <div className="booking-header">
-                            <h3
-                              onClick={() => handleViewVenue(booking.venueId)}
-                              className="clickable-title"
-                            >
-                              {booking.venueName}
-                            </h3>
-                            {getStatusBadge(booking.status)}
+                            <p className="booking-location">
+                              📍 {booking.city}, {booking.country}
+                            </p>
+                            <div className="booking-details">
+                              <p>
+                                <strong>Date:</strong>{" "}
+                                {formatDate(booking.bookingDetails?.date)}
+                              </p>
+                              <p>
+                                <strong>Time:</strong>{" "}
+                                {booking.bookingDetails?.startTime} -{" "}
+                                {booking.bookingDetails?.endTime}
+                              </p>
+                              <p>
+                                <strong>Guests:</strong>{" "}
+                                {booking.bookingDetails?.guests} people
+                              </p>
+                              <p>
+                                <strong>Total:</strong>{" "}
+                                {formatCurrency(booking.pricing?.total)}
+                              </p>
+                            </div>
+                            <div className="booking-actions">
+                              <button
+                                className="view-venue-btn"
+                                onClick={() => handleViewVenue(booking.venueId)}
+                              >
+                                View Venue
+                              </button>
+                              {booking.status === "completed" && (
+                                <button className="review-btn">
+                                  Leave Review
+                                </button>
+                              )}
+                            </div>
                           </div>
-                          <p className="booking-location">
-                            📍 {booking.city}, {booking.country}
-                          </p>
-                          <div className="booking-details">
-                            <p>
-                              <strong>Date:</strong>{" "}
-                              {formatDate(booking.bookingDetails.date)}
-                            </p>
-                            <p>
-                              <strong>Time:</strong>{" "}
-                              {booking.bookingDetails.startTime} -{" "}
-                              {booking.bookingDetails.endTime}
-                            </p>
-                            <p>
-                              <strong>Guests:</strong>{" "}
-                              {booking.bookingDetails.guests} people
-                            </p>
-                            <p>
-                              <strong>Total:</strong>{" "}
-                              {formatCurrency(booking.pricing.total)}
-                            </p>
-                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ) : (
@@ -316,6 +387,9 @@ const UserDashboard = () => {
                   <div className="no-enquiries-icon">📊</div>
                   <h2>No past enquiries</h2>
                   <p>Your past enquiries will appear here once completed.</p>
+                  <button className="cta-button" onClick={handleBrowseVenues}>
+                    Browse Venues
+                  </button>
                 </div>
               )}
             </div>
@@ -325,66 +399,89 @@ const UserDashboard = () => {
                 <div className="favorites-grid">
                   <h2>Your Favorite Venues ({favoriteVenues.length})</h2>
                   <div className="venues-list">
-                    {favoriteVenues.map((venue) => (
-                      <div
-                        key={venue.id}
-                        className="favorite-venue-card"
-                        onClick={() => handleViewVenue(venue.id)}
-                      >
-                        {/* Favorite Heart Icon */}
-                        <button
-                          className={`favorite-heart-btn ${
-                            isFavorited(venue.id) ? "active" : ""
-                          }`}
-                          onClick={(e) => handleToggleFavorite(venue.id, e)}
-                          aria-label="Remove from favorites"
-                        >
-                          {isFavorited(venue.id) ? "❤️" : "🤍"}
-                        </button>
+                    {favoriteVenues.map((venue) => {
+                      const venueImage = getVenueImage(venue);
 
-                        <div className="venue-image-container">
-                          {venue.floorPlanImages?.[0]?.url ? (
-                            <img
-                              src={venue.floorPlanImages[0].url}
-                              alt={venue.venueName}
-                              className="venue-image"
-                            />
-                          ) : (
-                            <div className="image-placeholder">🏢</div>
-                          )}
-                        </div>
-                        <div className="venue-info">
-                          <h3>{venue.venueName || "Unnamed Venue"}</h3>
-                          <p className="venue-location">
-                            📍 {venue.city}, {venue.country}
-                          </p>
-                          <p className="venue-capacity">
-                            👥 Capacity: {venue.venueSize} people
-                          </p>
-                          {venue.venueTypes && venue.venueTypes.length > 0 && (
-                            <div className="venue-types">
-                              {venue.venueTypes
-                                .slice(0, 3)
-                                .map((type, index) => (
-                                  <span key={index} className="venue-type-tag">
-                                    {type}
-                                  </span>
-                                ))}
-                              {venue.venueTypes.length > 3 && (
-                                <span className="venue-type-tag">
-                                  +{venue.venueTypes.length - 3} more
-                                </span>
-                              )}
-                            </div>
-                          )}
-                          {venue.hourlyRate && (
-                            <p className="venue-price">
-                              From {venue.hourlyRate} / hour
+                      return (
+                        <div
+                          key={venue.id}
+                          className="favorite-venue-card"
+                          onClick={() => handleViewVenue(venue.id)}
+                        >
+                          {/* Favorite Heart Icon */}
+                          <button
+                            className={`favorite-heart-btn ${
+                              isFavorited(venue.id) ? "active" : ""
+                            }`}
+                            onClick={(e) => handleToggleFavorite(venue.id, e)}
+                            aria-label={
+                              isFavorited(venue.id)
+                                ? "Remove from favorites"
+                                : "Add to favorites"
+                            }
+                          >
+                            {isFavorited(venue.id) ? "❤️" : "🤍"}
+                          </button>
+
+                          <div className="venue-image-container">
+                            {venueImage ? (
+                              <img
+                                src={venueImage}
+                                alt={venue.venueName}
+                                className="venue-image"
+                              />
+                            ) : (
+                              <div className="image-placeholder">🏢</div>
+                            )}
+                          </div>
+                          <div className="venue-info">
+                            <h3>{venue.venueName || "Unnamed Venue"}</h3>
+                            <p className="venue-location">
+                              📍 {venue.city}, {venue.country}
                             </p>
-                          )}
+                            <p className="venue-capacity">
+                              👥 Capacity: {venue.venueSize} people
+                            </p>
+                            {venue.venueTypes &&
+                              venue.venueTypes.length > 0 && (
+                                <div className="venue-types">
+                                  {venue.venueTypes
+                                    .slice(0, 3)
+                                    .map((type, index) => (
+                                      <span
+                                        key={index}
+                                        className="venue-type-tag"
+                                      >
+                                        {type}
+                                      </span>
+                                    ))}
+                                  {venue.venueTypes.length > 3 && (
+                                    <span className="venue-type-tag">
+                                      +{venue.venueTypes.length - 3} more
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            {venue.hourlyRate && (
+                              <p className="venue-price">
+                                From {formatCurrency(venue.hourlyRate)} / hour
+                              </p>
+                            )}
+                            <div className="venue-actions">
+                              <button
+                                className="enquire-btn"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleViewVenue(venue.id);
+                                }}
+                              >
+                                Send Enquiry
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ) : (
@@ -398,8 +495,7 @@ const UserDashboard = () => {
                 </div>
               )}
             </div>
-          ) : (
-            // Messages Tab Content - Now showing conversations
+          ) : activeTab === "messages" ? (
             <div className="messages-section">
               {userConversations.length > 0 ? (
                 <div className="conversations-list">
@@ -409,7 +505,11 @@ const UserDashboard = () => {
                       (v) => v.id === conversation.venueId
                     );
                     const lastMessage =
-                      conversation.messages[conversation.messages.length - 1];
+                      conversation.messages.length > 0
+                        ? conversation.messages[
+                            conversation.messages.length - 1
+                          ]
+                        : null;
                     const conversationUnreadCount =
                       getUnreadCountForConversation(conversation);
 
@@ -444,16 +544,37 @@ const UserDashboard = () => {
                           </div>
                         </div>
 
-                        <div className="conversation-preview">
-                          <span className="last-message-sender">
-                            {lastMessage.senderId === "admin"
-                              ? "You: "
-                              : "Owner: "}
-                          </span>
-                          <span className="last-message-text">
-                            {lastMessage.text}
-                          </span>
-                        </div>
+                        {lastMessage && (
+                          <div className="conversation-preview">
+                            <span className="last-message-sender">
+                              {lastMessage.senderId === "admin"
+                                ? "You: "
+                                : "Owner: "}
+                            </span>
+                            <span className="last-message-text">
+                              {lastMessage.text}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Show conversation metadata if available */}
+                        {conversation.metadata && (
+                          <div className="conversation-metadata">
+                            {conversation.metadata.flexibleDates && (
+                              <span className="metadata-tag">
+                                Flexible dates
+                              </span>
+                            )}
+                            {conversation.metadata.requireCatering && (
+                              <span className="metadata-tag">
+                                Requires catering
+                              </span>
+                            )}
+                            {conversation.metadata.ownCatering && (
+                              <span className="metadata-tag">Own catering</span>
+                            )}
+                          </div>
+                        )}
 
                         <div className="conversation-actions">
                           <button
@@ -484,8 +605,8 @@ const UserDashboard = () => {
                   <div className="no-messages-icon">💬</div>
                   <h2>No conversations yet</h2>
                   <p>
-                    Your conversations with hosts will appear here once you send
-                    them a message.
+                    Your conversations with venue owners will appear here once
+                    you send them a message.
                   </p>
                   <button className="cta-button" onClick={handleBrowseVenues}>
                     Browse Venues
@@ -493,7 +614,7 @@ const UserDashboard = () => {
                 </div>
               )}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 
