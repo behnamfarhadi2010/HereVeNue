@@ -1,11 +1,7 @@
-// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import "leaflet/dist/leaflet.css";
 import VenueOwnerDashboard from "./components/VenueOwnerDashboard.jsx";
 import Footer from "./components/Footer.jsx";
-
-import "./pages/myDashboard.jsx";
 
 import Login from "./pages/login";
 import ClientLogin from "./pages/ClientLogin";
@@ -30,7 +26,6 @@ const App = () => {
         <FavoritesProvider>
           <Router>
             <div className="app-container">
-              {/* Routes */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -47,9 +42,8 @@ const App = () => {
                   path="/booking-confirmation/:id"
                   element={<BookingConfirmation />}
                 />
+                <Route path="*" element={<h1>Page Not Found</h1>} />
               </Routes>
-
-              {/* Footer */}
               <Footer />
             </div>
           </Router>
