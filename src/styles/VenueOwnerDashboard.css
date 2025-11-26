@@ -1,0 +1,221 @@
+/* src/styles/VenueOwnerDashboard.css */
+
+.venue-owner-dashboard {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px; /* Increased width */
+  width: 95%; /* Take up more space on smaller screens */
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.venue-owner-dashboard h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.venue-owner-dashboard .dashboard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.venue-owner-dashboard .venue-count {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.venue-owner-dashboard .primary-btn {
+  padding: 12px 24px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.venue-owner-dashboard .primary-btn:hover {
+  background-color: #333;
+}
+
+/* Venues List */
+.venue-owner-dashboard .venues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.venue-owner-dashboard .venue-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  border-top: 4px solid #ec676a; /* Add brand accent color */
+  transition: box-shadow 0.2s, transform 0.2s;
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box;
+}
+
+.venue-owner-dashboard .venue-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.venue-owner-dashboard .venue-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #222;
+}
+
+.venue-owner-dashboard .submission-date {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.venue-owner-dashboard .venue-details {
+  margin: 20px 0;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.venue-owner-dashboard .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsive grid */
+  gap: 24px;
+}
+
+.venue-owner-dashboard .detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.venue-owner-dashboard .detail-item strong {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  font-weight: 600;
+}
+
+.venue-owner-dashboard .detail-item span, 
+.venue-owner-dashboard .detail-item {
+  font-size: 16px;
+  color: #222;
+  font-weight: 500;
+}
+
+.venue-owner-dashboard .status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.venue-owner-dashboard .status.draft {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.venue-owner-dashboard .status.submitted {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.venue-owner-dashboard .status.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.venue-owner-dashboard .action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.venue-owner-dashboard .edit-btn,
+.venue-owner-dashboard .delete-btn {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.venue-owner-dashboard .edit-btn {
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.venue-owner-dashboard .edit-btn:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.venue-owner-dashboard .delete-btn {
+  background: #ec676a; /* Updated color */
+  color: white;
+  border: 1px solid #ec676a;
+}
+
+.venue-owner-dashboard .delete-btn:hover {
+  background: #d6585b;
+  border-color: #c04d50;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(236, 103, 106, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .venue-owner-dashboard {
+    width: auto;
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .venue-owner-dashboard .dashboard-actions {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .venue-owner-dashboard .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .venue-owner-dashboard .action-buttons {
+    flex-direction: column;
+  }
+
+  .venue-owner-dashboard .edit-btn,
+  .venue-owner-dashboard .delete-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
