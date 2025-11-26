@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import { useVenue } from "../contexts/VenueContext";
-import { useMessages } from "../contexts/MessageContext";
+import { useMessages } from "../hooks/useMessages";
 import { useFavorites } from "../contexts/FavoritesContext";
 import ChatModal from "../components/ChatModal";
+import { formatDate, formatCurrency } from "../utils/utils";
 import "../styles/UserDashboard.css";
 
 const UserDashboard = () => {
@@ -20,11 +21,10 @@ const UserDashboard = () => {
     getUserConversations,
     getUnreadCount,
     markConversationAsRead,
-    lastUpdate, // This will trigger re-renders when messages update
   } = useMessages();
   const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
-  // Get user's conversations - use "admin" as the user ID (not "user")
+  // Get user's conversations
   const userConversations = getUserConversations("admin");
   const unreadCount = getUnreadCount("admin");
 
@@ -55,8 +55,8 @@ const UserDashboard = () => {
         setSelectedConversation(updatedConversation);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userConversations, lastUpdate]);
+    // eslint-disable-next-line
+  }, [userConversations]);
 
   // Get favorite venues using context
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
@@ -94,27 +94,6 @@ const UserDashboard = () => {
   const handleToggleFavorite = (venueId, event) => {
     event.stopPropagation(); // Prevent card click
     toggleFavorite(venueId);
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatCurrency = (amount) => {
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount)) return "$0.00";
-
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(numericAmount);
   };
 
   const getStatusBadge = (status) => {
