@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useVenue } from "../contexts/VenueContext";
-import { useMessages } from "../contexts/MessageContext";
+import { useMessages } from "../hooks/useMessages";
 import { useNavigate } from "react-router-dom";
 import ChatModal from "../components/ChatModal";
+import { formatDate, formatCurrency } from "../utils/utils";
 import "../styles/ownerRequestsAndMessages.css";
 
 const OwnerRequestsAndMessages = () => {
@@ -19,7 +20,6 @@ const OwnerRequestsAndMessages = () => {
     getUnreadCount,
     updateBookingStatus,
     pendingRequestsCount,
-    lastUpdate, // This will trigger re-renders when messages update
   } = useMessages();
 
   // Get owner's conversations
@@ -42,7 +42,7 @@ const OwnerRequestsAndMessages = () => {
         setSelectedConversation(updatedConversation);
       }
     }
-  }, [ownerConversations, selectedConversationId, lastUpdate]);
+  }, [ownerConversations, selectedConversationId]);
 
   const handleBookingAction = (bookingId, action) => {
     updateBookingStatus(bookingId, action);
@@ -62,26 +62,7 @@ const OwnerRequestsAndMessages = () => {
     navigate(`/venue/${venueId}`);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
-  const formatCurrency = (amount) => {
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount)) return "$0.00";
-
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(numericAmount);
-  };
 
   const getStatusBadge = (status) => {
     const statusConfig = {
