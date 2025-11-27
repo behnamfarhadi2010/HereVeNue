@@ -3,6 +3,7 @@ import React from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
 import Header from "./Header";
+import { formatDate, formatCurrency } from "../utils/utils";
 import "../styles/BookingConfirmation.css";
 
 const BookingConfirmation = () => {
@@ -31,22 +32,6 @@ const BookingConfirmation = () => {
     );
   }
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(amount);
-  };
 
   return (
     <>
