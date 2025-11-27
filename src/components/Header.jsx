@@ -1,51 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import Logo from "../assets/ovblogo.png";
 import Person from "../assets/person.svg";
 import Home24 from "../assets/home_24.svg";
 import "../styles/main.css";
 
 function Header() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [userType, setUserType] = useState(null);
+  const { currentUser, userType, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is logged in when component mounts
-    const loadUserData = () => {
-      const authUser = localStorage.getItem("authUser");
-      const storedUserType = localStorage.getItem("userType");
-
-      if (authUser) {
-        setCurrentUser(authUser);
-        setUserType(storedUserType);
-      } else {
-        setCurrentUser(null);
-        setUserType(null);
-      }
-    };
-
-    loadUserData();
-
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      loadUserData();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("userLoggedIn", loadUserData);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("userLoggedIn", loadUserData);
-    };
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("authUser");
-    localStorage.removeItem("userType");
-    setCurrentUser(null);
-    setUserType(null);
+    logout();
     navigate("/");
   };
 
