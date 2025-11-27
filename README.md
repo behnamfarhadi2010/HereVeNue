@@ -1,4 +1,4 @@
-# HereVeNue (OVP)
+# Online Venue Booking
 
 HereVeNue is a comprehensive online venue platform connecting venue owners with people looking for the perfect space for their events. Whether it's a wedding, corporate meeting, or private party, HereVeNue makes it easy to discover, book, and manage venue listings.
 
@@ -83,6 +83,19 @@ src/
 ├── App.jsx             # Main application component
 └── main.jsx            # Entry point
 ```
+
+## 📂 Login Information
+
+As a user :
+
+Username: **Admin**
+
+Pass: **123**
+
+As an Owner :
+
+Username: **owner**
+Pass: **owner123**
 
 ## 🤝 Contributing
 
