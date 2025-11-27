@@ -9,28 +9,22 @@ const MyMap = () => {
   // Static coordinates for St. John's area venues
 
   const { venues } = useVenue();
-  const getStaticCoordinates = (venueId) => {
-    // Create consistent coordinates based on venue ID
+  const getStaticCoordinates = (index) => {
+    // Create consistent coordinates based on index
     const basePosition = [47.5605, -52.7128]; // St. John's center
 
     // Generate slightly different positions for each venue
-    // const venuesCount = 8;
-    const index = venueId % venues.length; // Simple hash to spread out markers
-
-    const latOffset = (index % venues.length) * 0.02; // 0.01 degree ~ 1.1km
-    const lngOffset = Math.floor(index / venues.length) * 0.01;
+    const latOffset = (index % 5) * 0.02; // Spread in a grid (5 columns)
+    const lngOffset = Math.floor(index / 5) * 0.02;
 
     return [
-      basePosition[0] + latOffset - 0.015, // Spread them out a bit
-      basePosition[1] + lngOffset - 0.015,
+      basePosition[0] + latOffset - 0.04, // Center the grid roughly
+      basePosition[1] + lngOffset - 0.02,
     ];
   };
 
   // Calculate map center based on venues or use default
-  const mapCenter =
-    venues.length > 0
-      ? getStaticCoordinates(venues[0].id)
-      : [47.5605, -52.7128]; // Default St. John's coordinates
+  const mapCenter = [47.5605, -52.7128]; // Default St. John's coordinates
 
   return (
     <MapContainer
@@ -45,8 +39,8 @@ const MyMap = () => {
       />
 
       {/* Display all venues as markers */}
-      {venues.map((venue) => {
-        const coordinates = getStaticCoordinates(venue.id);
+      {venues.map((venue, index) => {
+        const coordinates = getStaticCoordinates(index);
 
         return (
           <Marker key={venue.id} position={coordinates}>
