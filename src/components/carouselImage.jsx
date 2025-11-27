@@ -65,7 +65,7 @@ const VenueCarousel = () => {
           <p>No venues available yet.</p>
           <button
             className="cta-button"
-            onClick={() => (window.location.href = "/add-venue")}
+            onClick={() => navigate("/add-listing")}
           >
             Add Your First Venue
           </button>
