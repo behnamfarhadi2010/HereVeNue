@@ -74,7 +74,7 @@ function Header() {
                 </div>
               </div>
             ) : (
-              <Link to="/login">
+              <Link to="/login" className="login-link">
                 <img src={Person} alt="Person icon" width="24" height="24" />
                 <span>Log in</span>
               </Link>
