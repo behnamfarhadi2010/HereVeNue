@@ -1,7 +1,8 @@
 // components/BookingSidebar.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useMessages } from "../contexts/MessageContext";
+// import { useMessages } from "../hooks/useMessages";
+import { formatCurrency } from "../utils/utils";
 import "../styles/BookingSidebarStyles.css";
 
 const BookingSidebar = ({ venue }) => {
@@ -153,17 +154,6 @@ const BookingSidebar = ({ venue }) => {
       minute: "2-digit",
       hour12: true,
     });
-  };
-
-  const formatCurrency = (amount) => {
-    if (!amount && amount !== 0) return "C$0";
-    const numberValue =
-      typeof amount === "number" ? amount : parseFloat(amount);
-    if (isNaN(numberValue)) return "C$0";
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(numberValue);
   };
 
   const handleBookRequest = () => {
