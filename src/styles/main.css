@@ -7,7 +7,7 @@
 body {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   height: auto;
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
@@ -95,7 +95,8 @@ main {
   justify-content: center;
   padding: 0 8% 5% 8%;
   align-items: center;
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .hero-section {
@@ -358,7 +359,39 @@ select {
 
 .favorites-link:hover {
   background-color: #f5f5f5;
-  color: #007bff;
+  color: #ec676a;
+}
+
+.list-venue-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.list-venue-link:hover {
+  background-color: #f5f5f5;
+  color: #ec676a;
+}
+
+.login-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.login-link:hover {
+  background-color: #f5f5f5;
+  color: #ec676a;
 }
 
 .menu ul li .favorites-link {
@@ -386,7 +419,7 @@ select {
 
 /* Large Desktop (1200px and above) */
 @media (min-width: 1200px) {
-  body {
+  main {
     width: 85%;
     max-width: 1400px;
     margin: 0 auto;
@@ -403,8 +436,9 @@ select {
 
 /* Desktop (1024px - 1199px) */
 @media (max-width: 1199px) {
-  body {
+  main {
     width: 90%;
+    margin: 0 auto;
   }
 
   main {
@@ -435,8 +469,9 @@ select {
 
 /* Tablet (768px - 1023px) */
 @media (max-width: 1023px) {
-  body {
+  main {
     width: 95%;
+    margin: 0 auto;
     padding: 15px;
   }
 
@@ -500,7 +535,7 @@ select {
 
 /* Mobile (481px - 767px) */
 @media (max-width: 767px) {
-  body {
+  main {
     width: 100%;
     padding: 10px;
   }
@@ -601,7 +636,9 @@ select {
   }
 
   .user-menu,
-  .favorites-link {
+  .favorites-link,
+  .list-venue-link,
+  .login-link {
     padding: 6px 8px;
   }
 
@@ -612,8 +649,9 @@ select {
 
 /* Small Mobile (320px - 480px) */
 @media (max-width: 480px) {
-  body {
+  main {
     padding: 8px;
+    width: 100%;
   }
 
   header {
@@ -711,7 +749,9 @@ select {
   }
 
   .user-menu,
-  .favorites-link {
+  .favorites-link,
+  .list-venue-link,
+  .login-link {
     padding: 4px 6px;
     font-size: 11px;
   }
@@ -726,6 +766,13 @@ select {
     font-size: 11px;
   }
 
+footer {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 40px 0;
+  margin-top: auto;
+}
   .dropdown-menu {
     min-width: 90px;
   }
@@ -733,8 +780,9 @@ select {
 
 /* Extra Small Mobile (up to 320px) */
 @media (max-width: 320px) {
-  body {
+  main {
     padding: 5px;
+    width: 100%;
   }
 
   header {
