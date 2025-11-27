@@ -4,9 +4,10 @@
   width: 80%;
   max-width: 1200px;
   margin: 50px auto;
-  margin-left: 11.9rem;
+
   padding: 20px;
   background-color: #fff;
+  font-size: 12px;
   font-family: Arial, sans-serif;
   color: #333;
 }
@@ -36,7 +37,7 @@
 
 .form-group label {
   display: block;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: bold;
   color: #555;
   margin-bottom: 8px;
@@ -314,6 +315,8 @@
   border: 1px solid #eee;
   border-radius: 8px;
   background: #fafafa;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .checkbox-field label {
@@ -323,6 +326,7 @@
   font-weight: bold;
   margin-bottom: 10px;
   cursor: pointer;
+  flex-wrap: wrap; /* Allow text to wrap */
 }
 
 .checkbox-field input[type="checkbox"] {
