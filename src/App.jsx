@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import VenueOwnerDashboard from "./components/VenueOwnerDashboard.jsx";
 import Footer from "./components/Footer.jsx";
 
