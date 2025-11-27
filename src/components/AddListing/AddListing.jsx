@@ -1,5 +1,6 @@
 // src/components/AddListing/AddListing.jsx
 import { useState, useEffect } from "react"; // Add useEffect import
+import { useNavigate } from "react-router-dom";
 import { useVenue } from "../../contexts/VenueContext";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
@@ -14,6 +15,7 @@ import Header from "../Header";
 
 const AddListing = () => {
   const { addVenue, updateVenue } = useVenue(); // Add updateVenue
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
   const [editingVenueId, setEditingVenueId] = useState(null);
@@ -155,7 +157,7 @@ const AddListing = () => {
     localStorage.removeItem("editingVenueId");
     localStorage.removeItem("venueToEdit");
 
-    window.location.href = "/dashboard";
+    navigate("/dashboard");
   };
 
   const handleChange = (e) => {
