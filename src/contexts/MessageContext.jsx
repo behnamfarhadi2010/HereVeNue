@@ -7,21 +7,12 @@ import React, {
   useCallback,
 } from "react";
 
-const MessageContext = createContext();
-
-export const useMessages = () => {
-  const context = useContext(MessageContext);
-  if (!context) {
-    throw new Error("useMessages must be used within a MessageProvider");
-  }
-  return context;
-};
+import MessageContext from "./MessageContextDefinition";
 
 export const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [bookingRequests, setBookingRequests] = useState([]);
   const [conversations, setConversations] = useState([]);
-  const [lastUpdate, setLastUpdate] = useState(Date.now()); // Track updates
 
   // Load data from storage on mount
   useEffect(() => {
@@ -31,9 +22,15 @@ export const MessageProvider = ({ children }) => {
   }, []);
 
   const loadMessages = useCallback(() => {
-    const savedMessages = localStorage.getItem("ownerMessages");
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
+    try {
+      const savedMessages = localStorage.getItem("ownerMessages");
+      if (savedMessages) {
+        const parsed = JSON.parse(savedMessages);
+        setMessages(Array.isArray(parsed) ? parsed : []);
+      }
+    } catch (error) {
+      console.error("Failed to load messages:", error);
+      setMessages([]);
     }
   }, []);
 
@@ -51,9 +48,15 @@ export const MessageProvider = ({ children }) => {
   }, []);
 
   const loadConversations = useCallback(() => {
-    const savedConversations = localStorage.getItem("conversations");
-    if (savedConversations) {
-      setConversations(JSON.parse(savedConversations));
+    try {
+      const savedConversations = localStorage.getItem("conversations");
+      if (savedConversations) {
+        const parsed = JSON.parse(savedConversations);
+        setConversations(Array.isArray(parsed) ? parsed : []);
+      }
+    } catch (error) {
+      console.error("Failed to load conversations:", error);
+      setConversations([]);
     }
   }, []);
 
@@ -75,7 +78,6 @@ export const MessageProvider = ({ children }) => {
 
     // Update state
     loadBookingRequests();
-    setLastUpdate(Date.now()); // Trigger re-render
 
     return newBooking;
   };
@@ -97,16 +99,18 @@ export const MessageProvider = ({ children }) => {
       });
       localStorage.setItem("userBookings", JSON.stringify(updatedBookings));
       loadBookingRequests();
-      setLastUpdate(Date.now()); // Trigger re-render
     }
   };
 
   // Send initial message (creates a conversation)
   const sendMessage = (messageData) => {
+    const senderId = messageData.senderId || "guest";
+    const senderName = messageData.senderName || "Guest User";
+
     const newMessage = {
       id: Date.now(),
-      userId: "admin",
-      userName: "Admin",
+      userId: senderId,
+      userName: senderName,
       venueId: messageData.venueId,
       venueName: messageData.venueName,
       message: messageData.messageText,
@@ -117,7 +121,8 @@ export const MessageProvider = ({ children }) => {
       ownCatering: messageData.ownCatering,
     };
 
-    const updatedMessages = [newMessage, ...messages];
+    const currentMessages = Array.isArray(messages) ? messages : [];
+    const updatedMessages = [newMessage, ...currentMessages];
     setMessages(updatedMessages);
     localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
 
@@ -127,12 +132,12 @@ export const MessageProvider = ({ children }) => {
       id: conversationId,
       venueId: messageData.venueId,
       venueName: messageData.venueName,
-      participants: ["admin", "owner"],
+      participants: [senderId, "owner"],
       messages: [
         {
           id: newMessage.id,
-          senderId: "admin",
-          senderName: "Admin",
+          senderId: senderId,
+          senderName: senderName,
           text: messageData.messageText,
           timestamp: new Date().toISOString(),
           read: false,
@@ -146,10 +151,10 @@ export const MessageProvider = ({ children }) => {
       },
     };
 
-    const updatedConversations = [newConversation, ...conversations];
+    const currentConversations = Array.isArray(conversations) ? conversations : [];
+    const updatedConversations = [newConversation, ...currentConversations];
     setConversations(updatedConversations);
     localStorage.setItem("conversations", JSON.stringify(updatedConversations));
-    setLastUpdate(Date.now()); // Trigger re-render
 
     return { message: newMessage, conversationId };
   };
@@ -178,30 +183,35 @@ export const MessageProvider = ({ children }) => {
 
     setConversations(updatedConversations);
     localStorage.setItem("conversations", JSON.stringify(updatedConversations));
-    setLastUpdate(Date.now()); // Trigger re-render
 
     return updatedConversations.find((c) => c.id === conversationId);
   };
 
   // Mark conversation messages as read
-  const markConversationAsRead = (conversationId, userId) => {
+  const markConversationAsRead = useCallback((conversationId, userId) => {
+    let hasChanges = false;
     const updatedConversations = conversations.map((conv) => {
       if (conv.id === conversationId) {
         const updatedMessages = conv.messages.map((msg) => {
-          if (msg.senderId !== userId) {
+          if (msg.senderId !== userId && !msg.read) {
+            hasChanges = true;
             return { ...msg, read: true };
           }
           return msg;
         });
-        return { ...conv, messages: updatedMessages };
+        if (hasChanges) {
+          return { ...conv, messages: updatedMessages };
+        }
+        return conv;
       }
       return conv;
     });
 
-    setConversations(updatedConversations);
-    localStorage.setItem("conversations", JSON.stringify(updatedConversations));
-    setLastUpdate(Date.now()); // Trigger re-render
-  };
+    if (hasChanges) {
+      setConversations(updatedConversations);
+      localStorage.setItem("conversations", JSON.stringify(updatedConversations));
+    }
+  }, [conversations]);
 
   // Get conversations for a specific user
   const getUserConversations = (userId) => {
@@ -228,7 +238,6 @@ export const MessageProvider = ({ children }) => {
     );
     setMessages(updatedMessages);
     localStorage.setItem("ownerMessages", JSON.stringify(updatedMessages));
-    setLastUpdate(Date.now()); // Trigger re-render
   };
 
   // Refresh all data from localStorage
@@ -236,21 +245,23 @@ export const MessageProvider = ({ children }) => {
     loadMessages();
     loadBookingRequests();
     loadConversations();
-    setLastUpdate(Date.now());
   }, [loadMessages, loadBookingRequests, loadConversations]);
 
   // Poll for updates (optional - for syncing between tabs)
   useEffect(() => {
     const interval = setInterval(() => {
-      // Check if localStorage has been updated by another tab
-      const savedConversations = localStorage.getItem("conversations");
-      if (savedConversations) {
-        const parsed = JSON.parse(savedConversations);
-        // Only update if there's a difference
-        if (JSON.stringify(parsed) !== JSON.stringify(conversations)) {
-          setConversations(parsed);
-          setLastUpdate(Date.now());
+      try {
+        // Check if localStorage has been updated by another tab
+        const savedConversations = localStorage.getItem("conversations");
+        if (savedConversations) {
+          const parsed = JSON.parse(savedConversations);
+          // Only update if there's a difference and it's an array
+          if (Array.isArray(parsed) && JSON.stringify(parsed) !== JSON.stringify(conversations)) {
+            setConversations(parsed);
+          }
         }
+      } catch (error) {
+        console.error("Polling error:", error);
       }
     }, 2000); // Check every 2 seconds
 
@@ -288,7 +299,6 @@ export const MessageProvider = ({ children }) => {
     getUnreadCount,
     unreadCount,
     pendingRequestsCount,
-    lastUpdate, // Export this so components can use it as a dependency
     refreshData, // Export refresh function
   };
 
