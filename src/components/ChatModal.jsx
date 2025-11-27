@@ -1,6 +1,7 @@
 // components/ChatModal.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { useMessages } from "../contexts/MessageContext";
+import { useMessages } from "../hooks/useMessages";
+import { formatTime } from "../utils/utils";
 import "../styles/ChatModal.css";
 
 const ChatModal = ({ conversation, onClose, currentUser }) => {
@@ -8,12 +9,12 @@ const ChatModal = ({ conversation, onClose, currentUser }) => {
   const { replyToMessage, markConversationAsRead } = useMessages(); // Changed from sendMessage to replyToMessage
   const messagesEndRef = useRef(null);
 
-  // Mark messages as read when modal opens
+  // Mark messages as read when modal opens or messages change
   useEffect(() => {
     if (conversation) {
       markConversationAsRead(conversation.id, currentUser.id);
     }
-  }, [conversation, currentUser.id, markConversationAsRead]);
+  }, [conversation?.id, conversation?.messages, currentUser.id, markConversationAsRead]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -28,22 +29,22 @@ const ChatModal = ({ conversation, onClose, currentUser }) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    // Use replyToMessage instead of sendMessage
-    replyToMessage(conversation.id, {
-      senderId: currentUser.id,
-      senderName: currentUser.name,
-      text: newMessage.trim(),
-    });
+    try {
+      // Use replyToMessage instead of sendMessage
+      replyToMessage(conversation.id, {
+        senderId: currentUser.id,
+        senderName: currentUser.name,
+        text: newMessage.trim(),
+      });
 
-    setNewMessage("");
+      setNewMessage("");
+    } catch (error) {
+      console.error("Failed to send reply:", error);
+      alert("Failed to send reply. Please try again.");
+    }
   };
 
-  const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+
 
   if (!conversation) return null;
 
@@ -90,7 +91,7 @@ const ChatModal = ({ conversation, onClose, currentUser }) => {
             placeholder="Type your message..."
             className="chat-input"
           />
-          <button type="submit" className="send-message-btn">
+          <button type="submit" className="chat-send-btn">
             Send
           </button>
         </form>
