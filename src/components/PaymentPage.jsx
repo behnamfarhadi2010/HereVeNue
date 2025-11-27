@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
+import { useMessages } from "../hooks/useMessages";
 import { sendBookingConfirmation } from "../Services/emailService";
 import Header from "./Header";
+import { formatCurrency } from "../utils/utils";
 import "../styles/PaymentPage.css";
 
 const PaymentPage = () => {
@@ -10,6 +12,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { venues } = useVenue();
+  const { createBookingRequest } = useMessages();
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Get booking details from location state or calculate defaults
@@ -117,39 +120,21 @@ const PaymentPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Create booking object
-      const newBooking = {
-        id: Date.now(),
+      const bookingData = {
         venueId: venue.id,
         venueName: venue.venueName,
         userName: fullName,
         userEmail: email,
         userPhone: phone,
-        status: "pending",
         bookingDetails: bookingDetails,
         pricing: pricing,
-        submittedAt: new Date().toISOString(),
         venueImage: venue.floorPlanImages?.[0]?.url || null,
         city: venue.city,
         country: venue.country,
       };
 
-      // Save to localStorage
-      const existingBookings = JSON.parse(
-        localStorage.getItem("userBookings") || "[]"
-      );
-      const updatedBookings = [newBooking, ...existingBookings];
-      localStorage.setItem("userBookings", JSON.stringify(updatedBookings));
-
-      // Trigger events for other components
-      window.dispatchEvent(new Event("bookingsUpdated"));
-      window.dispatchEvent(
-        new CustomEvent("newBookingEvent", {
-          detail: {
-            type: "NEW_BOOKING",
-            booking: newBooking,
-          },
-        })
-      );
+      // Use context to create booking
+      const newBooking = createBookingRequest(bookingData);
 
       // Send confirmation email via EmailJS
       console.log("Sending confirmation email...");
@@ -188,19 +173,6 @@ const PaymentPage = () => {
       month: "long",
       day: "numeric",
     });
-  };
-
-  const formatCurrency = (amount) => {
-    // Ensure amount is a valid number
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount)) {
-      return "$0.00";
-    }
-
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(numericAmount);
   };
 
   return (
