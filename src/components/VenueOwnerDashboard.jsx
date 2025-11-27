@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useVenue } from "../contexts/VenueContext";
 import Header from "./Header";
 import OwnerRequestsAndMessages from "./OwnerRequestsAndMessages"; // Add this import
+import "../styles/VenueOwnerDashboard.css";
 
 const VenueOwnerDashboard = () => {
   const venueContext = useVenue();
