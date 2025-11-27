@@ -249,7 +249,7 @@
 .submit-btn {
   width: 100%;
   padding: 16px;
-  background: #4285f4;
+  background: #ec676a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -260,7 +260,7 @@
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #3367d6;
+  background: #d33a3d;
 }
 
 .submit-btn:disabled {
