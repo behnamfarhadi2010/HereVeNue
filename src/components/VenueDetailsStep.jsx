@@ -5,6 +5,7 @@ import "../styles/VenueDetails.css";
 import Header from "./Header";
 import BookingSidebar from "../components/BookingSidebar.jsx";
 import MessageHostSidebar from "../components/MessageHostSidebar.jsx";
+import { formatCurrency } from "../utils/utils";
 
 const VenueDetails = () => {
   const { id } = useParams();
@@ -139,18 +140,7 @@ const VenueDetails = () => {
 
   const availableLayouts = getAvailableLayouts();
 
-  // Format currency function
-  const formatCurrency = (amount) => {
-    if (!amount && amount !== 0) return "Not specified";
-    const numericAmount =
-      typeof amount === "string" ? amount.replace(/[^\d.-]/g, "") : amount;
-    const numberValue = parseFloat(numericAmount);
-    if (isNaN(numberValue)) return "Invalid amount";
-    return new Intl.NumberFormat("en-CA", {
-      style: "currency",
-      currency: "CAD",
-    }).format(numberValue);
-  };
+
 
   return (
     <>
