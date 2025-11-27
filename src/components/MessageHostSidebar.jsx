@@ -1,10 +1,11 @@
 // components/MessageHostSidebar.jsx
-import React, { useState, useEffect } from "react";
-import { useMessages } from "../contexts/MessageContext";
+import React, { useState } from "react";
+import { useMessages } from "../hooks/useMessages";
+import { useFavorites } from "../contexts/FavoritesContext";
 import "../styles/MessageHostSidebarStyles.css";
 
 const MessageHostSidebar = ({ venue }) => {
-  const [isFavorited, setIsFavorited] = useState(false);
+  const { isFavorited, toggleFavorite } = useFavorites();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageData, setMessageData] = useState({
     flexibleDates: false,
@@ -16,15 +17,6 @@ const MessageHostSidebar = ({ venue }) => {
   // Get sendMessage from context
   const { sendMessage } = useMessages();
 
-  // Load favorite status from localStorage on component mount
-  useEffect(() => {
-    const savedFavorites = localStorage.getItem("userFavorites");
-    if (savedFavorites) {
-      const favorites = JSON.parse(savedFavorites);
-      setIsFavorited(favorites.includes(venue.id));
-    }
-  }, [venue.id]);
-
   const handleSendMessage = () => {
     setShowMessageModal(true);
   };
@@ -34,45 +26,31 @@ const MessageHostSidebar = ({ venue }) => {
   };
 
   const handleSubmitMessage = () => {
-    // Use context to send message instead of localStorage + events
-    sendMessage({
-      venueId: venue.id,
-      venueName: venue.venueName,
-      ...messageData,
-    });
+    try {
+      // Use context to send message instead of localStorage + events
+      sendMessage({
+        venueId: venue.id,
+        venueName: venue.venueName,
+        senderId: "guest", // Or get from auth context if available
+        senderName: "Guest User", // Or get from auth context
+        ...messageData,
+      });
 
-    alert("Message sent to host! They typically respond within 1 hour.");
-    setShowMessageModal(false);
-    setMessageData({
-      flexibleDates: false,
-      messageText: "",
-      requireCatering: false,
-      ownCatering: true,
-    });
-  };
-
-  const toggleFavorite = () => {
-    const savedFavorites = localStorage.getItem("userFavorites");
-    let favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-
-    let updatedFavorites;
-    if (isFavorited) {
-      updatedFavorites = favorites.filter((id) => id !== venue.id);
-    } else {
-      updatedFavorites = [...favorites, venue.id];
+      alert("Message sent to host! They typically respond within 1 hour.");
+      setShowMessageModal(false);
+      setMessageData({
+        flexibleDates: false,
+        messageText: "",
+        requireCatering: false,
+        ownCatering: true,
+      });
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      alert("Failed to send message. Please try again.");
     }
-
-    localStorage.setItem("userFavorites", JSON.stringify(updatedFavorites));
-    setIsFavorited(!isFavorited);
-
-    console.log(
-      `${venue.venueName} ${
-        !isFavorited ? "added to" : "removed from"
-      } favorites`
-    );
-
-    window.dispatchEvent(new Event("favoritesUpdated"));
   };
+
+
 
   return (
     <>
@@ -121,12 +99,14 @@ const MessageHostSidebar = ({ venue }) => {
             <label className="favorite-option">
               <input
                 type="checkbox"
-                checked={isFavorited}
-                onChange={toggleFavorite}
+                checked={isFavorited(venue.id)}
+                onChange={() => toggleFavorite(venue.id)}
                 className="favorite-checkbox"
               />
               <span className="favorite-label">
-                {isFavorited ? "Remove from Favourites" : "Add to Favourites"}
+                {isFavorited(venue.id)
+                  ? "Remove from Favourites"
+                  : "Add to Favourites"}
               </span>
             </label>
           </div>
