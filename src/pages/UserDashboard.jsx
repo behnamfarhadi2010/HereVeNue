@@ -28,23 +28,17 @@ const UserDashboard = () => {
   const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
   // Current user object
+  const storedUser = localStorage.getItem("authUser");
+  const effectiveUser = authUser || storedUser || "admin";
+  
   const currentUser = {
-    id: authUser ? authUser.toLowerCase() : "admin",
-    name: authUser || "Admin",
+    id: effectiveUser.toLowerCase(),
+    name: effectiveUser,
   };
-
-  console.log("UserDashboard: authUser from context:", authUser);
-  console.log("UserDashboard: currentUser.id:", currentUser.id);
 
   // Get user's conversations
   const userConversations = getUserConversations(currentUser.id);
-  console.log("UserDashboard: All conversations:", getUserConversations("")); // Hack to see all? No, getUserConversations filters.
-  // Let's log the raw conversations from context if possible, but we only have getUserConversations.
-  // Wait, we can get 'conversations' from useMessages if we destructure it.
-  
   const unreadCount = getUnreadCount(currentUser.id);
-  console.log("UserDashboard: userConversations:", userConversations);
-  console.log("UserDashboard: ALL RAW CONVERSATIONS:", conversations);
 
   // Check for activeTab from navigation state
   useEffect(() => {
