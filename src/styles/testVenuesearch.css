@@ -90,3 +90,26 @@
 .venues-layout {
   margin-left: 0; /* Remove the 5rem that was causing overflow */
 }
+
+/* Align search box with header padding */
+.venues-search-box {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
+}
+
+@media (max-width: 1023px) {
+  .venues-search-box {
+    margin-left: 3%;
+    margin-right: 3%;
+    width: 94%;
+  }
+}
+
+@media (max-width: 767px) {
+  .venues-search-box {
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 96%;
+  }
+}
