@@ -102,6 +102,10 @@ Pass: **owner123**
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Screenshot
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"> <img src="https://github.com/behnamfarhadi2010/HereVeNue/blob/main/src/assets/Landing_page.jpg" alt="Screenshot of Landing Page" width="280" height="450" /> <img src="https://github.com/behnamfarhadi2010/HereVeNue/blob/main/src/assets/email_notification.png" alt="Screenshot of Email Notification" width="280" height="450" /> <img src="https://github.com/behnamfarhadi2010/HereVeNue/blob/main/src/assets/Venues.jpg" alt="Screenshot of Venues" width="280" height="450" /><img src="https://github.com/behnamfarhadi2010/HereVeNue/blob/main/src/assets/Owner_Dashboard.png" alt="Screenshot of Owner Dashboard" width="280" height="450" /> <img src="https://github.com/behnamfarhadi2010/HereVeNue/blob/main/src/assets/User_Dashboard.png" alt="Screenshot of User Dashboard" width="280" height="450" />  </div>
+
 ## 📄 Credits
 
 My coach, **D.J. Rideout**, has been an incredible mentor throughout this development journey. His guidance was essential in helping me overcome complex challenges and his technical expertise provided clarity when I needed it most. Beyond teaching me valuable skills, he showed me how to persevere; celebrating successes together during our coding sessions and offering steady encouragement during difficult moments. I'm truly thankful for his support. This project wouldn't be what it is without his influence and guidance.
