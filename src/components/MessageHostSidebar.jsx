@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import { useMessages } from "../hooks/useMessages";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { useAuth } from "../contexts/AuthContext";
 import "../styles/MessageHostSidebarStyles.css";
 
 const MessageHostSidebar = ({ venue }) => {
   const { isFavorited, toggleFavorite } = useFavorites();
+  const { currentUser } = useAuth();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageData, setMessageData] = useState({
     flexibleDates: false,
@@ -27,12 +29,16 @@ const MessageHostSidebar = ({ venue }) => {
 
   const handleSubmitMessage = () => {
     try {
+      console.log("MessageHostSidebar: Sending message. currentUser:", currentUser);
+      const senderId = currentUser ? currentUser.toLowerCase() : "guest";
+      console.log("MessageHostSidebar: Using senderId:", senderId);
+
       // Use context to send message instead of localStorage + events
       sendMessage({
         venueId: venue.id,
         venueName: venue.venueName,
-        senderId: "guest", // Or get from auth context if available
-        senderName: "Guest User", // Or get from auth context
+        senderId: currentUser ? currentUser.toLowerCase() : "guest",
+        senderName: currentUser || "Guest User",
         ...messageData,
       });
 

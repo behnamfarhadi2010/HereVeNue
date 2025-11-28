@@ -7,6 +7,7 @@ import { useMessages } from "../hooks/useMessages";
 import { useFavorites } from "../contexts/FavoritesContext";
 import ChatModal from "../components/ChatModal";
 import { formatDate, formatCurrency } from "../utils/utils";
+import { useAuth } from "../contexts/AuthContext";
 import "../styles/UserDashboard.css";
 
 const UserDashboard = () => {
@@ -14,6 +15,7 @@ const UserDashboard = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("current");
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const { currentUser: authUser } = useAuth();
 
   const { venues } = useVenue();
   const {
@@ -21,18 +23,28 @@ const UserDashboard = () => {
     getUserConversations,
     getUnreadCount,
     markConversationAsRead,
+    conversations, // Add this
   } = useMessages();
   const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
-  // Get user's conversations
-  const userConversations = getUserConversations("admin");
-  const unreadCount = getUnreadCount("admin");
-
   // Current user object
   const currentUser = {
-    id: "admin",
-    name: "Admin",
+    id: authUser ? authUser.toLowerCase() : "admin",
+    name: authUser || "Admin",
   };
+
+  console.log("UserDashboard: authUser from context:", authUser);
+  console.log("UserDashboard: currentUser.id:", currentUser.id);
+
+  // Get user's conversations
+  const userConversations = getUserConversations(currentUser.id);
+  console.log("UserDashboard: All conversations:", getUserConversations("")); // Hack to see all? No, getUserConversations filters.
+  // Let's log the raw conversations from context if possible, but we only have getUserConversations.
+  // Wait, we can get 'conversations' from useMessages if we destructure it.
+  
+  const unreadCount = getUnreadCount(currentUser.id);
+  console.log("UserDashboard: userConversations:", userConversations);
+  console.log("UserDashboard: ALL RAW CONVERSATIONS:", conversations);
 
   // Check for activeTab from navigation state
   useEffect(() => {
