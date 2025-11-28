@@ -63,9 +63,7 @@ function Header() {
                   onClick={handleUserClick}
                   style={{ cursor: "pointer" }}
                 >
-                  Welcome, {currentUser}
-                  {userType &&
-                    ` (${userType === "venue_owner" ? "Owner" : "User"})`}
+                  {currentUser}
                 </span>
                 <div className="dropdown-menu">
                   <button onClick={handleLogout} className="logout-btn">

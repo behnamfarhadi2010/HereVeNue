@@ -38,7 +38,7 @@ export default function Search() {
   return (
     <>
       <Header />
-      <form className="search-box" onSubmit={handleSearch}>
+      <form className="search-box venues-search-box" onSubmit={handleSearch}>
         {/* EVENT TYPE */}
         <div className="filter-group">
           <label>EVENT TYPE</label>
