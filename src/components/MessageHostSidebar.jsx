@@ -29,16 +29,17 @@ const MessageHostSidebar = ({ venue }) => {
 
   const handleSubmitMessage = () => {
     try {
-      console.log("MessageHostSidebar: Sending message. currentUser:", currentUser);
-      const senderId = currentUser ? currentUser.toLowerCase() : "guest";
-      console.log("MessageHostSidebar: Using senderId:", senderId);
+      const storedUser = localStorage.getItem("authUser");
+      const effectiveUser = currentUser || storedUser;
+      const senderId = effectiveUser ? effectiveUser.toLowerCase() : "guest";
+      const senderName = effectiveUser || "Guest User";
 
       // Use context to send message instead of localStorage + events
       sendMessage({
         venueId: venue.id,
         venueName: venue.venueName,
-        senderId: currentUser ? currentUser.toLowerCase() : "guest",
-        senderName: currentUser || "Guest User",
+        senderId: senderId,
+        senderName: senderName,
         ...messageData,
       });
 
