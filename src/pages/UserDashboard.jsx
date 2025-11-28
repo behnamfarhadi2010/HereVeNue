@@ -23,7 +23,6 @@ const UserDashboard = () => {
     getUserConversations,
     getUnreadCount,
     markConversationAsRead,
-    conversations, // Add this
   } = useMessages();
   const { favorites, toggleFavorite, isFavorited } = useFavorites();
 
