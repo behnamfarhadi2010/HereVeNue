@@ -1,6 +1,5 @@
 // src/contexts/VenueContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import initialVenues from "../data";
 
 const VenueContext = createContext();
 
@@ -11,35 +10,26 @@ export function VenueProvider({ children }) {
     // Load all venues from localStorage
     const savedVenues = localStorage.getItem("venueSubmissions");
     if (savedVenues) {
-      const parsedVenues = JSON.parse(savedVenues);
-      if (parsedVenues.length > 0) {
-        setVenues(parsedVenues);
-      } else {
-        setVenues(initialVenues);
-      }
-    } else {
-      // If no venues in localStorage, use the pre-filled list
-      setVenues(initialVenues);
+      setVenues(JSON.parse(savedVenues));
     }
   }, []);
+  //add a new venue
   //add a new venue
   const addVenue = (venueData) => {
     const newVenue = {
       ...venueData,
       id: Date.now(),
       submittedAt: new Date().toISOString(),
+      status: "submitted",
     };
-    setVenues((prev) => [...prev, newVenue]);
+    
+    setVenues((prev) => {
+      const updatedVenues = [...prev, newVenue];
+      localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
+      return updatedVenues;
+    });
 
     localStorage.setItem("venueFormData", JSON.stringify(venueData));
-    localStorage.setItem(
-      "venueSubmission",
-      JSON.stringify({
-        ...venueData,
-        submittedAt: new Date().toISOString(),
-        status: "submitted",
-      })
-    );
   };
 
   const deleteVenue = (venueId) => {

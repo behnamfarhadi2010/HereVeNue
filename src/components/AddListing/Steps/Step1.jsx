@@ -53,7 +53,7 @@ const Step1 = ({ formData, handleChange, handleVenueTypeToggle, nextStep }) => {
                   key={type}
                   type="button"
                   className={`venue-type-btn ${
-                    formData.venueTypes.includes(type) ? "selected" : ""
+                    formData.venueTypes?.includes(type) ? "selected" : ""
                   }`}
                   onClick={() => handleVenueTypeToggle(type)}
                 >

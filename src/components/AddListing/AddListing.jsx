@@ -121,7 +121,11 @@ const AddListing = () => {
     if (editing && venueId && venueToEdit) {
       setIsEditing(true);
       setEditingVenueId(parseInt(venueId));
-      setFormData(JSON.parse(venueToEdit));
+      const parsedVenue = JSON.parse(venueToEdit);
+      setFormData((prev) => ({
+        ...prev,
+        ...parsedVenue,
+      }));
     }
   }, []);
 
@@ -133,23 +137,7 @@ const AddListing = () => {
     } else {
       // Add new venue
       addVenue(formData);
-      const existingVenues = JSON.parse(
-        localStorage.getItem("venueSubmissions") || "[]"
-      );
-
-      const newVenue = {
-        ...formData,
-        id: Date.now(),
-        submittedAt: new Date().toISOString(),
-        status: "submitted",
-      };
-
-      const updatedVenues = [...existingVenues, newVenue];
-      localStorage.setItem("venueSubmissions", JSON.stringify(updatedVenues));
-      localStorage.setItem("venueFormData", JSON.stringify(formData));
-
-      console.log("Venue submitted:", newVenue);
-      console.log("Total venues:", updatedVenues.length);
+      alert("Venue submitted successfully!");
     }
 
     // Clear editing state

@@ -66,21 +66,7 @@ const Step8 = ({ formData, handleChange, prevStep, onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    // Save to localStorage
-    venue.addVenue(formData);
-    localStorage.setItem("venueFormData", JSON.stringify(formData));
-    localStorage.setItem(
-      "venueSubmission",
-      JSON.stringify({
-        ...formData,
-        submittedAt: new Date().toISOString(),
-        status: "submitted",
-      })
-    );
-
     onSubmit();
-
-    alert("Venue submitted successfully!");
   };
 
   return (
