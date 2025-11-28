@@ -7,11 +7,15 @@ import "../styles/main.css";
 import Header from "../components/Header";
 import checkLogin from "./checkLogin"; // Import the checkLogin function
 
+import { useAuth } from "../contexts/AuthContext";
+
 const ClientLogin = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Attempting login with:", user, password);
@@ -20,8 +24,8 @@ const ClientLogin = () => {
 
     setMessage(result.message);
     if (result.success && typeof window !== "undefined") {
-      localStorage.setItem("authUser", user);
-      console.log("User stored in localStorage");
+      login(user, result.userType || "venue_owner");
+      console.log("User logged in via AuthContext");
       navigate("/dashboard");
     }
   };

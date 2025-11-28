@@ -7,11 +7,14 @@ import "../styles/main.css";
 import Header from "../components/Header";
 import checkLogin from "./checkLogin";
 
+import { useAuth } from "../contexts/AuthContext";
+
 const ClientLogin = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -21,9 +24,8 @@ const ClientLogin = () => {
 
     setMessage(result.message);
     if (result.success && typeof window !== "undefined") {
-      localStorage.setItem("authUser", user);
-      localStorage.setItem("userType", result.userType); // Store user type
-      console.log("User stored in localStorage, type:", result.userType);
+      login(user, result.userType);
+      console.log("User logged in via AuthContext, type:", result.userType);
 
       // Redirect based on user type
       if (result.userType === "venue_owner") {
