@@ -72,6 +72,12 @@
 }
 
 /*  INFO SECTIONS (Steps in Grid)  */
+.venue-info-sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
 .venue-info-section {
   background-color: #ffffff;
   padding: 25px;
@@ -80,14 +86,27 @@
   border: 1px solid #f0f0f0;
   animation: fadeIn 0.5s ease-out;
   min-height: 300px;
+  max-height: 500px; /* Limit height */
+  overflow-y: auto; /* Enable internal scrolling */
   display: flex;
   flex-direction: column;
+}
+
+/* Make the first section span full width */
+.venue-info-section:first-child {
+  grid-column: 1 / -1;
 }
 
 .venue-info-section:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   transition: box-shadow 0.3s ease;
   transform: translateY(-2px);
+}
+
+@media (max-width: 1023px) {
+  .venue-info-sections {
+    grid-template-columns: 1fr;
+  }
 }
 
 .venue-info-section h1 {
