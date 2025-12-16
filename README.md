@@ -27,7 +27,7 @@ HereVeNue is a comprehensive online venue platform connecting venue owners with 
 - **Email Notifications:** Automated email notifications for booking requests using EmailJS.
 
 ## 🛠️ Tech Stack
-
+- **DEMO** (https://behnamfarhadi2010.github.io/HereVeNue)
 - **Frontend:** [React](https://reactjs.org/) (v18+)
 - **Build Tool:** [Vite](https://vitejs.dev/)
 - **Routing:** [React Router](https://reactrouter.com/)
